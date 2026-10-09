@@ -194,7 +194,7 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
 
       {/* Contatti */}
       <Titolo>CONTATTI</Titolo>
-      <Card className="divide-y divide-neutral-800 mb-6">
+      <Card className="divide-y divide-filo mb-6">
         <Dato icona={Mail} valore={s.email} />
         <Dato icona={Phone} valore={s.telefono} />
         <Dato icona={Hash} valore={`iscritto il ${dataBreve(String(s.iscritto_il).slice(0, 10))}`} />
@@ -203,11 +203,11 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
       {/* Storico */}
       <Titolo>STORICO</Titolo>
       {storico === null ? (
-        <div className="h-16 rounded-2xl bg-neutral-900 animate-pulse" />
+        <div className="h-16 rounded-2xl bg-scheda animate-pulse" />
       ) : storico.length === 0 ? (
         <div className="text-[12px] text-neutral-600 mb-6">Ancora niente.</div>
       ) : (
-        <Card className="divide-y divide-neutral-800 mb-6">
+        <Card className="divide-y divide-filo mb-6">
           {storico.map((v, i) => (
             <div key={i} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
               <div className="min-w-0">
@@ -236,7 +236,7 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
             { stato: s.stato === "sospeso" ? "approvato" : "sospeso" }
           )}
           disabled={lavoro}
-          className="w-full rounded-xl border border-neutral-800 text-neutral-500 py-3 text-[12px] font-semibold disabled:opacity-40"
+          className="w-full rounded-xl border border-bordo text-neutral-500 py-3 text-[12px] font-semibold disabled:opacity-40"
         >
           {s.stato === "sospeso" ? "RIATTIVA SOCIO" : "SOSPENDI SOCIO"}
         </button>
@@ -268,7 +268,7 @@ function Requisito({ icona: Icona, nome, ok, valore, azione, aperto, children })
           </button>
         )}
       </div>
-      {aperto && <div className="mt-4 pt-4 border-t border-neutral-800">{children}</div>}
+      {aperto && <div className="mt-4 pt-4 border-t border-bordo">{children}</div>}
     </Card>
   );
 }
@@ -285,7 +285,7 @@ function FormCertificato({ onSalva, lavoro }) {
         value={data}
         min={oggiIso()}
         onChange={(e) => setData(e.target.value)}
-        className="bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 outline-none focus:border-neutral-600"
+        className="bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 outline-none focus:border-neutral-600"
       />
       <p className="text-[10.5px] text-neutral-600 leading-relaxed">
         In app resta solo la data. Il cartaceo va conservato in reception.
@@ -305,7 +305,7 @@ function FormQuota({ onSalva, lavoro }) {
       <label className="text-[11px] text-neutral-500">
         Stagione {anno - 1}/{anno}, chiude il 31 agosto {anno}
       </label>
-      <div className="flex items-center gap-2.5 bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 focus-within:border-neutral-600">
+      <div className="flex items-center gap-2.5 bg-scheda border border-bordo rounded-xl px-3.5 focus-within:border-neutral-600">
         <span className="text-neutral-600 text-[14px]">€</span>
         <input
           type="number"
@@ -342,7 +342,7 @@ function FormAbbonamento({ pacchetti, onSalva, lavoro }) {
       <select
         value={scelto}
         onChange={(e) => setScelto(e.target.value)}
-        className="bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 outline-none appearance-none focus:border-neutral-600"
+        className="bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 outline-none appearance-none focus:border-neutral-600"
       >
         <option value="">Scegli il pacchetto</option>
         {pacchetti.map((p) => (
@@ -358,7 +358,7 @@ function FormAbbonamento({ pacchetti, onSalva, lavoro }) {
           type="date"
           value={inizio}
           onChange={(e) => setInizio(e.target.value)}
-          className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 outline-none focus:border-neutral-600"
+          className="w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 outline-none focus:border-neutral-600"
         />
       </div>
 

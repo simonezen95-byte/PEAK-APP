@@ -23,7 +23,7 @@ export function Campo({
   ...resto
 }) {
   return (
-    <div className="flex items-center gap-3 bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 focus-within:border-neutral-600">
+    <div className="flex items-center gap-3 bg-scheda border border-bordo rounded-xl px-3.5 focus-within:border-neutral-600">
       {Icona && <Icona size={17} className="text-neutral-500 shrink-0" />}
       <input
         {...resto}
@@ -66,7 +66,7 @@ export function Avviso({ tono = "errore", children }) {
   const stile =
     tono === "errore"
       ? "bg-red-950/50 border-red-900/60 text-red-300"
-      : "bg-neutral-900 border-neutral-800 text-neutral-300";
+      : "bg-scheda border-bordo text-neutral-300";
   return (
     <div className={`border rounded-xl px-3.5 py-3 text-[12.5px] leading-relaxed ${stile}`}>
       {children}
@@ -134,7 +134,7 @@ export function DataNascita({ valore, onChange }) {
   }
 
   const stile =
-    "bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-3.5 text-[15px] text-neutral-50 outline-none appearance-none focus:border-neutral-600";
+    "bg-scheda border border-bordo rounded-xl px-3 py-3.5 text-[15px] text-neutral-50 outline-none appearance-none focus:border-neutral-600";
 
   return (
     <div>
@@ -171,7 +171,7 @@ export function Card({ className = "", ...resto }) {
   return (
     <div
       {...resto}
-      className={`rounded-2xl border border-neutral-800 bg-neutral-900/70 p-4 ${className}`}
+      className={`rounded-2xl border border-bordo bg-scheda p-4 ${className}`}
     />
   );
 }
@@ -190,7 +190,7 @@ export function Scheletro({ righe = 3 }) {
   return (
     <div className="flex flex-col gap-2.5">
       {Array.from({ length: righe }, (_, i) => (
-        <div key={i} className="h-16 rounded-2xl bg-neutral-900 animate-pulse" />
+        <div key={i} className="h-16 rounded-2xl bg-scheda animate-pulse" />
       ))}
     </div>
   );
@@ -300,7 +300,7 @@ export function Cerchio({ icona: Icona, misura = 44, pieno = false }) {
     <div
       style={{ width: misura, height: misura }}
       className={`rounded-full flex items-center justify-center shrink-0 ${
-        pieno ? "bg-neutral-800" : "border border-neutral-700"
+        pieno ? "bg-rilievo" : "border border-neutral-700"
       }`}
     >
       <Icona size={Math.round(misura * 0.4)} className="text-neutral-300" strokeWidth={1.6} />
@@ -310,7 +310,7 @@ export function Cerchio({ icona: Icona, misura = 44, pieno = false }) {
 
 /** Il filo verticale che divide una scheda in due parti. */
 export function Divisore() {
-  return <div className="w-px self-stretch bg-neutral-800 mx-3.5" />;
+  return <div className="w-px self-stretch bg-rilievo mx-3.5" />;
 }
 
 /** Bottone piccolo dentro una scheda. */

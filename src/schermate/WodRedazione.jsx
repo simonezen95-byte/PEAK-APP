@@ -94,7 +94,7 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
               className={`flex-1 rounded-xl py-2.5 text-[11px] font-bold tracking-wider border ${
                 tipo === t
                   ? "bg-neutral-50 border-neutral-50 text-black"
-                  : "border-neutral-800 text-neutral-400"
+                  : "border-bordo text-neutral-400"
               }`}
             >
               {nomeTipo(t).replace("A ", "").toUpperCase()}
@@ -164,7 +164,7 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
         <button
           onClick={elimina}
           disabled={lavoro}
-          className="w-full mt-5 rounded-xl border border-neutral-800 text-neutral-500 py-3 text-[12px] font-semibold flex items-center justify-center gap-2 disabled:opacity-40"
+          className="w-full mt-5 rounded-xl border border-bordo text-neutral-500 py-3 text-[12px] font-semibold flex items-center justify-center gap-2 disabled:opacity-40"
         >
           <Trash2 size={14} />
           ELIMINA IL WOD DI QUESTO GIORNO
@@ -175,7 +175,7 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
 }
 
 const stileCampo =
-  "w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 placeholder:text-neutral-700 outline-none focus:border-neutral-600";
+  "w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 placeholder:text-neutral-700 outline-none focus:border-neutral-600";
 
 /* Il browser, se non gli si dice niente, prova a riempire i campi con
    quello che conosce: indirizzi, nomi, numeri di telefono. Qui dentro

@@ -133,7 +133,7 @@ export default function Lezione({ sessione, onIndietro, onCambiato, onMessaggio 
                 <div className="text-[10.5px] text-neutral-500 mt-1">prenotati</div>
               </div>
             </div>
-            <div className="w-px self-stretch bg-neutral-800 mx-3" />
+            <div className="w-px self-stretch bg-rilievo mx-3" />
             <div className="flex-1 text-center">
               <div className="text-[19px] font-display font-bold text-neutral-50 leading-none">
                 {pieno ? r.in_coda : liberi}
@@ -168,7 +168,7 @@ export default function Lezione({ sessione, onIndietro, onCambiato, onMessaggio 
           <div className="mt-7">
             <Titolo>PRENOTATI</Titolo>
             {gente === null ? (
-              <div className="h-20 rounded-2xl bg-neutral-900 animate-pulse" />
+              <div className="h-20 rounded-2xl bg-scheda animate-pulse" />
             ) : prenotati.length === 0 ? (
               <div className="text-[12px] text-neutral-600 mb-6">Ancora nessuno.</div>
             ) : (
@@ -182,7 +182,7 @@ export default function Lezione({ sessione, onIndietro, onCambiato, onMessaggio 
 
           {coda.length > 0 && (
             <>
-              <div className="h-px bg-neutral-800 mb-6" />
+              <div className="h-px bg-rilievo mb-6" />
               <Titolo>IN CODA ({coda.length})</Titolo>
               <div className="flex flex-col gap-2 mb-6">
                 {coda.map((g, i) => (
@@ -202,7 +202,7 @@ export default function Lezione({ sessione, onIndietro, onCambiato, onMessaggio 
           {/* Appoggiato sopra la barra in basso, che su iPhone è più
               alta per via della zona sotto lo schermo. */}
           <div
-            className="fixed left-0 right-0 px-5 pb-3 pt-6 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D] to-transparent"
+            className="fixed left-0 right-0 px-5 pb-3 pt-6 bg-gradient-to-t from-[#050507] via-[#050507] to-transparent"
             style={{ bottom: "calc(60px + env(safe-area-inset-bottom))" }}
           >
             <div className="max-w-md mx-auto">

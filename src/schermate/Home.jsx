@@ -265,7 +265,7 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
         <>
           <Sezione titolo="I TUOI NUMERI" azione={onVaiAlProfilo} etichetta="QUESTO MESE" />
           <Card className="!p-0 overflow-hidden">
-            <div className="grid grid-cols-3 divide-x divide-neutral-800">
+            <div className="grid grid-cols-3 divide-x divide-filo">
               <Tassello icona={Flame} valore={numeri.mese}
                         nome={["ALLENAMENTI", "QUESTO MESE"]} />
               <Tassello icona={CalendarCheck} valore={numeri.inArrivo}
@@ -307,7 +307,7 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
       {accesso && (
         <>
           <Sezione titolo="LA TUA SITUAZIONE" azione={onVaiAlProfilo} etichetta="PROFILO" />
-          <Card className="divide-y divide-neutral-800">
+          <Card className="divide-y divide-filo">
             <Voce
               nome="Abbonamento"
               valore={accesso.abbonamento ?? "nessuno"}
@@ -347,7 +347,7 @@ function Tassello({ icona: Icona, valore, nome }) {
   const righe = Array.isArray(nome) ? nome : [nome];
   return (
     <div className="flex flex-col items-center text-center py-5 px-1.5">
-      <div className="w-10 h-10 rounded-full bg-neutral-800/80 flex items-center justify-center mb-3">
+      <div className="w-10 h-10 rounded-full bg-rilievo flex items-center justify-center mb-3">
         <Icona size={16} className="text-neutral-200" strokeWidth={1.9} />
       </div>
       <div className="text-[26px] font-display font-bold text-neutral-50 leading-none">

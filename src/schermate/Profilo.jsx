@@ -33,7 +33,7 @@ export default function Profilo({ onVaiAiProgressi }) {
       {onVaiAiProgressi && (
         <button
           onClick={onVaiAiProgressi}
-          className="w-full rounded-2xl border border-neutral-800 bg-neutral-900/70 p-3.5 flex items-center gap-3.5 mb-7"
+          className="w-full rounded-2xl border border-bordo bg-scheda p-3.5 flex items-center gap-3.5 mb-7"
         >
           <TrendingUp size={16} className="text-neutral-400 shrink-0" strokeWidth={1.8} />
           <div className="flex-1 text-left">
@@ -47,7 +47,7 @@ export default function Profilo({ onVaiAiProgressi }) {
       )}
 
       <Titolo>I TUOI DATI</Titolo>
-      <Card className="divide-y divide-neutral-800 mb-8">
+      <Card className="divide-y divide-filo mb-8">
         <Riga icona={Hash} nome="Tessera" valore={profilo.numero_tessera ?? "–"} />
         <Riga icona={Mail} nome="Email" valore={profilo.email} />
         <Riga icona={Phone} nome="Telefono" valore={profilo.telefono} />
@@ -60,7 +60,7 @@ export default function Profilo({ onVaiAiProgressi }) {
 
       <button
         onClick={esci}
-        className="w-full rounded-xl border border-neutral-800 text-neutral-400 py-3.5 text-[12.5px] font-semibold flex items-center justify-center gap-2"
+        className="w-full rounded-xl border border-bordo text-neutral-400 py-3.5 text-[12.5px] font-semibold flex items-center justify-center gap-2"
       >
         <LogOut size={15} />
         ESCI

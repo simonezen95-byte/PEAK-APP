@@ -120,7 +120,7 @@ export default function Wod({ giornoIniziale, onIndietro, onMessaggio }) {
       {errore && <div className="mb-5"><Avviso>{errore}</Avviso></div>}
 
       {w === undefined ? (
-        <div className="h-40 rounded-2xl bg-neutral-900 animate-pulse" />
+        <div className="h-40 rounded-2xl bg-scheda animate-pulse" />
       ) : !w ? (
         <Vuoto>
           Nessun WOD per questo giorno.
@@ -148,7 +148,7 @@ export default function Wod({ giornoIniziale, onIndietro, onMessaggio }) {
 
           {/* Riscaldamento: solo staff */}
           {w.warm_up && (
-            <Card className="mb-4 border-neutral-800">
+            <Card className="mb-4 border-bordo">
               <div className="flex items-center gap-2 mb-2">
                 <Flame size={12} className="text-neutral-500" />
                 <span className="text-[10px] tracking-[0.15em] text-neutral-500 font-semibold">
@@ -171,7 +171,7 @@ export default function Wod({ giornoIniziale, onIndietro, onMessaggio }) {
                   className={`flex-1 rounded-xl py-2 text-[11px] font-bold tracking-wider border transition-colors ${
                     variante === v
                       ? "bg-neutral-50 border-neutral-50 text-black"
-                      : "border-neutral-800 text-neutral-400"
+                      : "border-bordo text-neutral-400"
                   }`}
                 >
                   {v}
@@ -202,7 +202,7 @@ export default function Wod({ giornoIniziale, onIndietro, onMessaggio }) {
               Ancora nessun risultato.
             </div>
           ) : (
-            <Card className="divide-y divide-neutral-800">
+            <Card className="divide-y divide-filo">
               {gara.map((r, i) => (
                 <div key={r.profilo_id} className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
                   <span className="w-5 text-[11px] text-neutral-600 tabular-nums shrink-0">
@@ -274,7 +274,7 @@ function IlMioScore({ w, profilo, onFatto }) {
         className={`w-full rounded-2xl border p-4 mb-7 flex items-center text-left ${
           w.mio_score != null
             ? "border-neutral-400 bg-neutral-50/[0.07]"
-            : "border-neutral-800 bg-neutral-900/70"
+            : "border-bordo bg-scheda"
         }`}
       >
         <div className="flex-1">
@@ -312,7 +312,7 @@ function IlMioScore({ w, profilo, onFatto }) {
               className={`flex-1 rounded-lg py-1.5 text-[10.5px] font-bold tracking-wider border ${
                 variante === v
                   ? "bg-neutral-50 border-neutral-50 text-black"
-                  : "border-neutral-800 text-neutral-400"
+                  : "border-bordo text-neutral-400"
               }`}
             >
               {v}
@@ -330,7 +330,7 @@ function IlMioScore({ w, profilo, onFatto }) {
         onChange={(e) => setTesto(e.target.value)}
         inputMode={w.tipo_score === "tempo" ? "text" : "decimal"}
         placeholder={w.tipo_score === "tempo" ? "3:45" : w.tipo_score === "carico" ? "80" : "150"}
-        className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 py-3 text-[15px] text-neutral-50 placeholder:text-neutral-600 outline-none focus:border-neutral-600"
+        className="w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[15px] text-neutral-50 placeholder:text-neutral-600 outline-none focus:border-neutral-600"
       />
       <div className="text-[10.5px] text-neutral-600 mt-1.5 mb-3">
         in {unitaScore(w.tipo_score)}
@@ -351,7 +351,7 @@ function IlMioScore({ w, profilo, onFatto }) {
       <div className="flex gap-2.5">
         <button
           onClick={() => setApro(false)}
-          className="flex-1 rounded-xl border border-neutral-800 text-neutral-400 py-3 text-[12px] font-semibold"
+          className="flex-1 rounded-xl border border-bordo text-neutral-400 py-3 text-[12px] font-semibold"
         >
           ANNULLA
         </button>

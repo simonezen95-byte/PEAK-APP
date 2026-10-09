@@ -97,9 +97,9 @@ export default function Accesso({ onRegistrati }) {
         </Bottone>
 
         <div className="flex items-center gap-3 my-5">
-          <div className="h-px flex-1 bg-neutral-800" />
+          <div className="h-px flex-1 bg-rilievo" />
           <span className="text-[11px] text-neutral-600">oppure</span>
-          <div className="h-px flex-1 bg-neutral-800" />
+          <div className="h-px flex-1 bg-rilievo" />
         </div>
 
         <Bottone type="button" variante="vuoto" onClick={onRegistrati}>

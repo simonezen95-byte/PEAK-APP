@@ -72,7 +72,7 @@ export default function Progressi({ onIndietro, onMessaggio }) {
       {/* Quanto ti alleni */}
       {numeri && (
         <Card className="!p-0 overflow-hidden mb-2">
-          <div className="grid grid-cols-3 divide-x divide-neutral-800">
+          <div className="grid grid-cols-3 divide-x divide-filo">
             <Numero icona={Flame} valore={numeri.questo_mese} nome="QUESTO MESE" />
             <Numero icona={CalendarCheck} valore={numeri.in_programma} nome="IN PROGRAMMA" />
             <Numero icona={Calendar} valore={numeri.totale} nome="IN TOTALE" />
@@ -94,7 +94,7 @@ export default function Progressi({ onIndietro, onMessaggio }) {
             className={`flex-1 rounded-xl py-2.5 text-[11px] font-bold tracking-wider border transition-colors ${
               vista === k
                 ? "bg-neutral-50 border-neutral-50 text-black"
-                : "border-neutral-800 text-neutral-400"
+                : "border-bordo text-neutral-400"
             }`}
           >
             {nome}
@@ -124,7 +124,7 @@ export default function Progressi({ onIndietro, onMessaggio }) {
             Object.entries(raggruppa(massimali)).map(([categoria, righe]) => (
               <div key={categoria} className="mb-5">
                 <Sezione titolo={categoria.toUpperCase()} />
-                <Card className="divide-y divide-neutral-800">
+                <Card className="divide-y divide-filo">
                   {righe.map((r) => (
                     <Massimale
                       key={`${r.esercizio_id}-${r.tipo}`}
@@ -157,7 +157,7 @@ export default function Progressi({ onIndietro, onMessaggio }) {
           Si inseriscono dalla sezione WOD, dopo l'allenamento.
         </Vuoto>
       ) : (
-        <Card className="divide-y divide-neutral-800">
+        <Card className="divide-y divide-filo">
           {wod.map((r, i) => (
             <div key={i} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
               <div className="flex-1 min-w-0">
@@ -202,9 +202,9 @@ function Massimale({ r, aperto, onApri, onCambiato }) {
       </button>
 
       {aperto && (
-        <div className="mt-3 pt-3 border-t border-neutral-800/60">
+        <div className="mt-3 pt-3 border-t border-bordo/60">
           {storico === null ? (
-            <div className="h-8 rounded-lg bg-neutral-900 animate-pulse" />
+            <div className="h-8 rounded-lg bg-scheda animate-pulse" />
           ) : (
             storico.map((s) => (
               <div key={s.id} className="flex items-center gap-3 py-1.5">
@@ -308,7 +308,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
             placeholder="Cerca l'esercizio"
             autoComplete="off"
             autoCorrect="off"
-            className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 placeholder:text-neutral-600 outline-none focus:border-neutral-600 mb-4"
+            className="w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 placeholder:text-neutral-600 outline-none focus:border-neutral-600 mb-4"
           />
           {lista === null ? (
             <Scheletro righe={4} />
@@ -324,7 +324,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
                   Aggiungi «{cerca.trim()}»
                 </button>
               )}
-              <Card className="divide-y divide-neutral-800">
+              <Card className="divide-y divide-filo">
                 {visibili.slice(0, 40).map((e) => (
                   <button
                     key={e.id}
@@ -365,7 +365,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
                 className={`flex-1 rounded-lg py-2 text-[11px] font-bold border ${
                   tipo === t
                     ? "bg-neutral-50 border-neutral-50 text-black"
-                    : "border-neutral-800 text-neutral-400"
+                    : "border-bordo text-neutral-400"
                 }`}
               >
                 {t}
@@ -374,7 +374,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
           </div>
 
           <div className="text-[11px] text-neutral-400 font-semibold mb-2">Peso</div>
-          <div className="flex items-center gap-2.5 bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 mb-5 focus-within:border-neutral-600">
+          <div className="flex items-center gap-2.5 bg-scheda border border-bordo rounded-xl px-3.5 mb-5 focus-within:border-neutral-600">
             <input
               value={peso}
               onChange={(e) => setPeso(e.target.value)}
@@ -392,7 +392,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
             value={data}
             max={oggiIso()}
             onChange={(e) => setData(e.target.value)}
-            className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 outline-none focus:border-neutral-600 mb-5"
+            className="w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 outline-none focus:border-neutral-600 mb-5"
           />
 
           {errore && <div className="mb-4"><Avviso>{errore}</Avviso></div>}

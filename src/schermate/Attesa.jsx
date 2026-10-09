@@ -26,7 +26,7 @@ export default function Attesa({ sospeso = false }) {
       </div>
 
       <div className="flex-1 flex flex-col justify-center text-center">
-        <div className="w-16 h-16 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center mx-auto mb-6">
+        <div className="w-16 h-16 rounded-full bg-scheda border border-bordo flex items-center justify-center mx-auto mb-6">
           <Icona size={26} strokeWidth={1.5} className="text-neutral-400" />
         </div>
 
@@ -62,7 +62,7 @@ export default function Attesa({ sospeso = false }) {
           </div>
         )}
 
-        <div className="mt-6 pt-6 border-t border-neutral-900">
+        <div className="mt-6 pt-6 border-t border-filo">
           <p className="text-[12px] text-neutral-500 leading-relaxed">
             Serve aiuto? Scrivi o chiama lo
             <br />

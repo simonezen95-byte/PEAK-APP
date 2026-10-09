@@ -118,7 +118,7 @@ export default function Tv({ codice }) {
           </div>
 
           {dati.warm_up && (
-            <footer className="shrink-0 border-t border-neutral-900 pt-5 mt-8">
+            <footer className="shrink-0 border-t border-filo pt-5 mt-8">
               <div className="text-[0.75rem] tracking-[0.25em] text-neutral-600 font-semibold mb-2">
                 WARM UP
               </div>

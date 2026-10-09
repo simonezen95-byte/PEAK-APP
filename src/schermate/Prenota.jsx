@@ -94,8 +94,8 @@ export default function Prenota({ onApri, ricarica }) {
                 scelto
                   ? "bg-neutral-50 border-neutral-50 text-black"
                   : passato
-                  ? "border-neutral-900 text-neutral-700"
-                  : "border-neutral-800 text-neutral-300"
+                  ? "border-filo text-neutral-700"
+                  : "border-bordo text-neutral-300"
               }`}
             >
               <span className="text-[9.5px] uppercase tracking-wider opacity-70">
@@ -193,10 +193,10 @@ function Riga({ r, onApri }) {
         dentro
           ? "border-neutral-400 bg-neutral-50/[0.07]"
           : inCoda
-          ? "border-neutral-700 bg-neutral-900/70"
+          ? "border-neutral-700 bg-scheda"
           : passata || r.annullata
-          ? "border-neutral-900 bg-neutral-950 opacity-50"
-          : "border-neutral-800 bg-neutral-900/70"
+          ? "border-filo bg-neutral-950 opacity-50"
+          : "border-bordo bg-scheda"
       }`}
     >
       <div className="shrink-0">
@@ -208,7 +208,7 @@ function Riga({ r, onApri }) {
         </div>
       </div>
 
-      <div className="w-px self-stretch bg-neutral-800" />
+      <div className="w-px self-stretch bg-rilievo" />
 
       <div className="flex-1 min-w-0">
         <div className="text-[13.5px] text-neutral-100 font-semibold truncate">

@@ -48,7 +48,7 @@ export default function Soci({ onApri, ricarica }) {
         Soci
       </div>
 
-      <div className="flex items-center gap-2.5 bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 mb-4 focus-within:border-neutral-600">
+      <div className="flex items-center gap-2.5 bg-scheda border border-bordo rounded-xl px-3.5 mb-4 focus-within:border-neutral-600">
         <Search size={16} className="text-neutral-600 shrink-0" />
         <input
           value={cerca}
@@ -66,7 +66,7 @@ export default function Soci({ onApri, ricarica }) {
             className={`shrink-0 rounded-full px-3.5 py-1.5 text-[11.5px] font-semibold border transition-colors ${
               filtro === f.chiave
                 ? "bg-neutral-50 border-neutral-50 text-black"
-                : "border-neutral-800 text-neutral-400"
+                : "border-bordo text-neutral-400"
             }`}
           >
             {f.nome}
@@ -110,7 +110,7 @@ function Riga({ s, onApri }) {
       className={`w-full rounded-2xl border p-3.5 flex items-center gap-3.5 text-left ${
         attesa
           ? "border-neutral-400 bg-neutral-50/[0.07]"
-          : "border-neutral-800 bg-neutral-900/70"
+          : "border-bordo bg-scheda"
       }`}
     >
       <div className="w-10 h-10 rounded-full border border-neutral-700 flex items-center justify-center shrink-0">

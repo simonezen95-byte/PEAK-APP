@@ -132,7 +132,7 @@ function Riquadro({ icona: Icona, valore, nome, nota, acceso, onClick }) {
       className={`rounded-2xl border p-3.5 text-left ${
         acceso
           ? "border-neutral-400 bg-neutral-50/[0.07]"
-          : "border-neutral-800 bg-neutral-900/70"
+          : "border-bordo bg-scheda"
       }`}
     >
       <Icona size={15} className="text-neutral-500 mb-2.5" strokeWidth={1.8} />
@@ -148,7 +148,7 @@ function Riquadro({ icona: Icona, valore, nome, nota, acceso, onClick }) {
 function Attivita({ a }) {
   const liberi = Math.max(0, a.capienza - a.iscritti);
   return (
-    <div className="rounded-2xl border border-neutral-800 bg-neutral-900/70 p-3.5 flex items-center gap-3.5">
+    <div className="rounded-2xl border border-bordo bg-scheda p-3.5 flex items-center gap-3.5">
       <div className="shrink-0">
         <div className="text-[15px] font-display font-bold text-neutral-50 leading-none">
           {soloOra(a.ora)}
@@ -157,7 +157,7 @@ function Attivita({ a }) {
           {piuMinuti(a.ora, a.durata_min)}
         </div>
       </div>
-      <div className="w-px self-stretch bg-neutral-800" />
+      <div className="w-px self-stretch bg-rilievo" />
       <div className="flex-1 min-w-0">
         <div className="text-[13px] text-neutral-100 truncate">{a.nome}</div>
         <div className="text-[10.5px] text-neutral-500 mt-0.5 truncate">
@@ -208,7 +208,7 @@ function Istogramma({ righe }) {
           );
         })}
       </div>
-      <div className="flex gap-[2px] mt-2 pt-2 border-t border-neutral-800">
+      <div className="flex gap-[2px] mt-2 pt-2 border-t border-bordo">
         {righe.map((r) => (
           <div
             key={r.data}
