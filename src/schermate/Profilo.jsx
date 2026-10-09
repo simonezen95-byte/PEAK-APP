@@ -24,7 +24,7 @@ export default function Profilo() {
           <div className="text-[20px] font-display font-bold text-neutral-50 leading-tight truncate">
             {profilo.nome} {profilo.cognome}
           </div>
-          <div className="text-[11.5px] text-neutral-500 mt-0.5 capitalize">
+          <div className="text-[11.5px] text-neutral-500 mt-0.5 first-letter:uppercase">
             {profilo.ruolo === "socio" ? "socio" : profilo.ruolo}
           </div>
         </div>

@@ -69,7 +69,7 @@ export default function Prenota({ onApri, ricarica }) {
         >
           <ChevronLeft size={20} />
         </button>
-        <div className="text-[13px] text-neutral-300 font-semibold capitalize">
+        <div className="text-[13px] text-neutral-300 font-semibold first-letter:uppercase">
           {meseEAnno(settimanaDal)}
         </div>
         <button
@@ -112,7 +112,7 @@ export default function Prenota({ onApri, ricarica }) {
         })}
       </div>
 
-      <div className="text-[12px] text-neutral-500 mb-5 capitalize">
+      <div className="text-[12px] text-neutral-500 mb-5 first-letter:uppercase">
         {dataEstesa(giorno)}
       </div>
 

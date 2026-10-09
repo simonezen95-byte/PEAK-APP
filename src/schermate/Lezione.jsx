@@ -106,7 +106,7 @@ export default function Lezione({ sessione, onIndietro, onCambiato, onMessaggio 
           <div className="text-[21px] font-display font-bold text-neutral-50 leading-tight uppercase truncate">
             {r.nome}
           </div>
-          <div className="text-[12px] text-neutral-500 capitalize">{dataEstesa(r.data)}</div>
+          <div className="text-[12px] text-neutral-500 first-letter:uppercase">{dataEstesa(r.data)}</div>
           <div className="text-[11.5px] text-neutral-400 mt-0.5">
             {soloOra(r.ora)} – {piuMinuti(r.ora, r.durata_min)}
             {r.coach && <span className="text-neutral-600"> · {r.coach}</span>}

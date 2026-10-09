@@ -111,7 +111,7 @@ export default function Home({ onVaiAlCalendario, ricarica }) {
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="text-[13px] text-neutral-100 truncate">{p.nome}</div>
-                  <div className="text-[11px] text-neutral-500 mt-0.5 capitalize">
+                  <div className="text-[11px] text-neutral-500 mt-0.5 first-letter:uppercase">
                     {quando(p.data)} · {soloOra(p.ora)}
                   </div>
                 </div>
