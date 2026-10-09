@@ -1,49 +1,70 @@
-import { useState } from "react";
-import { Home as IconaHome, CalendarDays, Dumbbell, TrendingUp, Users, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  Home as IconaHome, CalendarDays, Dumbbell, TrendingUp, Users, User,
+  ChevronDown, Check,
+} from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { eStaff } from "../lib/staff";
 import { Logo, Messaggio } from "./base";
 import Home from "../schermate/Home";
 import Prenota from "../schermate/Prenota";
 import Lezione from "../schermate/Lezione";
+import Wod from "../schermate/Wod";
+import Progressi from "../schermate/Progressi";
 import Soci from "../schermate/Soci";
 import Socio from "../schermate/Socio";
 import Profilo from "../schermate/Profilo";
-import Wod from "../schermate/Wod";
-import Progressi from "../schermate/Progressi";
 
-/* La struttura dell'app una volta dentro: una barra sopra, le sezioni
-   sotto, e le schermate di dettaglio che si aprono a tutto schermo.
+/* La struttura dell'app una volta dentro.
 
-   La sezione Soci compare solo a chi è staff. Non è una misura di
-   sicurezza — quella sta nel database, che a un socio non darebbe
-   comunque niente — è solo per non mostrare porte chiuse. */
+   Chi è staff ha due modi di usarla: da socio, e vede esattamente
+   quello che vedono gli altri; da staff, e ha la console. Lo switch
+   sta in alto a destra.
 
-/** Oggi in forma "2026-10-09". */
-function oggi() {
-  const d = new Date();
-  const p = (n) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-}
+   Non è una questione di permessi — quelli stanno nel database e non
+   cambiano a seconda di come guardi — è questione di cosa serve avere
+   sottomano: in reception i progressi non interessano, mentre ci si
+   allena l'elenco dei soci nemmeno.
+
+   Risolve anche un problema pratico: cinque voci in basso sono il
+   massimo che ci sta su un telefono, e così ogni modo ne ha meno. */
+
+const RICORDA = "peak:modo";
 
 export default function Guscio() {
   const { profilo } = useSessione();
   const staff = eStaff(profilo);
 
-  const sezioni = [
-    { chiave: "home",    nome: "Home",    icona: IconaHome },
-    { chiave: "prenota", nome: "Prenota", icona: CalendarDays },
-    { chiave: "wod",     nome: "WOD",     icona: Dumbbell },
-    // Cinque voci è il massimo che ci sta su un telefono. Chi è staff
-    // tiene Soci, che usa ogni giorno, e arriva ai Progressi dal
-    // Profilo; chi è socio ha i Progressi qui.
-    staff
-      ? { chiave: "soci",      nome: "Soci",      icona: Users }
-      : { chiave: "progressi", nome: "Progressi", icona: TrendingUp },
-    { chiave: "profilo", nome: "Profilo", icona: User },
-  ];
+  const [modo, setModo] = useState(() => {
+    try {
+      return localStorage.getItem(RICORDA) === "socio" ? "socio" : "staff";
+    } catch {
+      return "staff";
+    }
+  });
 
-  const [sezione, setSezione] = useState("home");
+  useEffect(() => {
+    try { localStorage.setItem(RICORDA, modo); } catch { /* finestra privata */ }
+  }, [modo]);
+
+  const comeStaff = staff && modo === "staff";
+
+  const sezioni = comeStaff
+    ? [
+        { chiave: "soci",    nome: "Soci",    icona: Users },
+        { chiave: "wod",     nome: "WOD",     icona: Dumbbell },
+        { chiave: "prenota", nome: "Classi",  icona: CalendarDays },
+        { chiave: "profilo", nome: "Profilo", icona: User },
+      ]
+    : [
+        { chiave: "home",      nome: "Home",      icona: IconaHome },
+        { chiave: "prenota",   nome: "Prenota",   icona: CalendarDays },
+        { chiave: "wod",       nome: "WOD",       icona: Dumbbell },
+        { chiave: "progressi", nome: "Progressi", icona: TrendingUp },
+        { chiave: "profilo",   nome: "Profilo",   icona: User },
+      ];
+
+  const [sezione, setSezione] = useState(() => (staff ? "soci" : "home"));
   const [lezione, setLezione] = useState(null);
   const [socio, setSocio] = useState(null);
   const [progressi, setProgressi] = useState(false);
@@ -64,12 +85,24 @@ export default function Guscio() {
     setSezione(chiave);
   }
 
+  function cambiaModo(nuovo) {
+    setModo(nuovo);
+    setLezione(null);
+    setSocio(null);
+    setProgressi(false);
+    setSezione(nuovo === "staff" ? "soci" : "home");
+  }
+
   const dettaglio = Boolean(lezione || socio || progressi);
 
   return (
     <div className="min-h-full flex flex-col">
-      <header className="flex items-center justify-center py-3.5 pt-[max(0.875rem,env(safe-area-inset-top))] border-b border-neutral-900 sticky top-0 bg-[#0D0D0D]/95 backdrop-blur z-20">
+      <header className="flex items-center px-5 py-3.5 pt-[max(0.875rem,env(safe-area-inset-top))] border-b border-neutral-900 sticky top-0 bg-[#0D0D0D]/95 backdrop-blur z-20">
+        <div className="flex-1" />
         <Logo altezza={22} />
+        <div className="flex-1 flex justify-end">
+          {staff && <Interruttore modo={modo} onCambia={cambiaModo} profilo={profilo} />}
+        </div>
       </header>
 
       <main className="flex-1 max-w-md w-full mx-auto">
@@ -105,7 +138,9 @@ export default function Guscio() {
         ) : sezione === "soci" ? (
           <Soci onApri={setSocio} ricarica={versione} />
         ) : (
-          <Profilo onVaiAiProgressi={() => setProgressi(true)} />
+          // In modo staff i progressi non stanno in barra: si arriva
+          // qui dal profilo.
+          <Profilo onVaiAiProgressi={comeStaff ? () => setProgressi(true) : undefined} />
         )}
       </main>
 
@@ -137,4 +172,68 @@ export default function Guscio() {
       </nav>
     </div>
   );
+}
+
+/** "Visualizza come": lo stesso menù del prototipo. */
+function Interruttore({ modo, onCambia, profilo }) {
+  const [aperto, setAperto] = useState(false);
+
+  const voci = [
+    { chiave: "staff", nome: nomeRuolo(profilo.ruolo), nota: "Console di gestione" },
+    { chiave: "socio", nome: "Socio", nota: "L'app come la vedono gli altri" },
+  ];
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setAperto((v) => !v)}
+        className="flex items-center gap-1 text-neutral-400"
+        aria-label="Cambia vista"
+      >
+        <span className="text-[11px] font-semibold">
+          {modo === "staff" ? nomeRuolo(profilo.ruolo) : "Socio"}
+        </span>
+        <ChevronDown size={14} />
+      </button>
+
+      {aperto && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setAperto(false)} />
+          <div className="absolute right-0 mt-2.5 w-56 bg-neutral-900 border border-neutral-800 rounded-2xl p-1.5 z-20 shadow-xl shadow-black/60">
+            <div className="px-3 py-2 text-[9.5px] text-neutral-500 tracking-[0.15em] font-semibold">
+              VISUALIZZA COME
+            </div>
+            {voci.map((v) => (
+              <button
+                key={v.chiave}
+                onClick={() => { onCambia(v.chiave); setAperto(false); }}
+                className={`w-full text-left px-3 py-2.5 rounded-xl ${
+                  modo === v.chiave ? "bg-neutral-800" : ""
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-[13px] text-neutral-100">{v.nome}</span>
+                  {modo === v.chiave && (
+                    <Check size={13} className="text-neutral-100" strokeWidth={3} />
+                  )}
+                </div>
+                <div className="text-[10.5px] text-neutral-500 mt-0.5">{v.nota}</div>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function nomeRuolo(ruolo) {
+  return ruolo === "coach" ? "Coach" : ruolo === "owner" ? "Titolare" : "Admin";
+}
+
+/** Oggi in forma "2026-10-09". */
+function oggi() {
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
