@@ -1,11 +1,11 @@
-import { LogOut, Mail, Phone, Hash } from "lucide-react";
+import { LogOut, Mail, Phone, Hash, TrendingUp, ChevronRight } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { Card, Titolo } from "../ui/base";
 
 /* Per ora solo la tua scheda e l'uscita. Le impostazioni vere
    (notifiche, privacy, foto) arrivano con le prossime sezioni. */
 
-export default function Profilo() {
+export default function Profilo({ onVaiAiProgressi }) {
   const { profilo, esci } = useSessione();
 
   return (
@@ -29,6 +29,22 @@ export default function Profilo() {
           </div>
         </div>
       </div>
+
+      {onVaiAiProgressi && (
+        <button
+          onClick={onVaiAiProgressi}
+          className="w-full rounded-2xl border border-neutral-800 bg-neutral-900/70 p-3.5 flex items-center gap-3.5 mb-7"
+        >
+          <TrendingUp size={16} className="text-neutral-400 shrink-0" strokeWidth={1.8} />
+          <div className="flex-1 text-left">
+            <div className="text-[13px] text-neutral-100">Progressi</div>
+            <div className="text-[11px] text-neutral-500 mt-0.5">
+              Massimali, risultati dei WOD, allenamenti
+            </div>
+          </div>
+          <ChevronRight size={16} className="text-neutral-700 shrink-0" />
+        </button>
+      )}
 
       <Titolo>I TUOI DATI</Titolo>
       <Card className="divide-y divide-neutral-800 mb-8">

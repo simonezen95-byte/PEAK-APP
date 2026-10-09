@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home as IconaHome, CalendarDays, Dumbbell, Users, User } from "lucide-react";
+import { Home as IconaHome, CalendarDays, Dumbbell, TrendingUp, Users, User } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { eStaff } from "../lib/staff";
 import { Logo, Messaggio } from "./base";
@@ -10,6 +10,7 @@ import Soci from "../schermate/Soci";
 import Socio from "../schermate/Socio";
 import Profilo from "../schermate/Profilo";
 import Wod from "../schermate/Wod";
+import Progressi from "../schermate/Progressi";
 
 /* La struttura dell'app una volta dentro: una barra sopra, le sezioni
    sotto, e le schermate di dettaglio che si aprono a tutto schermo.
@@ -33,13 +34,19 @@ export default function Guscio() {
     { chiave: "home",    nome: "Home",    icona: IconaHome },
     { chiave: "prenota", nome: "Prenota", icona: CalendarDays },
     { chiave: "wod",     nome: "WOD",     icona: Dumbbell },
-    ...(staff ? [{ chiave: "soci", nome: "Soci", icona: Users }] : []),
+    // Cinque voci è il massimo che ci sta su un telefono. Chi è staff
+    // tiene Soci, che usa ogni giorno, e arriva ai Progressi dal
+    // Profilo; chi è socio ha i Progressi qui.
+    staff
+      ? { chiave: "soci",      nome: "Soci",      icona: Users }
+      : { chiave: "progressi", nome: "Progressi", icona: TrendingUp },
     { chiave: "profilo", nome: "Profilo", icona: User },
   ];
 
   const [sezione, setSezione] = useState("home");
   const [lezione, setLezione] = useState(null);
   const [socio, setSocio] = useState(null);
+  const [progressi, setProgressi] = useState(false);
   const [messaggio, setMessaggio] = useState("");
   // Cambiando questo numero le schermate rileggono i dati: serve dopo
   // una prenotazione o una modifica, perché il quadro è cambiato.
@@ -53,10 +60,11 @@ export default function Guscio() {
   function vaiA(chiave) {
     setLezione(null);
     setSocio(null);
+    setProgressi(false);
     setSezione(chiave);
   }
 
-  const dettaglio = Boolean(lezione || socio);
+  const dettaglio = Boolean(lezione || socio || progressi);
 
   return (
     <div className="min-h-full flex flex-col">
@@ -72,6 +80,8 @@ export default function Guscio() {
             onCambiato={() => setVersione((v) => v + 1)}
             onMessaggio={avvisa}
           />
+        ) : progressi ? (
+          <Progressi onIndietro={() => setProgressi(false)} onMessaggio={avvisa} />
         ) : socio ? (
           <Socio
             socio={socio}
@@ -90,10 +100,12 @@ export default function Guscio() {
           <Prenota onApri={setLezione} ricarica={versione} />
         ) : sezione === "wod" ? (
           <Wod giornoIniziale={oggi()} onMessaggio={avvisa} />
+        ) : sezione === "progressi" ? (
+          <Progressi onMessaggio={avvisa} />
         ) : sezione === "soci" ? (
           <Soci onApri={setSocio} ricarica={versione} />
         ) : (
-          <Profilo />
+          <Profilo onVaiAiProgressi={() => setProgressi(true)} />
         )}
       </main>
 
