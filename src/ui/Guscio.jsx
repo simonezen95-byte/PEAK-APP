@@ -68,7 +68,11 @@ export default function Guscio() {
         { chiave: "profilo",   nome: "Profilo",   icona: User },
       ];
 
-  const [sezione, setSezione] = useState(() => (staff ? "oggi" : "home"));
+  // Da quale schermata si parte: dipende dal modo in cui si era
+  // rimasti, non solo dall'essere staff. Guardando solo il ruolo si
+  // apriva la schermata del titolare dentro la barra del socio,
+  // finché non si toccava qualcosa.
+  const [sezione, setSezione] = useState(() => (comeStaff ? "oggi" : "home"));
   const [lezione, setLezione] = useState(null);
   const [socio, setSocio] = useState(null);
   const [progressi, setProgressi] = useState(false);
