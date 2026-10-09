@@ -85,14 +85,18 @@ export async function disdici(sessioneId, profiloId) {
   }
 }
 
-/** Le tue prossime prenotazioni, per la schermata iniziale. */
+/** Le tue prossime prenotazioni, per la schermata iniziale: con i
+    posti ancora liberi e il nome del coach. */
 export async function mieProssime(profiloId, quante = 5) {
   const oggi = new Date();
-  const iso = `${oggi.getFullYear()}-${String(oggi.getMonth() + 1).padStart(2, "0")}-${String(oggi.getDate()).padStart(2, "0")}`;
+  const p = (n) => String(n).padStart(2, "0");
+  const iso = `${oggi.getFullYear()}-${p(oggi.getMonth() + 1)}-${p(oggi.getDate())}`;
 
   const { data, error } = await supabase
     .from("prenotazioni")
-    .select("id, stato, posizione_coda, sessioni!inner(id, data, ora, durata_min, tipo, nome, annullata)")
+    .select(
+      "id, stato, posizione_coda, sessioni!inner(id, data, ora, durata_min, tipo, nome, capienza, coach_id, annullata)"
+    )
     .eq("profilo_id", profiloId)
     .in("stato", ["prenotato", "lista_attesa"])
     .gte("sessioni.data", iso)
@@ -101,10 +105,45 @@ export async function mieProssime(profiloId, quante = 5) {
     .limit(quante);
   if (error) throw error;
 
-  return (data ?? []).map((r) => ({
+  const righe = (data ?? []).map((r) => ({
     stato: r.stato,
     posizione_coda: r.posizione_coda,
     ...r.sessioni,
+  }));
+  if (righe.length === 0) return righe;
+
+  // Quanti posti restano: il conteggio arriva con una lettura sola per
+  // tutte le sessioni in elenco, non una per ciascuna.
+  const idSessioni = righe.map((r) => r.id);
+  const { data: altrui } = await supabase
+    .from("prenotazioni")
+    .select("sessione_id, stato")
+    .in("sessione_id", idSessioni)
+    .in("stato", ["prenotato", "presente"]);
+
+  const occupati = new Map();
+  for (const a of altrui ?? []) {
+    occupati.set(a.sessione_id, (occupati.get(a.sessione_id) ?? 0) + 1);
+  }
+
+  // I nomi dei coach passano dalla vista pubblica, come ovunque.
+  const idCoach = [...new Set(righe.map((r) => r.coach_id).filter(Boolean))];
+  const nomi = new Map();
+  if (idCoach.length) {
+    const { data: persone } = await supabase
+      .from("soci_pubblici")
+      .select("id, nome, cognome")
+      .in("id", idCoach);
+    for (const c of persone ?? []) {
+      nomi.set(c.id, `${c.nome} ${c.cognome}`.trim());
+    }
+  }
+
+  return righe.map((r) => ({
+    ...r,
+    iscritti: occupati.get(r.id) ?? 0,
+    posti_liberi: Math.max(0, r.capienza - (occupati.get(r.id) ?? 0)),
+    coach: r.coach_id ? nomi.get(r.coach_id) ?? null : null,
   }));
 }
 

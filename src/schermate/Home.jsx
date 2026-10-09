@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import {
-  Calendar, Dumbbell, DoorOpen, Clock, Check, Flame, CalendarCheck,
-  Megaphone, TrendingUp,
+  Calendar, Dumbbell, DoorOpen, Clock, CheckCircle2, Flame, CalendarCheck,
+  Megaphone, BarChart3, UserRound, ChevronRight,
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import {
@@ -104,38 +104,47 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
       {prossime === null ? (
         <Scheletro righe={1} />
       ) : prima ? (
-        <Card className="flex items-center">
-          <Cerchio icona={prima.tipo === "classe" ? Calendar : DoorOpen} />
-          <div className="flex-1 min-w-0 ml-3.5">
-            <div className="text-[10.5px] text-neutral-500 first-letter:uppercase">
+        <Card className="flex items-stretch">
+          <Cerchio icona={prima.tipo === "classe" ? Calendar : DoorOpen} pieno />
+          <div className="flex-1 min-w-0 ml-4">
+            <div className="text-[11.5px] text-neutral-400 first-letter:uppercase">
               {quando(prima.data)}
             </div>
-            <div className="text-[30px] font-display font-bold text-neutral-50 leading-none mt-0.5">
+            <div className="text-[31px] font-display font-bold text-neutral-50 leading-none mt-0.5">
               {soloOra(prima.ora)}
             </div>
-            <div className="text-[10px] tracking-[0.18em] text-neutral-400 font-semibold uppercase mt-1.5 truncate">
+            <div className="text-[12px] tracking-[0.2em] text-neutral-200 font-semibold uppercase mt-1 truncate">
               {prima.nome}
+            </div>
+            {prima.coach && (
+              <div className="flex items-center gap-1.5 text-[11.5px] text-neutral-400 mt-1.5">
+                <UserRound size={12} strokeWidth={1.8} />
+                <span className="truncate">{prima.coach}</span>
+              </div>
+            )}
+            <div className="mt-3">
+              {prima.stato === "lista_attesa" ? (
+                <span className="inline-flex items-center gap-1.5 text-[10.5px] font-semibold tracking-[0.08em] border border-neutral-700 text-neutral-300 rounded-full pl-1 pr-3 py-1">
+                  <Clock size={15} className="shrink-0" strokeWidth={2} />
+                  IN CODA · {prima.posizione_coda ?? "–"}
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 text-[10.5px] font-semibold tracking-[0.08em] border border-neutral-700 text-neutral-100 rounded-full pl-1 pr-3 py-1">
+                  <CheckCircle2 size={15} className="shrink-0" strokeWidth={2} />
+                  PRENOTATO
+                </span>
+              )}
             </div>
           </div>
           <Divisore />
-          <div className="shrink-0 text-right">
-            {prima.stato === "lista_attesa" ? (
-              <>
-                <Clock size={15} className="text-neutral-300 inline-block mb-1" />
-                <div className="text-[10px] tracking-[0.1em] text-neutral-500 font-semibold leading-tight">
-                  IN CODA<br />POSIZIONE {prima.posizione_coda ?? "–"}
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="inline-flex items-center gap-1 text-[9.5px] font-bold tracking-[0.1em] bg-neutral-100 text-black rounded-full px-2.5 py-1 mb-2">
-                  <Check size={10} strokeWidth={3} /> PRENOTATO
-                </div>
-                <div className="text-[10px] text-neutral-600 leading-tight">
-                  fine {piuMinuti(prima.ora, prima.durata_min)}
-                </div>
-              </>
-            )}
+          <div className="shrink-0 self-center text-left pr-1">
+            <div className="text-[21px] font-display font-bold text-neutral-50 leading-none">
+              {prima.posti_liberi ?? "–"}
+              <span className="text-neutral-500 text-[15px]"> / {prima.capienza ?? "–"}</span>
+            </div>
+            <div className="text-[9.5px] tracking-[0.1em] text-neutral-500 font-semibold mt-1.5">
+              POSTI LIBERI
+            </div>
           </div>
         </Card>
       ) : libera ? (
@@ -257,9 +266,12 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
           <Sezione titolo="I TUOI NUMERI" azione={onVaiAlProfilo} etichetta="QUESTO MESE" />
           <Card className="!p-0 overflow-hidden">
             <div className="grid grid-cols-3 divide-x divide-neutral-800">
-              <Tassello icona={Flame} valore={numeri.mese} nome="QUESTO MESE" />
-              <Tassello icona={CalendarCheck} valore={numeri.inArrivo} nome="IN PROGRAMMA" />
-              <Tassello icona={TrendingUp} valore={numeri.totale} nome="IN TOTALE" />
+              <Tassello icona={Flame} valore={numeri.mese}
+                        nome={["ALLENAMENTI", "QUESTO MESE"]} />
+              <Tassello icona={CalendarCheck} valore={numeri.inArrivo}
+                        nome={["GIA'", "PRENOTATI"]} />
+              <Tassello icona={BarChart3} valore={numeri.totale}
+                        nome={["IN TOTALE", "DALL'ISCRIZIONE"]} />
             </div>
           </Card>
         </>
@@ -271,17 +283,20 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
           <Sezione titolo="DAL BOX" />
           <div className="flex flex-col gap-2.5">
             {avvisi.map((a) => (
-              <Card key={a.id} className="flex items-start gap-3.5">
-                <Cerchio icona={Megaphone} misura={40} />
+              <Card key={a.id} className="flex items-center gap-3.5">
+                <Cerchio icona={Megaphone} misura={44} pieno />
                 <div className="flex-1 min-w-0">
-                  <div className="text-[13px] font-semibold text-neutral-50">{a.titolo}</div>
-                  <div className="text-[10px] text-neutral-600 mt-0.5">
+                  <div className="text-[13px] font-semibold text-neutral-50 uppercase tracking-[0.04em]">
+                    {a.titolo}
+                  </div>
+                  <div className="text-[10.5px] text-neutral-500 mt-0.5">
                     {quantoFa(a.pubblicata_il)}
                   </div>
-                  <div className="text-[11.5px] text-neutral-400 leading-relaxed mt-1.5">
+                  <div className="text-[11.5px] text-neutral-400 leading-relaxed mt-1">
                     {a.testo}
                   </div>
                 </div>
+                <ChevronRight size={16} className="text-neutral-700 shrink-0" />
               </Card>
             ))}
           </div>
@@ -329,16 +344,17 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
 }
 
 function Tassello({ icona: Icona, valore, nome }) {
+  const righe = Array.isArray(nome) ? nome : [nome];
   return (
-    <div className="flex flex-col items-center text-center py-5 px-2">
-      <div className="w-9 h-9 rounded-full bg-neutral-800 flex items-center justify-center mb-2.5">
-        <Icona size={15} className="text-neutral-300" strokeWidth={1.8} />
+    <div className="flex flex-col items-center text-center py-5 px-1.5">
+      <div className="w-10 h-10 rounded-full bg-neutral-800/80 flex items-center justify-center mb-3">
+        <Icona size={16} className="text-neutral-200" strokeWidth={1.9} />
       </div>
-      <div className="text-[23px] font-display font-bold text-neutral-50 leading-none">
+      <div className="text-[26px] font-display font-bold text-neutral-50 leading-none">
         {valore}
       </div>
-      <div className="text-[9px] tracking-[0.12em] text-neutral-500 mt-1.5 font-semibold">
-        {nome}
+      <div className="text-[8.5px] tracking-[0.1em] text-neutral-400 mt-2 font-semibold leading-[1.5]">
+        {righe.map((r) => <div key={r}>{r}</div>)}
       </div>
     </div>
   );

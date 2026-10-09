@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import {
-  Home as IconaHome, CalendarDays, Dumbbell, TrendingUp, Users, User,
-  ChevronDown, Check, Bell,
+  Home as IconaHome, CalendarDays, Dumbbell, Users, User,
+  ChevronDown, Check, Bell, BarChart3,
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { eStaff } from "../lib/staff";
@@ -64,7 +64,7 @@ export default function Guscio() {
         { chiave: "home",      nome: "Home",      icona: IconaHome },
         { chiave: "prenota",   nome: "Prenota",   icona: CalendarDays },
         { chiave: "wod",       nome: "WOD",       icona: Dumbbell },
-        { chiave: "progressi", nome: "Progressi", icona: TrendingUp },
+        { chiave: "progressi", nome: "Progressi", icona: BarChart3 },
         { chiave: "profilo",   nome: "Profilo",   icona: User },
       ];
 
@@ -124,6 +124,19 @@ export default function Guscio() {
             <Bell size={20} strokeWidth={1.7} />
             {daLeggere > 0 && (
               <span className="absolute top-0 right-0 w-[7px] h-[7px] rounded-full bg-neutral-50 ring-2 ring-[#0D0D0D]" />
+            )}
+          </button>
+          <button
+            onClick={() => vaiA("profilo")}
+            aria-label="Il tuo profilo"
+            className="w-9 h-9 rounded-full border border-neutral-600 overflow-hidden flex items-center justify-center shrink-0"
+          >
+            {profilo.foto_url ? (
+              <img src={profilo.foto_url} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-[11px] font-display font-bold text-neutral-300">
+                {(profilo.nome?.[0] ?? "") + (profilo.cognome?.[0] ?? "")}
+              </span>
             )}
           </button>
         </div>
@@ -195,7 +208,11 @@ export default function Guscio() {
                   attiva ? "text-neutral-50" : "text-neutral-600"
                 }`}
               >
-                <Icona size={19} strokeWidth={attiva ? 2.2 : 1.7} />
+                <Icona
+                  size={19}
+                  strokeWidth={attiva ? 2 : 1.7}
+                  fill={attiva ? "currentColor" : "none"}
+                />
                 <span className="text-[9px] tracking-[0.06em] font-semibold whitespace-nowrap">
                   {nome.toUpperCase()}
                 </span>
