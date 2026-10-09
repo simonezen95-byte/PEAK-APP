@@ -61,7 +61,7 @@ export default function Guscio() {
 
   return (
     <div className="min-h-full flex flex-col">
-      <header className="flex items-center justify-center py-3.5 border-b border-neutral-900 sticky top-0 bg-[#0D0D0D]/95 backdrop-blur z-20">
+      <header className="flex items-center justify-center py-3.5 pt-[max(0.875rem,env(safe-area-inset-top))] border-b border-neutral-900 sticky top-0 bg-[#0D0D0D]/95 backdrop-blur z-20">
         <Logo altezza={22} />
       </header>
 
