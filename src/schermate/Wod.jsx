@@ -59,7 +59,7 @@ export default function Wod({ giornoIniziale, onIndietro, onMessaggio }) {
 
   return (
     <div className="px-5 pb-28 pt-1 relative overflow-hidden">
-      <Montagna className="absolute right-[-20px] top-0 w-[215px] h-[215px] text-white pointer-events-none" />
+      <Montagna className="absolute right-[-35px] top-[0px] w-[240px] h-[190px] text-white pointer-events-none" />
 
       <div className="flex items-center justify-between min-h-10">
         {/* Aperta dalla barra in basso non ha un "indietro": è già

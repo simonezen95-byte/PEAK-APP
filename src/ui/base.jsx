@@ -218,43 +218,37 @@ export function Messaggio({ testo }) {
 
 /** Il segno della montagna: la stessa A del logo.
 
-    Tre strati, e il terzo è quello che fa la differenza: un velo
-    dentro la V, la fascia appena schiarita, e sul bordo un filo più
-    chiaro che la rende incisa invece che dipinta. Tutto in bianco a
-    bassissima opacità — è luce sul nero, non grigio sopra il nero —
-    e tutto sfuma verso il basso. */
+    Misurata sul mockup pixel per pixel, non stimata a occhio. Tre
+    cose che sembravano esserci e non ci sono: il filo chiaro sul
+    bordo, il velo dentro la V, il contorno. È una fascia sola,
+    piatta, che sfuma verso il basso e un po' verso sinistra.
+
+    Le misure, in punti: apice al centro, pendenza 0,71 in orizzontale
+    per ogni punto in verticale, fascia spessa 41, apice interno 59
+    punti più in basso. Il riquadro è in punti apposta, così i numeri
+    presi dal mockup si leggono tali e quali. */
 export function Montagna({ className = "" }) {
   // useId mette dei due punti nel nome, e url(#...) con i due punti
   // su Safari ogni tanto non lo segue: li tolgo.
-  const seme = useId().replace(/[^a-zA-Z0-9]/g, "");
-  const riempimento = `mr${seme}`;
-  const filo = `mf${seme}`;
-  const velo = `mv${seme}`;
+  const id = `montagna${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
 
   return (
-    <svg viewBox="0 0 200 200" className={className} aria-hidden="true">
+    <svg viewBox="0 0 240 190" className={className} aria-hidden="true">
       <defs>
-        <linearGradient id={riempimento} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="0.055" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-        </linearGradient>
-        <linearGradient id={filo} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="0.15" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-        </linearGradient>
-        <linearGradient id={velo} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="0.03" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+        {/* L'asse va dall'alto a destra, dov'è più chiara, al basso a
+            sinistra, dove sparisce: nel mockup la gamba sinistra è
+            più spenta della destra alla stessa altezza. */}
+        <linearGradient id={id} x1="0.78" y1="0" x2="0.42" y2="1">
+          <stop offset="0%"  stopColor="currentColor" stopOpacity="0.133" />
+          <stop offset="40%" stopColor="currentColor" stopOpacity="0.078" />
+          <stop offset="58%" stopColor="currentColor" stopOpacity="0.036" />
+          <stop offset="75%" stopColor="currentColor" stopOpacity="0.016" />
+          <stop offset="92%" stopColor="currentColor" stopOpacity="0" />
         </linearGradient>
       </defs>
-
-      <path d="M100 86 L150 190 L50 190 Z" fill={`url(#${velo})`} />
       <path
-        d="M100 10 L198 190 L150 190 L100 86 L50 190 L2 190 Z"
-        fill={`url(#${riempimento})`}
-        stroke={`url(#${filo})`}
-        strokeWidth="1.6"
-        strokeLinejoin="round"
+        d="M120 4 L243 182 L201 182 L120 63 L39 182 L-3 182 Z"
+        fill={`url(#${id})`}
       />
     </svg>
   );
