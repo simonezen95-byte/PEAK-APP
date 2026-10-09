@@ -316,6 +316,10 @@ function IlMioScore({ w, profilo, onFatto }) {
       )}
 
       <input
+        name="mio-risultato"
+        autoComplete="off"
+        autoCorrect="off"
+        spellCheck={false}
         value={testo}
         onChange={(e) => setTesto(e.target.value)}
         inputMode={w.tipo_score === "tempo" ? "text" : "decimal"}

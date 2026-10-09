@@ -309,6 +309,8 @@ function FormQuota({ onSalva, lavoro }) {
         <span className="text-neutral-600 text-[14px]">€</span>
         <input
           type="number"
+          name="importo-quota"
+          autoComplete="off"
           inputMode="decimal"
           step="0.01"
           value={importo}

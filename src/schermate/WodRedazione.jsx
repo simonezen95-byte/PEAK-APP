@@ -76,6 +76,8 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
 
       <Campo nome="Titolo" nota="Come si chiama: FRAN, AMRAP 20', EMOM 12…">
         <input
+          {...senzaAiuti}
+          name="wod-titolo"
           value={titolo}
           onChange={(e) => setTitolo(e.target.value)}
           placeholder="FRAN"
@@ -103,6 +105,9 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
 
       <Campo nome="Time cap" nota="Lascia vuoto se non c'è.">
         <input
+          {...senzaAiuti}
+          name="wod-timecap"
+          inputMode="numeric"
           value={timeCap}
           onChange={(e) => setTimeCap(e.target.value)}
           placeholder="12:00"
@@ -117,6 +122,8 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
           nota={v === "RX" ? "Un movimento per riga." : undefined}
         >
           <textarea
+            {...senzaAiuti}
+            name={`wod-${v.toLowerCase()}`}
             value={varianti[v]}
             onChange={(e) => setVarianti((p) => ({ ...p, [v]: e.target.value }))}
             rows={v === "RX" ? 6 : 4}
@@ -131,6 +138,8 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
         nota="Compare sullo schermo in sala e qui nella console, mai nell'app dei soci."
       >
         <textarea
+          {...senzaAiuti}
+          name="wod-warmup"
           value={warmUp}
           onChange={(e) => setWarmUp(e.target.value)}
           rows={3}
@@ -167,6 +176,17 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
 
 const stileCampo =
   "w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 placeholder:text-neutral-700 outline-none focus:border-neutral-600";
+
+/* Il browser, se non gli si dice niente, prova a riempire i campi con
+   quello che conosce: indirizzi, nomi, numeri di telefono. Qui dentro
+   non c'entrano, e il correttore automatico rovinerebbe "AMRAP" e
+   "Thruster". */
+const senzaAiuti = {
+  autoComplete: "off",
+  autoCorrect: "off",
+  autoCapitalize: "off",
+  spellCheck: false,
+};
 
 function Campo({ nome, nota, children }) {
   return (
