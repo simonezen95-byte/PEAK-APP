@@ -7,6 +7,7 @@ import { useSessione } from "../lib/sessione";
 import { eStaff } from "../lib/staff";
 import { Logo, Messaggio } from "./base";
 import Home from "../schermate/Home";
+import Oggi from "../schermate/Oggi";
 import Prenota from "../schermate/Prenota";
 import Lezione from "../schermate/Lezione";
 import Wod from "../schermate/Wod";
@@ -51,6 +52,7 @@ export default function Guscio() {
 
   const sezioni = comeStaff
     ? [
+        { chiave: "oggi",    nome: "Oggi",    icona: IconaHome },
         { chiave: "soci",    nome: "Soci",    icona: Users },
         { chiave: "wod",     nome: "WOD",     icona: Dumbbell },
         { chiave: "prenota", nome: "Classi",  icona: CalendarDays },
@@ -64,7 +66,7 @@ export default function Guscio() {
         { chiave: "profilo",   nome: "Profilo",   icona: User },
       ];
 
-  const [sezione, setSezione] = useState(() => (staff ? "soci" : "home"));
+  const [sezione, setSezione] = useState(() => (staff ? "oggi" : "home"));
   const [lezione, setLezione] = useState(null);
   const [socio, setSocio] = useState(null);
   const [progressi, setProgressi] = useState(false);
@@ -90,7 +92,7 @@ export default function Guscio() {
     setLezione(null);
     setSocio(null);
     setProgressi(false);
-    setSezione(nuovo === "staff" ? "soci" : "home");
+    setSezione(nuovo === "staff" ? "oggi" : "home");
   }
 
   const dettaglio = Boolean(lezione || socio || progressi);
@@ -121,6 +123,13 @@ export default function Guscio() {
             onIndietro={() => setSocio(null)}
             onCambiato={() => setVersione((v) => v + 1)}
             onMessaggio={avvisa}
+          />
+        ) : sezione === "oggi" ? (
+          <Oggi
+            onVaiAiSoci={() => vaiA("soci")}
+            onVaiAlleClassi={() => vaiA("prenota")}
+            onVaiAlWod={() => vaiA("wod")}
+            ricarica={versione}
           />
         ) : sezione === "home" ? (
           <Home
