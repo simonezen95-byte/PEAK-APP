@@ -107,7 +107,10 @@ export default function Tv({ codice }) {
                 <div className="text-[0.85rem] tracking-[0.28em] text-neutral-500 font-semibold mb-5">
                   {v}
                 </div>
-                <div className="text-[clamp(1.3rem,2.6vw,2.2rem)] leading-[1.55] text-neutral-100 whitespace-pre-line font-medium">
+                <div
+                  className="leading-[1.5] text-neutral-100 whitespace-pre-line font-medium"
+                  style={{ fontSize: misura(presenti.length) }}
+                >
                   {varianti[v]}
                 </div>
               </section>
@@ -128,6 +131,15 @@ export default function Tv({ codice }) {
       )}
     </div>
   );
+}
+
+/** Quanto scrivere i movimenti. Con una versione sola c'è tutto lo
+    schermo a disposizione e va sfruttato: questa pagina si guarda da
+    in fondo alla sala, non da vicino. */
+function misura(quante) {
+  if (quante <= 1) return "clamp(2rem, 5.5vw, 4.6rem)";
+  if (quante === 2) return "clamp(1.6rem, 3.4vw, 3rem)";
+  return "clamp(1.3rem, 2.5vw, 2.2rem)";
 }
 
 function Centro({ children }) {
