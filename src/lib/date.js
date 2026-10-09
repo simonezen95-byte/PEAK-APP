@@ -61,10 +61,14 @@ export function dataEstesa(iso) {
   return `${GIORNI_LUNGHI[d.getDay()]} ${d.getDate()} ${MESI[d.getMonth()]}`;
 }
 
-/** "12 ott" */
+/** "12 ott", e "12 ott 2027" se cade in un altro anno: una scadenza
+    senza anno si legge come se fosse domani. */
 export function dataBreve(iso) {
   const d = aData(iso);
-  return `${d.getDate()} ${MESI[d.getMonth()].slice(0, 3)}`;
+  const anno = d.getFullYear() === new Date().getFullYear()
+    ? ""
+    : ` ${d.getFullYear()}`;
+  return `${d.getDate()} ${MESI[d.getMonth()].slice(0, 3)}${anno}`;
 }
 
 /** "ottobre 2026", per l'intestazione della settimana. */
