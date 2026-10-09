@@ -5,7 +5,7 @@ import { Logo } from "./ui/base";
 import Accesso from "./schermate/Accesso";
 import Registrazione from "./schermate/Registrazione";
 import Attesa from "./schermate/Attesa";
-import Dentro from "./schermate/Dentro";
+import Guscio from "./ui/Guscio";
 
 /* Decide quale schermata mostrare. L'ordine delle domande è:
    l'app è collegata? → c'è un account? → ha una scheda socio?
@@ -33,7 +33,7 @@ export default function App() {
   if (profilo.stato === "sospeso") return <Attesa sospeso />;
   if (profilo.stato !== "approvato") return <Attesa />;
 
-  return <Dentro />;
+  return <Guscio />;
 }
 
 function Attendere() {

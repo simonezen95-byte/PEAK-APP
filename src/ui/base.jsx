@@ -162,3 +162,56 @@ export function DataNascita({ valore, onChange }) {
     </div>
   );
 }
+
+/* ----------------------------------------------------------------
+   Pezzi comuni alle schermate interne.
+   ---------------------------------------------------------------- */
+
+export function Card({ className = "", ...resto }) {
+  return (
+    <div
+      {...resto}
+      className={`rounded-2xl border border-neutral-800 bg-neutral-900/70 p-4 ${className}`}
+    />
+  );
+}
+
+export function Titolo({ children }) {
+  return (
+    <div className="text-[11px] tracking-[0.15em] text-neutral-500 font-semibold mb-3">
+      {children}
+    </div>
+  );
+}
+
+/** Rettangoli grigi al posto del contenuto mentre arriva dal database:
+    la pagina non salta quando i dati compaiono. */
+export function Scheletro({ righe = 3 }) {
+  return (
+    <div className="flex flex-col gap-2.5">
+      {Array.from({ length: righe }, (_, i) => (
+        <div key={i} className="h-16 rounded-2xl bg-neutral-900 animate-pulse" />
+      ))}
+    </div>
+  );
+}
+
+export function Vuoto({ children }) {
+  return (
+    <div className="text-center text-[12.5px] text-neutral-600 py-10 leading-relaxed">
+      {children}
+    </div>
+  );
+}
+
+/** Messaggio che compare in basso dopo un'azione e sparisce da solo. */
+export function Messaggio({ testo }) {
+  if (!testo) return null;
+  return (
+    <div className="fixed left-0 right-0 bottom-24 flex justify-center px-6 pointer-events-none z-30">
+      <div className="bg-neutral-100 text-black text-[12.5px] font-semibold rounded-full px-5 py-2.5 shadow-lg max-w-sm text-center">
+        {testo}
+      </div>
+    </div>
+  );
+}
