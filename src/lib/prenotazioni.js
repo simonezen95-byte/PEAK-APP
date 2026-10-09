@@ -166,3 +166,29 @@ export function ostacoli(accesso, dataIso) {
 export function soloOpenBox(accesso) {
   return Boolean(accesso?.abbonamento) && accesso.include_classi === false;
 }
+
+/** Tre numeri per la home: quanti allenamenti questo mese, quanti in
+    programma, quanti da quando sei iscritto. Contano le prenotazioni
+    non disdette: finché lo staff non spunta le presenze è il dato più
+    vicino alla verità che abbiamo. */
+export async function mieStatistiche(profiloId) {
+  const oggi = new Date();
+  const p = (n) => String(n).padStart(2, "0");
+  const iso = (d) => `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+  const oggiIso = iso(oggi);
+  const inizioMese = `${oggi.getFullYear()}-${p(oggi.getMonth() + 1)}-01`;
+
+  const { data, error } = await supabase
+    .from("prenotazioni")
+    .select("stato, sessioni!inner(data)")
+    .eq("profilo_id", profiloId)
+    .in("stato", ["prenotato", "presente"]);
+  if (error) throw error;
+
+  const righe = (data ?? []).map((r) => r.sessioni.data);
+  return {
+    mese:       righe.filter((d) => d >= inizioMese && d <= oggiIso).length,
+    inArrivo:   righe.filter((d) => d > oggiIso).length,
+    totale:     righe.filter((d) => d <= oggiIso).length,
+  };
+}

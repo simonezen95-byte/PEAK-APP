@@ -215,3 +215,53 @@ export function Messaggio({ testo }) {
     </div>
   );
 }
+
+/** Il segno della montagna, lo stesso del marchio. Sta sullo sfondo
+    appena visibile: serve a far sentire che è PEAK, non a farsi
+    guardare. */
+export function Montagna({ className = "" }) {
+  return (
+    <svg viewBox="0 0 100 60" className={className} fill="none" aria-hidden="true">
+      <path d="M2 58L50 4L98 58" stroke="currentColor" strokeWidth="6" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/** Titolo di sezione con, a destra, il rimando al resto. */
+export function Sezione({ titolo, azione, etichetta = "VEDI TUTTO" }) {
+  return (
+    <div className="flex items-center justify-between mt-7 mb-3">
+      <div className="text-[11px] tracking-[0.15em] text-neutral-400 font-semibold">
+        {titolo}
+      </div>
+      {azione && (
+        <button
+          onClick={azione}
+          className="text-[10.5px] text-neutral-500 flex items-center gap-0.5 font-semibold tracking-wider"
+        >
+          {etichetta}
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </button>
+      )}
+    </div>
+  );
+}
+
+/** Un numero grande con sotto cosa vuol dire. */
+export function Numero({ icona: Icona, valore, nome, nota }) {
+  return (
+    <div className="flex flex-col items-center text-center py-4 px-2">
+      {Icona && <Icona size={17} className="text-neutral-400 mb-2" strokeWidth={1.8} />}
+      <div className="text-[22px] font-display font-bold text-neutral-50 leading-none">
+        {valore}
+      </div>
+      <div className="text-[9px] tracking-[0.12em] text-neutral-500 mt-1.5 font-semibold">
+        {nome}
+      </div>
+      {nota && <div className="text-[9px] text-neutral-700 mt-1">{nota}</div>}
+    </div>
+  );
+}

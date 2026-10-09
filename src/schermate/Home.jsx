@@ -1,22 +1,31 @@
 import { useCallback, useEffect, useState } from "react";
-import { Dumbbell, DoorOpen, Clock, Check, ChevronRight } from "lucide-react";
+import {
+  Dumbbell, DoorOpen, Clock, Check, Calendar, Flame, CalendarCheck,
+} from "lucide-react";
 import { useSessione } from "../lib/sessione";
-import { mieProssime, mioAccesso, ostacoli } from "../lib/prenotazioni";
+import { mieProssime, mioAccesso, mieStatistiche, ostacoli } from "../lib/prenotazioni";
 import { quando, soloOra, piuMinuti, dataBreve, aData, oggiIso } from "../lib/date";
-import { Card, Titolo, Scheletro, Vuoto } from "../ui/base";
+import { Card, Sezione, Scheletro, Montagna, Numero } from "../ui/base";
 
-/* La prima schermata: cosa hai in programma e cosa ti manca. */
+/* La prima schermata: chi sei, cosa hai in programma, come stai andando
+   e cosa ti manca. */
 
-export default function Home({ onVaiAlCalendario, ricarica }) {
+export default function Home({ onVaiAlCalendario, onVaiAlProfilo, ricarica }) {
   const { profilo } = useSessione();
   const [prossime, setProssime] = useState(null);
   const [accesso, setAccesso] = useState(null);
+  const [numeri, setNumeri] = useState(null);
 
   const carica = useCallback(async () => {
     try {
-      const [p, a] = await Promise.all([mieProssime(profilo.id), mioAccesso()]);
+      const [p, a, n] = await Promise.all([
+        mieProssime(profilo.id),
+        mioAccesso(),
+        mieStatistiche(profilo.id),
+      ]);
       setProssime(p);
       setAccesso(a);
+      setNumeri(n);
     } catch {
       setProssime([]);
     }
@@ -28,50 +37,80 @@ export default function Home({ onVaiAlCalendario, ricarica }) {
   const prima = prossime?.[0];
 
   return (
-    <div className="px-5 pb-28 pt-4">
-      <div className="mb-7">
-        <div className="text-[11px] tracking-[0.15em] text-neutral-500 font-semibold">
+    <div className="px-5 pb-28 pt-3 relative overflow-hidden">
+      <Montagna className="absolute -right-5 -top-2 w-36 h-36 text-neutral-900 pointer-events-none" />
+
+      {/* Chi sei */}
+      <div className="relative mb-2">
+        <div className="text-[10.5px] tracking-[0.2em] text-neutral-500 font-semibold">
           {saluto()}
         </div>
-        <div className="text-[25px] font-display font-bold text-neutral-50 leading-tight mt-1">
+        <div className="text-[2.3rem] leading-[1.03] font-display font-bold text-neutral-50 uppercase mt-1">
           {profilo.nome}
+        </div>
+        <div className="w-9 h-[3px] bg-neutral-50 my-3.5" />
+        <div className="text-[9.5px] tracking-[0.25em] text-neutral-600 font-semibold">
+          FOCUS. TRAIN. IMPROVE. REPEAT.
         </div>
       </div>
 
+      {/* Cosa manca */}
+      {blocchi.length > 0 && (
+        <div className="mt-6 flex flex-col gap-2.5">
+          {blocchi.map((b) => (
+            <Card key={b.titolo} className="border-amber-900/50 bg-amber-950/20">
+              <div className="text-[13px] font-semibold text-amber-200 mb-1">{b.titolo}</div>
+              <div className="text-[11.5px] text-amber-200/60 leading-relaxed">{b.testo}</div>
+            </Card>
+          ))}
+        </div>
+      )}
+
       {/* La prossima */}
+      <Sezione titolo="LA PROSSIMA" azione={onVaiAlCalendario} etichetta="CALENDARIO" />
       {prossime === null ? (
         <Scheletro righe={1} />
       ) : prima ? (
         <button
           onClick={onVaiAlCalendario}
-          className="w-full text-left rounded-2xl border border-neutral-400 bg-neutral-50/[0.07] p-4 mb-6"
+          className="w-full text-left rounded-2xl border border-neutral-400 bg-neutral-50/[0.07] p-4 flex items-center"
         >
-          <div className="flex items-center gap-2 mb-3">
-            {prima.stato === "lista_attesa" ? (
-              <Clock size={12} className="text-neutral-300" />
-            ) : (
-              <Check size={12} className="text-neutral-100" strokeWidth={3} />
-            )}
-            <span className="text-[10px] tracking-[0.15em] font-bold text-neutral-300">
-              {prima.stato === "lista_attesa"
-                ? `IN LISTA D'ATTESA · POSIZIONE ${prima.posizione_coda ?? "–"}`
-                : "LA TUA PROSSIMA"}
-            </span>
-          </div>
-          <div className="flex items-end gap-3">
-            <div className="text-[27px] font-display font-bold text-neutral-50 leading-none">
+          <div className="flex-1 min-w-0">
+            <div className="text-[10.5px] text-neutral-500 mb-0.5 first-letter:uppercase">
+              {quando(prima.data)}
+            </div>
+            <div className="text-[31px] font-display font-bold text-neutral-50 leading-none">
               {soloOra(prima.ora)}
             </div>
-            <div className="text-[12px] text-neutral-400 pb-0.5">
-              – {piuMinuti(prima.ora, prima.durata_min)}
+            <div className="text-[10px] tracking-[0.15em] text-neutral-400 mt-2 font-semibold uppercase truncate">
+              {prima.nome}
             </div>
+            <span
+              className={`inline-flex items-center gap-1 mt-3 text-[9.5px] font-bold tracking-wider rounded-full px-2.5 py-1 ${
+                prima.stato === "lista_attesa"
+                  ? "border border-neutral-600 text-neutral-300"
+                  : "bg-neutral-50 text-black"
+              }`}
+            >
+              {prima.stato === "lista_attesa" ? (
+                <><Clock size={10} strokeWidth={3} /> IN CODA {prima.posizione_coda ?? ""}</>
+              ) : (
+                <><Check size={10} strokeWidth={3} /> PRENOTATO</>
+              )}
+            </span>
           </div>
-          <div className="text-[13px] text-neutral-200 mt-2">
-            {prima.nome} · <span className="text-neutral-400">{quando(prima.data)}</span>
+          <div className="w-px self-stretch bg-neutral-800 mx-3.5" />
+          <div className="text-center shrink-0 px-1">
+            <div className="text-[19px] font-display font-bold text-neutral-50 leading-none">
+              {piuMinuti(prima.ora, prima.durata_min)}
+            </div>
+            <div className="text-[9px] tracking-[0.12em] text-neutral-600 mt-1.5 font-semibold leading-tight">
+              FINE<br />LEZIONE
+            </div>
           </div>
         </button>
       ) : (
-        <Card className="mb-6">
+        <Card>
           <div className="text-[13px] text-neutral-300 mb-1">Non hai prenotazioni attive.</div>
           <button
             onClick={onVaiAlCalendario}
@@ -82,22 +121,10 @@ export default function Home({ onVaiAlCalendario, ricarica }) {
         </Card>
       )}
 
-      {/* Cosa manca */}
-      {blocchi.length > 0 && (
-        <div className="mb-7 flex flex-col gap-2.5">
-          {blocchi.map((b) => (
-            <Card key={b.titolo} className="border-amber-900/50 bg-amber-950/20">
-              <div className="text-[13px] font-semibold text-amber-200 mb-1">{b.titolo}</div>
-              <div className="text-[11.5px] text-amber-200/60 leading-relaxed">{b.testo}</div>
-            </Card>
-          ))}
-        </div>
-      )}
-
       {/* In programma */}
       {prossime !== null && prossime.length > 1 && (
-        <section className="mb-7">
-          <Titolo>IN PROGRAMMA</Titolo>
+        <>
+          <Sezione titolo="IN PROGRAMMA" />
           <div className="flex flex-col gap-2.5">
             {prossime.slice(1).map((p) => (
               <div
@@ -123,13 +150,27 @@ export default function Home({ onVaiAlCalendario, ricarica }) {
               </div>
             ))}
           </div>
-        </section>
+        </>
+      )}
+
+      {/* I tuoi numeri */}
+      {numeri && (
+        <>
+          <Sezione titolo="I TUOI NUMERI" />
+          <Card className="!p-0 overflow-hidden">
+            <div className="grid grid-cols-3 divide-x divide-neutral-800">
+              <Numero icona={Flame} valore={numeri.mese} nome="QUESTO MESE" />
+              <Numero icona={CalendarCheck} valore={numeri.inArrivo} nome="IN PROGRAMMA" />
+              <Numero icona={Calendar} valore={numeri.totale} nome="IN TOTALE" />
+            </div>
+          </Card>
+        </>
       )}
 
       {/* Abbonamento */}
       {accesso && (
-        <section>
-          <Titolo>LA TUA SITUAZIONE</Titolo>
+        <>
+          <Sezione titolo="LA TUA SITUAZIONE" azione={onVaiAlProfilo} etichetta="PROFILO" />
           <Card className="divide-y divide-neutral-800">
             <Voce
               nome="Abbonamento"
@@ -141,6 +182,7 @@ export default function Home({ onVaiAlCalendario, ricarica }) {
                     }`
                   : null
               }
+              allarme={!accesso.abbonamento}
             />
             <Voce
               nome="Certificato medico"
@@ -159,7 +201,7 @@ export default function Home({ onVaiAlCalendario, ricarica }) {
               allarme={!accesso.quota_fino}
             />
           </Card>
-        </section>
+        </>
       )}
     </div>
   );
@@ -181,7 +223,7 @@ function Voce({ nome, valore, nota, allarme }) {
 
 function saluto() {
   const h = new Date().getHours();
-  if (h < 12) return "BUONGIORNO";
-  if (h < 18) return "BUON POMERIGGIO";
-  return "BUONASERA";
+  if (h < 12) return "BUONGIORNO,";
+  if (h < 18) return "BUON POMERIGGIO,";
+  return "BUONASERA,";
 }

@@ -71,7 +71,11 @@ export default function Guscio() {
             onMessaggio={avvisa}
           />
         ) : sezione === "home" ? (
-          <Home onVaiAlCalendario={() => vaiA("prenota")} ricarica={versione} />
+          <Home
+            onVaiAlCalendario={() => vaiA("prenota")}
+            onVaiAlProfilo={() => vaiA("profilo")}
+            ricarica={versione}
+          />
         ) : sezione === "prenota" ? (
           <Prenota onApri={setLezione} ricarica={versione} />
         ) : sezione === "soci" ? (
