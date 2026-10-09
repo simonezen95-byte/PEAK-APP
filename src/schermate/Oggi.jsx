@@ -34,7 +34,7 @@ export default function Oggi({ onVaiAiSoci, onVaiAlleClassi, onVaiAlWod, ricaric
 
   return (
     <div className="px-5 pb-28 pt-4 relative overflow-hidden">
-      <Montagna className="absolute right-[-3.5rem] top-[-2rem] w-64 h-64 text-neutral-800/60 pointer-events-none" />
+      <Montagna className="absolute right-[-4rem] top-[-1.5rem] w-[20rem] h-[20rem] text-white pointer-events-none" />
 
       <div className="relative mb-6">
         <div className="text-[10.5px] tracking-[0.2em] text-neutral-500 font-semibold">

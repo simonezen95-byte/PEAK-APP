@@ -71,7 +71,7 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
 
   return (
     <div className="px-5 pb-28 pt-4 relative overflow-hidden">
-      <Montagna className="absolute right-[-4.5rem] top-[-2.5rem] w-[21rem] h-[21rem] text-neutral-800/70 pointer-events-none" />
+      <Montagna className="absolute right-[-5rem] top-[-2rem] w-[25rem] h-[25rem] text-white pointer-events-none" />
 
       {/* Chi sei */}
       <div className="relative mb-1">

@@ -216,30 +216,42 @@ export function Messaggio({ testo }) {
   );
 }
 
-/** Il segno della montagna: la stessa A del logo, piena e spessa,
-    che sfuma verso il basso. Sta sullo sfondo appena accennata —
-    serve a far sentire che è PEAK, non a farsi guardare. */
+/** Il segno della montagna: la stessa A del logo. Una fascia spessa
+    e chiara, con dentro un velo più tenue, che sfuma verso il basso.
+
+    È luce sul nero, non grigio dipinto: così resta coerente anche se
+    un giorno lo sfondo cambia tono. */
 export function Montagna({ className = "" }) {
   // useId mette dei due punti nel nome, e url(#...) con i due punti
   // su Safari ogni tanto non lo segue: li tolgo.
-  const id = `montagna${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+  const seme = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const fascia = `fascia${seme}`;
+  const velo = `velo${seme}`;
+
   return (
-    <svg viewBox="0 0 200 190" className={className} aria-hidden="true">
+    <svg viewBox="0 0 200 200" className={className} aria-hidden="true">
       <defs>
-        <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
-          <stop offset="55%" stopColor="currentColor" stopOpacity="0.75" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0.15" />
+        <linearGradient id={fascia} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stopColor="currentColor" stopOpacity="0.085" />
+          <stop offset="55%"  stopColor="currentColor" stopOpacity="0.055" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id={velo} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stopColor="currentColor" stopOpacity="0.035" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
         </linearGradient>
       </defs>
-      {/* Apice in alto, due gambe spesse che scendono: il contorno
-          esterno e quello interno in un tratto solo. */}
+
+      {/* Il velo dentro la V */}
+      <path d="M100 76 L150 196 L50 196 Z" fill={`url(#${velo})`} />
+
+      {/* La fascia: contorno esterno e interno in un tratto solo */}
       <path
-        d="M100 8 L196 178 L150 178 L100 88 L50 178 L4 178 Z"
-        fill={`url(#${id})`}
+        d="M100 10 L199 196 L151 196 L100 80 L49 196 L1 196 Z"
+        fill={`url(#${fascia})`}
+        stroke={`url(#${fascia})`}
+        strokeWidth="5"
         strokeLinejoin="round"
-        stroke={`url(#${id})`}
-        strokeWidth="8"
       />
     </svg>
   );
