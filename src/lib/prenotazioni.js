@@ -213,3 +213,11 @@ export async function mieStatistiche() {
   if (error) throw error;
   return data?.[0] ?? null;
 }
+
+/** Le ultime settimane, una per una: serve alle tacche sotto la
+    fiamma della serie. L'ultima è quella in corso. */
+export async function mieSettimane(quante = 8) {
+  const { data, error } = await supabase.rpc("mie_settimane", { quante });
+  if (error) throw error;
+  return data ?? [];
+}

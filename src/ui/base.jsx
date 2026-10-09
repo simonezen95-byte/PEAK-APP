@@ -332,3 +332,54 @@ export function BottonePiccolo({ chiaro, children, ...resto }) {
     </button>
   );
 }
+
+/** La fiamma della serie.
+
+    Accesa e con l'alone quando la settimana in corso è già
+    alimentata, spenta e vuota quando è ancora aperta: si deve capire
+    a colpo d'occhio se manca qualcosa da fare, non solo quante
+    settimane hai messo insieme.
+
+    Sotto, una tacca per settimana: piene quelle fatte, l'ultima
+    pulsa finché resta da alimentare. */
+export function Fiamma({ accesa, settimane = [] }) {
+  return (
+    <div className="flex flex-col items-center">
+      <div
+        className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+          accesa ? "bg-neutral-100" : "bg-rilievo"
+        }`}
+        style={accesa ? { boxShadow: "0 0 16px 1px rgba(255,255,255,0.18)" } : undefined}
+      >
+        <svg
+          width={accesa ? 19 : 17} height={accesa ? 19 : 17} viewBox="0 0 24 24"
+          fill={accesa ? "currentColor" : "none"}
+          stroke="currentColor"
+          strokeWidth={accesa ? 1 : 1.8}
+          strokeLinecap="round" strokeLinejoin="round"
+          className={accesa ? "text-black" : "text-neutral-500"}
+        >
+          <path d="M12 2c1 4 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 1-2-1-5 1-8z" />
+        </svg>
+      </div>
+
+      {settimane.length > 0 && (
+        <div className="flex items-end gap-[3px] mt-2.5 h-[9px]">
+          {settimane.map((s) => (
+            <span
+              key={s.inizio}
+              title={`${s.quanti} allenamenti`}
+              className={`w-[3px] rounded-full ${
+                s.fatta
+                  ? s.in_corso ? "bg-neutral-100 h-[9px]" : "bg-neutral-400 h-[7px]"
+                  : s.in_corso
+                  ? "bg-neutral-600 h-[9px] animate-pulse"
+                  : "bg-neutral-800 h-[4px]"
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

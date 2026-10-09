@@ -5,7 +5,8 @@ import {
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import {
-  mieProssime, mioAccesso, mieStatistiche, ostacoli, settimana as leggiSettimana,
+  mieProssime, mioAccesso, mieStatistiche, mieSettimane, ostacoli,
+  settimana as leggiSettimana,
 } from "../lib/prenotazioni";
 import { wodDelGiorno, puoScrivereWod, VARIANTI } from "../lib/wod";
 import { comunicazioni as leggiComunicazioni, quantoFa } from "../lib/notifiche";
@@ -13,7 +14,7 @@ import {
   quando, soloOra, piuMinuti, dataBreve, aData, oggiIso, lunedi, minutiAllInizio,
 } from "../lib/date";
 import {
-  Card, Sezione, Scheletro, Montagna, Cerchio, Divisore, BottonePiccolo,
+  Card, Sezione, Scheletro, Montagna, Cerchio, Divisore, BottonePiccolo, Fiamma,
 } from "../ui/base";
 
 /* La prima schermata del socio. */
@@ -26,21 +27,24 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
   const [wod, setWod] = useState(undefined);
   const [libera, setLibera] = useState(null);   // la prossima classe prenotabile
   const [avvisi, setAvvisi] = useState([]);
+  const [settimane, setSettimane] = useState([]);
 
   const carica = useCallback(async () => {
     try {
-      const [p, a, n, w, c] = await Promise.all([
+      const [p, a, n, w, c, sett] = await Promise.all([
         mieProssime(profilo.id),
         mioAccesso(),
         mieStatistiche(),
         wodDelGiorno(oggiIso()),
         leggiComunicazioni(3).catch(() => []),
+        mieSettimane(8).catch(() => []),
       ]);
       setProssime(p);
       setAccesso(a);
       setNumeri(n);
       setWod(w);
       setAvvisi(c);
+      setSettimane(sett);
 
       // Se non hai niente prenotato, la scheda in alto propone la
       // prossima classe con ancora posto.
@@ -267,12 +271,12 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
           <Card className="!p-0 overflow-hidden">
             <div className="grid grid-cols-3 divide-x divide-filo">
               <Tassello
-                icona={Flame}
+                sopra={<Fiamma accesa={numeri.settimana_fatta} settimane={settimane} />}
                 valore={numeri.settimane_di_fila}
                 nome={["SETTIMANE", "DI FILA"]}
                 nota={numeri.settimana_fatta
-                  ? "questa l'hai fatta ✓"
-                  : "questa è ancora aperta"}
+                  ? "questa l'hai alimentata"
+                  : "questa è ancora da fare"}
               />
               <Tassello
                 icona={CalendarCheck}
@@ -363,12 +367,16 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
   );
 }
 
-function Tassello({ icona: Icona, valore, nome, nota }) {
+function Tassello({ icona: Icona, sopra, valore, nome, nota }) {
   const righe = Array.isArray(nome) ? nome : [nome];
   return (
     <div className="flex flex-col items-center text-center py-5 px-1.5">
-      <div className="w-10 h-10 rounded-full bg-rilievo flex items-center justify-center mb-3">
-        <Icona size={16} className="text-neutral-200" strokeWidth={1.9} />
+      <div className="mb-3">
+        {sopra ?? (
+          <div className="w-10 h-10 rounded-full bg-rilievo flex items-center justify-center">
+            <Icona size={16} className="text-neutral-200" strokeWidth={1.9} />
+          </div>
+        )}
       </div>
       <div className="text-[26px] font-display font-bold text-neutral-50 leading-none">
         {valore}
