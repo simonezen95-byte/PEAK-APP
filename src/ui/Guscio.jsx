@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Home as IconaHome, CalendarDays, Dumbbell, TrendingUp, Users, User,
-  ChevronDown, Check,
+  ChevronDown, Check, Bell,
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { eStaff } from "../lib/staff";
+import { quanteDaLeggere } from "../lib/notifiche";
 import { Logo, Messaggio } from "./base";
 import Home from "../schermate/Home";
 import Oggi from "../schermate/Oggi";
@@ -15,6 +16,7 @@ import Progressi from "../schermate/Progressi";
 import Soci from "../schermate/Soci";
 import Socio from "../schermate/Socio";
 import Profilo from "../schermate/Profilo";
+import Notifiche from "../schermate/Notifiche";
 
 /* La struttura dell'app una volta dentro.
 
@@ -70,10 +72,18 @@ export default function Guscio() {
   const [lezione, setLezione] = useState(null);
   const [socio, setSocio] = useState(null);
   const [progressi, setProgressi] = useState(false);
+  const [notifiche, setNotifiche] = useState(false);
+  const [daLeggere, setDaLeggere] = useState(0);
   const [messaggio, setMessaggio] = useState("");
   // Cambiando questo numero le schermate rileggono i dati: serve dopo
   // una prenotazione o una modifica, perché il quadro è cambiato.
   const [versione, setVersione] = useState(0);
+
+  const contaNotifiche = useCallback(() => {
+    quanteDaLeggere().then(setDaLeggere).catch(() => setDaLeggere(0));
+  }, []);
+
+  useEffect(() => { contaNotifiche(); }, [contaNotifiche]);
 
   function avvisa(testo) {
     setMessaggio(testo);
@@ -84,6 +94,7 @@ export default function Guscio() {
     setLezione(null);
     setSocio(null);
     setProgressi(false);
+    setNotifiche(false);
     setSezione(chiave);
   }
 
@@ -92,23 +103,36 @@ export default function Guscio() {
     setLezione(null);
     setSocio(null);
     setProgressi(false);
+    setNotifiche(false);
     setSezione(nuovo === "staff" ? "oggi" : "home");
   }
 
-  const dettaglio = Boolean(lezione || socio || progressi);
+  const dettaglio = Boolean(lezione || socio || progressi || notifiche);
 
   return (
     <div className="min-h-full flex flex-col">
       <header className="flex items-center px-5 py-3.5 pt-[max(0.875rem,env(safe-area-inset-top))] border-b border-neutral-900 sticky top-0 bg-[#0D0D0D]/95 backdrop-blur z-20">
+        <Logo altezza={26} />
         <div className="flex-1" />
-        <Logo altezza={22} />
-        <div className="flex-1 flex justify-end">
+        <div className="flex items-center gap-4">
           {staff && <Interruttore modo={modo} onCambia={cambiaModo} profilo={profilo} />}
+          <button
+            onClick={() => { setNotifiche(true); setLezione(null); setSocio(null); setProgressi(false); }}
+            aria-label={daLeggere > 0 ? `Notifiche, ${daLeggere} da leggere` : "Notifiche"}
+            className="relative text-neutral-300 p-0.5"
+          >
+            <Bell size={20} strokeWidth={1.7} />
+            {daLeggere > 0 && (
+              <span className="absolute top-0 right-0 w-[7px] h-[7px] rounded-full bg-neutral-50 ring-2 ring-[#0D0D0D]" />
+            )}
+          </button>
         </div>
       </header>
 
       <main className="flex-1 max-w-md w-full mx-auto">
-        {lezione ? (
+        {notifiche ? (
+          <Notifiche onIndietro={() => setNotifiche(false)} onLette={contaNotifiche} />
+        ) : lezione ? (
           <Lezione
             sessione={lezione}
             onIndietro={() => setLezione(null)}
@@ -136,6 +160,7 @@ export default function Guscio() {
             onVaiAlCalendario={() => vaiA("prenota")}
             onVaiAlProfilo={() => vaiA("profilo")}
             onVaiAlWod={() => vaiA("wod")}
+            onApriLezione={setLezione}
             ricarica={versione}
           />
         ) : sezione === "prenota" ? (
@@ -166,7 +191,7 @@ export default function Guscio() {
               <button
                 key={chiave}
                 onClick={() => vaiA(chiave)}
-                className={`flex flex-col items-center gap-1 py-3 ${
+                className={`flex flex-col items-center gap-1 pt-3 pb-2.5 relative ${
                   attiva ? "text-neutral-50" : "text-neutral-600"
                 }`}
               >
@@ -174,6 +199,9 @@ export default function Guscio() {
                 <span className="text-[9px] tracking-[0.06em] font-semibold whitespace-nowrap">
                   {nome.toUpperCase()}
                 </span>
+                {attiva && (
+                  <span className="absolute bottom-0 w-7 h-[2px] rounded-full bg-neutral-50" />
+                )}
               </button>
             );
           })}

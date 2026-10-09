@@ -1,35 +1,63 @@
 import { useCallback, useEffect, useState } from "react";
 import {
-  Dumbbell, DoorOpen, Clock, Check, Calendar, Flame, CalendarCheck,
+  Calendar, Dumbbell, DoorOpen, Clock, Check, Flame, CalendarCheck,
+  Megaphone, TrendingUp,
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
-import { mieProssime, mioAccesso, mieStatistiche, ostacoli } from "../lib/prenotazioni";
+import {
+  mieProssime, mioAccesso, mieStatistiche, ostacoli, settimana as leggiSettimana,
+} from "../lib/prenotazioni";
 import { wodDelGiorno, puoScrivereWod, VARIANTI } from "../lib/wod";
-import { quando, soloOra, piuMinuti, dataBreve, aData, oggiIso } from "../lib/date";
-import { Card, Sezione, Scheletro, Montagna, Numero } from "../ui/base";
+import { comunicazioni as leggiComunicazioni, quantoFa } from "../lib/notifiche";
+import {
+  quando, soloOra, piuMinuti, dataBreve, aData, oggiIso, lunedi, minutiAllInizio,
+} from "../lib/date";
+import {
+  Card, Sezione, Scheletro, Montagna, Cerchio, Divisore, BottonePiccolo,
+} from "../ui/base";
 
-/* La prima schermata: chi sei, cosa hai in programma, come stai andando
-   e cosa ti manca. */
+/* La prima schermata del socio. */
 
-export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ricarica }) {
+export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, onApriLezione, ricarica }) {
   const { profilo } = useSessione();
   const [prossime, setProssime] = useState(null);
   const [accesso, setAccesso] = useState(null);
   const [numeri, setNumeri] = useState(null);
   const [wod, setWod] = useState(undefined);
+  const [libera, setLibera] = useState(null);   // la prossima classe prenotabile
+  const [avvisi, setAvvisi] = useState([]);
 
   const carica = useCallback(async () => {
     try {
-      const [p, a, n, w] = await Promise.all([
+      const [p, a, n, w, c] = await Promise.all([
         mieProssime(profilo.id),
         mioAccesso(),
         mieStatistiche(profilo.id),
         wodDelGiorno(oggiIso()),
+        leggiComunicazioni(3).catch(() => []),
       ]);
       setProssime(p);
       setAccesso(a);
       setNumeri(n);
       setWod(w);
+      setAvvisi(c);
+
+      // Se non hai niente prenotato, la scheda in alto propone la
+      // prossima classe con ancora posto.
+      if (p.length === 0) {
+        const sett = await leggiSettimana(lunedi(oggiIso()));
+        setLibera(
+          sett.find(
+            (s) =>
+              s.tipo === "classe" &&
+              !s.annullata &&
+              minutiAllInizio(s.data, s.ora) > 0 &&
+              s.iscritti < s.capienza
+          ) ?? null
+        );
+      } else {
+        setLibera(null);
+      }
     } catch {
       setProssime([]);
     }
@@ -42,19 +70,19 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ri
   const prima = prossime?.[0];
 
   return (
-    <div className="px-5 pb-28 pt-3 relative overflow-hidden">
-      <Montagna className="absolute -right-5 -top-2 w-36 h-36 text-neutral-900 pointer-events-none" />
+    <div className="px-5 pb-28 pt-4 relative overflow-hidden">
+      <Montagna className="absolute right-[-3.5rem] top-[-1.5rem] w-72 h-72 text-neutral-900/80 pointer-events-none" />
 
       {/* Chi sei */}
-      <div className="relative mb-2">
-        <div className="text-[10.5px] tracking-[0.2em] text-neutral-500 font-semibold">
+      <div className="relative mb-1">
+        <div className="text-[11px] tracking-[0.22em] text-neutral-400 font-semibold">
           {saluto()}
         </div>
-        <div className="text-[2.3rem] leading-[1.03] font-display font-bold text-neutral-50 uppercase mt-1">
+        <div className="text-[2.6rem] leading-[1.02] font-display font-bold text-neutral-50 uppercase mt-0.5">
           {profilo.nome}
         </div>
-        <div className="w-9 h-[3px] bg-neutral-50 my-3.5" />
-        <div className="text-[9.5px] tracking-[0.25em] text-neutral-600 font-semibold">
+        <div className="w-10 h-[3px] bg-neutral-50 my-3.5" />
+        <div className="text-[10px] tracking-[0.25em] text-neutral-500 font-semibold">
           FOCUS. TRAIN. IMPROVE. REPEAT.
         </div>
       </div>
@@ -76,44 +104,68 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ri
       {prossime === null ? (
         <Scheletro righe={1} />
       ) : prima ? (
-        <button
-          onClick={onVaiAlCalendario}
-          className="w-full text-left rounded-2xl border border-neutral-400 bg-neutral-50/[0.07] p-4 flex items-center"
-        >
-          <div className="flex-1 min-w-0">
-            <div className="text-[10.5px] text-neutral-500 mb-0.5 first-letter:uppercase">
+        <Card className="flex items-center">
+          <Cerchio icona={prima.tipo === "classe" ? Calendar : DoorOpen} />
+          <div className="flex-1 min-w-0 ml-3.5">
+            <div className="text-[10.5px] text-neutral-500 first-letter:uppercase">
               {quando(prima.data)}
             </div>
-            <div className="text-[31px] font-display font-bold text-neutral-50 leading-none">
+            <div className="text-[30px] font-display font-bold text-neutral-50 leading-none mt-0.5">
               {soloOra(prima.ora)}
             </div>
-            <div className="text-[10px] tracking-[0.15em] text-neutral-400 mt-2 font-semibold uppercase truncate">
+            <div className="text-[10px] tracking-[0.18em] text-neutral-400 font-semibold uppercase mt-1.5 truncate">
               {prima.nome}
             </div>
-            <span
-              className={`inline-flex items-center gap-1 mt-3 text-[9.5px] font-bold tracking-wider rounded-full px-2.5 py-1 ${
-                prima.stato === "lista_attesa"
-                  ? "border border-neutral-600 text-neutral-300"
-                  : "bg-neutral-50 text-black"
-              }`}
-            >
-              {prima.stato === "lista_attesa" ? (
-                <><Clock size={10} strokeWidth={3} /> IN CODA {prima.posizione_coda ?? ""}</>
-              ) : (
-                <><Check size={10} strokeWidth={3} /> PRENOTATO</>
-              )}
-            </span>
           </div>
-          <div className="w-px self-stretch bg-neutral-800 mx-3.5" />
-          <div className="text-center shrink-0 px-1">
-            <div className="text-[19px] font-display font-bold text-neutral-50 leading-none">
-              {piuMinuti(prima.ora, prima.durata_min)}
+          <Divisore />
+          <div className="shrink-0 text-right">
+            {prima.stato === "lista_attesa" ? (
+              <>
+                <Clock size={15} className="text-neutral-300 inline-block mb-1" />
+                <div className="text-[10px] tracking-[0.1em] text-neutral-500 font-semibold leading-tight">
+                  IN CODA<br />POSIZIONE {prima.posizione_coda ?? "–"}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="inline-flex items-center gap-1 text-[9.5px] font-bold tracking-[0.1em] bg-neutral-100 text-black rounded-full px-2.5 py-1 mb-2">
+                  <Check size={10} strokeWidth={3} /> PRENOTATO
+                </div>
+                <div className="text-[10px] text-neutral-600 leading-tight">
+                  fine {piuMinuti(prima.ora, prima.durata_min)}
+                </div>
+              </>
+            )}
+          </div>
+        </Card>
+      ) : libera ? (
+        <Card className="flex items-center">
+          <Cerchio icona={Calendar} />
+          <div className="flex-1 min-w-0 ml-3.5">
+            <div className="text-[10.5px] text-neutral-500 first-letter:uppercase">
+              {quando(libera.data)}
             </div>
-            <div className="text-[9px] tracking-[0.12em] text-neutral-600 mt-1.5 font-semibold leading-tight">
-              FINE<br />LEZIONE
+            <div className="text-[30px] font-display font-bold text-neutral-50 leading-none mt-0.5">
+              {soloOra(libera.ora)}
+            </div>
+            <div className="text-[10px] tracking-[0.18em] text-neutral-400 font-semibold uppercase mt-1.5 truncate">
+              {libera.nome}
             </div>
           </div>
-        </button>
+          <Divisore />
+          <div className="shrink-0 text-right">
+            <div className="text-[15px] font-display font-bold text-neutral-50 leading-none tabular-nums">
+              {libera.capienza - libera.iscritti}
+              <span className="text-neutral-600"> / {libera.capienza}</span>
+            </div>
+            <div className="text-[9px] tracking-[0.1em] text-neutral-600 font-semibold mt-1 mb-2.5 leading-tight">
+              POSTI<br />LIBERI
+            </div>
+            <BottonePiccolo chiaro onClick={() => onApriLezione(libera)}>
+              PRENOTA
+            </BottonePiccolo>
+          </div>
+        </Card>
       ) : (
         <Card>
           <div className="text-[13px] text-neutral-300 mb-1">Non hai prenotazioni attive.</div>
@@ -121,7 +173,7 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ri
             onClick={onVaiAlCalendario}
             className="text-[12px] text-neutral-400 underline underline-offset-2"
           >
-            Prenota la tua prossima sessione
+            Apri il calendario
           </button>
         </Card>
       )}
@@ -131,34 +183,40 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ri
       {wod === undefined ? (
         <Scheletro righe={1} />
       ) : !wod ? (
-        // Si apre lo stesso: di là lo staff lo scrive, e chiunque può
-        // guardare gli altri giorni.
         <button onClick={onVaiAlWod} className="w-full text-left">
-          <Card>
-            <div className="text-[13px] text-neutral-400">
-              Oggi non c'è ancora un WOD.
-            </div>
-            <div className="text-[11px] text-neutral-600 mt-1">
-              {puoScrivere ? "Aprilo per scriverlo." : "Lo pubblica lo staff: ricontrolla più tardi."}
+          <Card className="flex items-center">
+            <Cerchio icona={Dumbbell} />
+            <div className="flex-1 ml-3.5">
+              <div className="text-[13px] text-neutral-300">
+                Oggi non c'è ancora un WOD.
+              </div>
+              <div className="text-[11px] text-neutral-600 mt-0.5">
+                {puoScrivere ? "Aprilo per scriverlo." : "Lo pubblica lo staff."}
+              </div>
             </div>
           </Card>
         </button>
       ) : (
-        <button onClick={onVaiAlWod} className="w-full text-left">
-          <Card className="flex items-start gap-3.5">
-            <div className="w-11 h-11 rounded-full border border-neutral-700 flex items-center justify-center shrink-0">
-              <Dumbbell size={17} className="text-neutral-300" strokeWidth={1.6} />
+        <Card className="flex items-center">
+          <Cerchio icona={Dumbbell} />
+          <Divisore />
+          <div className="flex-1 min-w-0">
+            <div className="text-[9.5px] tracking-[0.18em] text-neutral-500 font-semibold uppercase">
+              {wod.tipo_score === "tempo" ? "FOR TIME"
+               : wod.tipo_score === "carico" ? "A CARICO" : "A RIPETIZIONI"}
+              {wod.time_cap && ` · CAP ${wod.time_cap}`}
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-[17px] font-display font-bold text-neutral-50 leading-tight uppercase truncate">
-                {wod.titolo}
-              </div>
-              <div className="text-[11.5px] text-neutral-400 mt-1.5 leading-relaxed line-clamp-3 whitespace-pre-line">
-                {anteprima(wod)}
-              </div>
+            <div className="text-[17px] font-display font-bold text-neutral-50 leading-tight uppercase mt-0.5 truncate">
+              {capo(wod)}
             </div>
-          </Card>
-        </button>
+            <div className="text-[11.5px] text-neutral-400 leading-[1.5] mt-1 whitespace-pre-line">
+              {corpo(wod)}
+            </div>
+          </div>
+          <div className="shrink-0 ml-3">
+            <BottonePiccolo onClick={onVaiAlWod}>APRI</BottonePiccolo>
+          </div>
+        </Card>
       )}
 
       {/* In programma */}
@@ -167,9 +225,9 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ri
           <Sezione titolo="IN PROGRAMMA" />
           <div className="flex flex-col gap-2.5">
             {prossime.slice(1).map((p) => (
-              <div
+              <Card
                 key={p.id ?? `${p.data}-${p.ora}`}
-                className="rounded-2xl border border-neutral-800 bg-neutral-900/70 p-3.5 flex items-center gap-3.5"
+                className="flex items-center gap-3.5 !py-3"
               >
                 {p.tipo === "classe" ? (
                   <Dumbbell size={16} className="text-neutral-500 shrink-0" strokeWidth={1.5} />
@@ -187,7 +245,7 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ri
                     IN CODA
                   </span>
                 )}
-              </div>
+              </Card>
             ))}
           </div>
         </>
@@ -196,18 +254,41 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ri
       {/* I tuoi numeri */}
       {numeri && (
         <>
-          <Sezione titolo="I TUOI NUMERI" />
+          <Sezione titolo="I TUOI NUMERI" azione={onVaiAlProfilo} etichetta="QUESTO MESE" />
           <Card className="!p-0 overflow-hidden">
             <div className="grid grid-cols-3 divide-x divide-neutral-800">
-              <Numero icona={Flame} valore={numeri.mese} nome="QUESTO MESE" />
-              <Numero icona={CalendarCheck} valore={numeri.inArrivo} nome="IN PROGRAMMA" />
-              <Numero icona={Calendar} valore={numeri.totale} nome="IN TOTALE" />
+              <Tassello icona={Flame} valore={numeri.mese} nome="QUESTO MESE" />
+              <Tassello icona={CalendarCheck} valore={numeri.inArrivo} nome="IN PROGRAMMA" />
+              <Tassello icona={TrendingUp} valore={numeri.totale} nome="IN TOTALE" />
             </div>
           </Card>
         </>
       )}
 
-      {/* Abbonamento */}
+      {/* Dal box */}
+      {avvisi.length > 0 && (
+        <>
+          <Sezione titolo="DAL BOX" />
+          <div className="flex flex-col gap-2.5">
+            {avvisi.map((a) => (
+              <Card key={a.id} className="flex items-start gap-3.5">
+                <Cerchio icona={Megaphone} misura={40} />
+                <div className="flex-1 min-w-0">
+                  <div className="text-[13px] font-semibold text-neutral-50">{a.titolo}</div>
+                  <div className="text-[10px] text-neutral-600 mt-0.5">
+                    {quantoFa(a.pubblicata_il)}
+                  </div>
+                  <div className="text-[11.5px] text-neutral-400 leading-relaxed mt-1.5">
+                    {a.testo}
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* La tua situazione */}
       {accesso && (
         <>
           <Sezione titolo="LA TUA SITUAZIONE" azione={onVaiAlProfilo} etichetta="PROFILO" />
@@ -247,6 +328,22 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ri
   );
 }
 
+function Tassello({ icona: Icona, valore, nome }) {
+  return (
+    <div className="flex flex-col items-center text-center py-5 px-2">
+      <div className="w-9 h-9 rounded-full bg-neutral-800 flex items-center justify-center mb-2.5">
+        <Icona size={15} className="text-neutral-300" strokeWidth={1.8} />
+      </div>
+      <div className="text-[23px] font-display font-bold text-neutral-50 leading-none">
+        {valore}
+      </div>
+      <div className="text-[9px] tracking-[0.12em] text-neutral-500 mt-1.5 font-semibold">
+        {nome}
+      </div>
+    </div>
+  );
+}
+
 function Voce({ nome, valore, nota, allarme }) {
   return (
     <div className="flex items-center justify-between py-3 first:pt-0 last:pb-0">
@@ -261,11 +358,16 @@ function Voce({ nome, valore, nota, allarme }) {
   );
 }
 
-/** Le prime righe della versione RX: quel tanto che basta a capire
-    se oggi si tira o si corre. */
-function anteprima(wod) {
-  const prima = VARIANTI.map((v) => wod.varianti?.[v]).find(Boolean) ?? "";
-  return prima.split("\n").slice(0, 3).join("\n");
+/** La prima riga del WOD fa da titolo, le altre da sottotitolo. */
+function righe(wod) {
+  const testo = VARIANTI.map((v) => wod.varianti?.[v]).find(Boolean) ?? "";
+  return testo.split("\n").filter((r) => r.trim());
+}
+function capo(wod) {
+  return righe(wod)[0] ?? wod.titolo;
+}
+function corpo(wod) {
+  return righe(wod).slice(1, 4).join("\n");
 }
 
 function saluto() {

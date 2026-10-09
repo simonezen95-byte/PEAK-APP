@@ -265,3 +265,43 @@ export function Numero({ icona: Icona, valore, nome, nota }) {
     </div>
   );
 }
+
+/** Icona dentro un cerchio: è il modo in cui il marchio presenta le
+    cose, dal logo in giù. */
+export function Cerchio({ icona: Icona, misura = 44, pieno = false }) {
+  return (
+    <div
+      style={{ width: misura, height: misura }}
+      className={`rounded-full flex items-center justify-center shrink-0 ${
+        pieno ? "bg-neutral-800" : "border border-neutral-700"
+      }`}
+    >
+      <Icona size={Math.round(misura * 0.4)} className="text-neutral-300" strokeWidth={1.6} />
+    </div>
+  );
+}
+
+/** Il filo verticale che divide una scheda in due parti. */
+export function Divisore() {
+  return <div className="w-px self-stretch bg-neutral-800 mx-3.5" />;
+}
+
+/** Bottone piccolo dentro una scheda. */
+export function BottonePiccolo({ chiaro, children, ...resto }) {
+  return (
+    <button
+      {...resto}
+      className={`rounded-xl px-3.5 py-2.5 text-[10.5px] font-bold tracking-[0.08em] whitespace-nowrap flex items-center gap-1 ${
+        chiaro
+          ? "bg-neutral-100 text-black"
+          : "border border-neutral-700 text-neutral-200"
+      }`}
+    >
+      {children}
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <path d="m9 18 6-6-6-6" />
+      </svg>
+    </button>
+  );
+}
