@@ -88,7 +88,7 @@ export default function Lezione({ sessione, onIndietro, onCambiato, onMessaggio 
   const Icona = r.tipo === "classe" ? Dumbbell : DoorOpen;
 
   return (
-    <div className="px-5 pb-28 pt-1">
+    <div className="px-5 pb-40 pt-1">
       <button
         onClick={onIndietro}
         aria-label="Torna al calendario"
@@ -199,7 +199,12 @@ export default function Lezione({ sessione, onIndietro, onCambiato, onMessaggio 
           )}
 
           {/* Il bottone */}
-          <div className="fixed left-0 right-0 bottom-[72px] px-5 pb-3 pt-6 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D] to-transparent">
+          {/* Appoggiato sopra la barra in basso, che su iPhone è più
+              alta per via della zona sotto lo schermo. */}
+          <div
+            className="fixed left-0 right-0 px-5 pb-3 pt-6 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D] to-transparent"
+            style={{ bottom: "calc(60px + env(safe-area-inset-bottom))" }}
+          >
             <div className="max-w-md mx-auto">
               <Bottone
                 stato={
