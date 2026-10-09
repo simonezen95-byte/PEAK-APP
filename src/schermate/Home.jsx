@@ -32,7 +32,7 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
       const [p, a, n, w, c] = await Promise.all([
         mieProssime(profilo.id),
         mioAccesso(),
-        mieStatistiche(profilo.id),
+        mieStatistiche(),
         wodDelGiorno(oggiIso()),
         leggiComunicazioni(3).catch(() => []),
       ]);
@@ -266,12 +266,32 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
           <Sezione titolo="I TUOI NUMERI" azione={onVaiAlProfilo} etichetta="QUESTO MESE" />
           <Card className="!p-0 overflow-hidden">
             <div className="grid grid-cols-3 divide-x divide-filo">
-              <Tassello icona={Flame} valore={numeri.mese}
-                        nome={["ALLENAMENTI", "QUESTO MESE"]} />
-              <Tassello icona={CalendarCheck} valore={numeri.inArrivo}
-                        nome={["GIA'", "PRENOTATI"]} />
-              <Tassello icona={BarChart3} valore={numeri.totale}
-                        nome={["IN TOTALE", "DALL'ISCRIZIONE"]} />
+              <Tassello
+                icona={Flame}
+                valore={numeri.settimane_di_fila}
+                nome={["SETTIMANE", "DI FILA"]}
+                nota={numeri.settimana_fatta
+                  ? "questa l'hai fatta ✓"
+                  : "questa è ancora aperta"}
+              />
+              <Tassello
+                icona={CalendarCheck}
+                valore={numeri.questo_mese}
+                nome={["ALLENAMENTI", "QUESTO MESE"]}
+                nota={numeri.in_programma > 0
+                  ? `+${numeri.in_programma} in programma`
+                  : null}
+              />
+              <Tassello
+                icona={BarChart3}
+                valore={numeri.variazione == null
+                  ? "–"
+                  : `${numeri.variazione > 0 ? "+" : ""}${numeri.variazione}%`}
+                nome={["SUL MESE", "SCORSO"]}
+                nota={numeri.variazione == null
+                  ? "primo mese"
+                  : `erano ${numeri.mese_scorso}`}
+              />
             </div>
           </Card>
         </>
@@ -343,7 +363,7 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
   );
 }
 
-function Tassello({ icona: Icona, valore, nome }) {
+function Tassello({ icona: Icona, valore, nome, nota }) {
   const righe = Array.isArray(nome) ? nome : [nome];
   return (
     <div className="flex flex-col items-center text-center py-5 px-1.5">
@@ -356,6 +376,11 @@ function Tassello({ icona: Icona, valore, nome }) {
       <div className="text-[8.5px] tracking-[0.1em] text-neutral-400 mt-2 font-semibold leading-[1.5]">
         {righe.map((r) => <div key={r}>{r}</div>)}
       </div>
+      {nota && (
+        <div className="text-[8.5px] text-neutral-600 mt-1.5 leading-[1.4] px-0.5">
+          {nota}
+        </div>
+      )}
     </div>
   );
 }
