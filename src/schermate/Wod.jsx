@@ -61,14 +61,20 @@ export default function Wod({ giornoIniziale, onIndietro, onMessaggio }) {
     <div className="px-5 pb-28 pt-1 relative overflow-hidden">
       <Montagna className="absolute -right-6 top-6 w-32 h-32 text-neutral-900 pointer-events-none" />
 
-      <div className="flex items-center justify-between">
-        <button
-          onClick={onIndietro}
-          aria-label="Indietro"
-          className="w-10 h-10 -ml-2 flex items-center justify-center text-neutral-300"
-        >
-          <ChevronLeft size={22} />
-        </button>
+      <div className="flex items-center justify-between min-h-10">
+        {/* Aperta dalla barra in basso non ha un "indietro": è già
+            una delle sezioni. */}
+        {onIndietro ? (
+          <button
+            onClick={onIndietro}
+            aria-label="Indietro"
+            className="w-10 h-10 -ml-2 flex items-center justify-center text-neutral-300"
+          >
+            <ChevronLeft size={22} />
+          </button>
+        ) : (
+          <span />
+        )}
         {posso && (
           <button
             onClick={() => setScrivo(true)}
