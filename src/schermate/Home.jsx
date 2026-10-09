@@ -4,7 +4,7 @@ import {
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { mieProssime, mioAccesso, mieStatistiche, ostacoli } from "../lib/prenotazioni";
-import { wodDelGiorno, VARIANTI } from "../lib/wod";
+import { wodDelGiorno, puoScrivereWod, VARIANTI } from "../lib/wod";
 import { quando, soloOra, piuMinuti, dataBreve, aData, oggiIso } from "../lib/date";
 import { Card, Sezione, Scheletro, Montagna, Numero } from "../ui/base";
 
@@ -38,6 +38,7 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ri
   useEffect(() => { carica(); }, [carica, ricarica]);
 
   const blocchi = ostacoli(accesso, oggiIso());
+  const puoScrivere = puoScrivereWod(profilo);
   const prima = prossime?.[0];
 
   return (
@@ -126,18 +127,22 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ri
       )}
 
       {/* Il WOD di oggi */}
-      <Sezione titolo="IL WOD DI OGGI" azione={wod ? onVaiAlWod : undefined} etichetta="APRI" />
+      <Sezione titolo="IL WOD DI OGGI" azione={onVaiAlWod} etichetta="APRI" />
       {wod === undefined ? (
         <Scheletro righe={1} />
       ) : !wod ? (
-        <Card>
-          <div className="text-[13px] text-neutral-400">
-            Oggi non c'è ancora un WOD.
-          </div>
-          <div className="text-[11px] text-neutral-600 mt-1">
-            Lo pubblica lo staff: ricontrolla più tardi.
-          </div>
-        </Card>
+        // Si apre lo stesso: di là lo staff lo scrive, e chiunque può
+        // guardare gli altri giorni.
+        <button onClick={onVaiAlWod} className="w-full text-left">
+          <Card>
+            <div className="text-[13px] text-neutral-400">
+              Oggi non c'è ancora un WOD.
+            </div>
+            <div className="text-[11px] text-neutral-600 mt-1">
+              {puoScrivere ? "Aprilo per scriverlo." : "Lo pubblica lo staff: ricontrolla più tardi."}
+            </div>
+          </Card>
+        </button>
       ) : (
         <button onClick={onVaiAlWod} className="w-full text-left">
           <Card className="flex items-start gap-3.5">
