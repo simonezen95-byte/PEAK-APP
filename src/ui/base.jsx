@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 /* Pezzi comuni a tutte le schermate di accesso. */
@@ -101,10 +102,13 @@ export function Spunta({ attiva, onChange, children }) {
     scorrere indietro di trent'anni, e un campo libero lascerebbe
     scrivere ogni data in un formato diverso. */
 export function DataNascita({ valore, onChange }) {
+  // Le tre tendine si ricordano da sole cosa hai scelto. Se dipendessero
+  // dalla data completa, la prima scelta sparirebbe: finché mancano le
+  // altre due la data non esiste ancora.
   const parti = (valore || "").split("-");
-  const g = parti[2] ? String(Number(parti[2])) : "";
-  const m = parti[1] ? String(Number(parti[1])) : "";
-  const a = parti[0] || "";
+  const [g, setG] = useState(parti[2] ? String(Number(parti[2])) : "");
+  const [m, setM] = useState(parti[1] ? String(Number(parti[1])) : "");
+  const [a, setA] = useState(parti[0] || "");
 
   const mesi = ["gen","feb","mar","apr","mag","giu","lug","ago","set","ott","nov","dic"];
   const quest_anno = new Date().getFullYear();
@@ -119,6 +123,9 @@ export function DataNascita({ valore, onChange }) {
       const max = new Date(Number(next.a), Number(next.m), 0).getDate();
       if (Number(next.g) > max) next.g = String(max);
     }
+    setG(next.g);
+    setM(next.m);
+    setA(next.a);
     onChange(
       next.g && next.m && next.a
         ? `${next.a}-${String(next.m).padStart(2, "0")}-${String(next.g).padStart(2, "0")}`
