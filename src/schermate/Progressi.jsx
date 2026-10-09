@@ -53,7 +53,7 @@ export default function Progressi({ onIndietro, onMessaggio }) {
 
   return (
     <div className="px-5 pb-28 pt-3 relative overflow-hidden">
-      <Montagna className="absolute right-[-4rem] top-[-1.5rem] w-[20rem] h-[20rem] text-white pointer-events-none" />
+      <Montagna className="absolute right-[-20px] top-0 w-[215px] h-[215px] text-white pointer-events-none" />
 
       {onIndietro && (
         <button

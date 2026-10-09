@@ -216,41 +216,44 @@ export function Messaggio({ testo }) {
   );
 }
 
-/** Il segno della montagna: la stessa A del logo. Una fascia spessa
-    e chiara, con dentro un velo più tenue, che sfuma verso il basso.
+/** Il segno della montagna: la stessa A del logo.
 
-    È luce sul nero, non grigio dipinto: così resta coerente anche se
-    un giorno lo sfondo cambia tono. */
+    Tre strati, e il terzo è quello che fa la differenza: un velo
+    dentro la V, la fascia appena schiarita, e sul bordo un filo più
+    chiaro che la rende incisa invece che dipinta. Tutto in bianco a
+    bassissima opacità — è luce sul nero, non grigio sopra il nero —
+    e tutto sfuma verso il basso. */
 export function Montagna({ className = "" }) {
   // useId mette dei due punti nel nome, e url(#...) con i due punti
   // su Safari ogni tanto non lo segue: li tolgo.
   const seme = useId().replace(/[^a-zA-Z0-9]/g, "");
-  const fascia = `fascia${seme}`;
-  const velo = `velo${seme}`;
+  const riempimento = `mr${seme}`;
+  const filo = `mf${seme}`;
+  const velo = `mv${seme}`;
 
   return (
     <svg viewBox="0 0 200 200" className={className} aria-hidden="true">
       <defs>
-        <linearGradient id={fascia} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="currentColor" stopOpacity="0.085" />
-          <stop offset="55%"  stopColor="currentColor" stopOpacity="0.055" />
+        <linearGradient id={riempimento} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.055" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id={filo} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.15" />
           <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
         </linearGradient>
         <linearGradient id={velo} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="currentColor" stopOpacity="0.035" />
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.03" />
           <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
         </linearGradient>
       </defs>
 
-      {/* Il velo dentro la V */}
-      <path d="M100 76 L150 196 L50 196 Z" fill={`url(#${velo})`} />
-
-      {/* La fascia: contorno esterno e interno in un tratto solo */}
+      <path d="M100 86 L150 190 L50 190 Z" fill={`url(#${velo})`} />
       <path
-        d="M100 10 L199 196 L151 196 L100 80 L49 196 L1 196 Z"
-        fill={`url(#${fascia})`}
-        stroke={`url(#${fascia})`}
-        strokeWidth="5"
+        d="M100 10 L198 190 L150 190 L100 86 L50 190 L2 190 Z"
+        fill={`url(#${riempimento})`}
+        stroke={`url(#${filo})`}
+        strokeWidth="1.6"
         strokeLinejoin="round"
       />
     </svg>
