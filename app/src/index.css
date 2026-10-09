@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0d0d0d;
+  color: #f5f5f5;
+  font-family: Montserrat, sans-serif;
+  /* Niente rimbalzo elastico: l'app deve sembrare un'app, non una pagina. */
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Le tendine di sistema restano scure anche su iOS. */
+select option {
+  background: #171717;
+  color: #f5f5f5;
+}
