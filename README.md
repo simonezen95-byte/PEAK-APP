@@ -26,7 +26,7 @@ in produzione fra le variabili d'ambiente di Vercel.
 
 ## Database
 
-Gli archivi e le regole stanno in `../db`, da eseguire in ordine:
+Gli archivi e le regole stanno in `db/`, da eseguire in ordine:
 
 1. `01-schema.sql` — gli archivi
 2. `02-sicurezza.sql` — chi può leggere e scrivere cosa
