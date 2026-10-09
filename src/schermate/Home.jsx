@@ -4,28 +4,32 @@ import {
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { mieProssime, mioAccesso, mieStatistiche, ostacoli } from "../lib/prenotazioni";
+import { wodDelGiorno, VARIANTI } from "../lib/wod";
 import { quando, soloOra, piuMinuti, dataBreve, aData, oggiIso } from "../lib/date";
 import { Card, Sezione, Scheletro, Montagna, Numero } from "../ui/base";
 
 /* La prima schermata: chi sei, cosa hai in programma, come stai andando
    e cosa ti manca. */
 
-export default function Home({ onVaiAlCalendario, onVaiAlProfilo, ricarica }) {
+export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, ricarica }) {
   const { profilo } = useSessione();
   const [prossime, setProssime] = useState(null);
   const [accesso, setAccesso] = useState(null);
   const [numeri, setNumeri] = useState(null);
+  const [wod, setWod] = useState(undefined);
 
   const carica = useCallback(async () => {
     try {
-      const [p, a, n] = await Promise.all([
+      const [p, a, n, w] = await Promise.all([
         mieProssime(profilo.id),
         mioAccesso(),
         mieStatistiche(profilo.id),
+        wodDelGiorno(oggiIso()),
       ]);
       setProssime(p);
       setAccesso(a);
       setNumeri(n);
+      setWod(w);
     } catch {
       setProssime([]);
     }
@@ -119,6 +123,37 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, ricarica }) {
             Prenota la tua prossima sessione
           </button>
         </Card>
+      )}
+
+      {/* Il WOD di oggi */}
+      <Sezione titolo="IL WOD DI OGGI" azione={wod ? onVaiAlWod : undefined} etichetta="APRI" />
+      {wod === undefined ? (
+        <Scheletro righe={1} />
+      ) : !wod ? (
+        <Card>
+          <div className="text-[13px] text-neutral-400">
+            Oggi non c'è ancora un WOD.
+          </div>
+          <div className="text-[11px] text-neutral-600 mt-1">
+            Lo pubblica lo staff: ricontrolla più tardi.
+          </div>
+        </Card>
+      ) : (
+        <button onClick={onVaiAlWod} className="w-full text-left">
+          <Card className="flex items-start gap-3.5">
+            <div className="w-11 h-11 rounded-full border border-neutral-700 flex items-center justify-center shrink-0">
+              <Dumbbell size={17} className="text-neutral-300" strokeWidth={1.6} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-[17px] font-display font-bold text-neutral-50 leading-tight uppercase truncate">
+                {wod.titolo}
+              </div>
+              <div className="text-[11.5px] text-neutral-400 mt-1.5 leading-relaxed line-clamp-3 whitespace-pre-line">
+                {anteprima(wod)}
+              </div>
+            </div>
+          </Card>
+        </button>
       )}
 
       {/* In programma */}
@@ -219,6 +254,13 @@ function Voce({ nome, valore, nota, allarme }) {
       </div>
     </div>
   );
+}
+
+/** Le prime righe della versione RX: quel tanto che basta a capire
+    se oggi si tira o si corre. */
+function anteprima(wod) {
+  const prima = VARIANTI.map((v) => wod.varianti?.[v]).find(Boolean) ?? "";
+  return prima.split("\n").slice(0, 3).join("\n");
 }
 
 function saluto() {

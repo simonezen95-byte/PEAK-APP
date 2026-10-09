@@ -9,6 +9,7 @@ import Lezione from "../schermate/Lezione";
 import Soci from "../schermate/Soci";
 import Socio from "../schermate/Socio";
 import Profilo from "../schermate/Profilo";
+import Wod from "../schermate/Wod";
 
 /* La struttura dell'app una volta dentro: una barra sopra, le sezioni
    sotto, e le schermate di dettaglio che si aprono a tutto schermo.
@@ -16,6 +17,13 @@ import Profilo from "../schermate/Profilo";
    La sezione Soci compare solo a chi è staff. Non è una misura di
    sicurezza — quella sta nel database, che a un socio non darebbe
    comunque niente — è solo per non mostrare porte chiuse. */
+
+/** Oggi in forma "2026-10-09". */
+function oggi() {
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
 
 export default function Guscio() {
   const { profilo } = useSessione();
@@ -31,6 +39,7 @@ export default function Guscio() {
   const [sezione, setSezione] = useState("home");
   const [lezione, setLezione] = useState(null);
   const [socio, setSocio] = useState(null);
+  const [wod, setWod] = useState(null);     // il giorno aperto, o null
   const [messaggio, setMessaggio] = useState("");
   // Cambiando questo numero le schermate rileggono i dati: serve dopo
   // una prenotazione o una modifica, perché il quadro è cambiato.
@@ -44,10 +53,11 @@ export default function Guscio() {
   function vaiA(chiave) {
     setLezione(null);
     setSocio(null);
+    setWod(null);
     setSezione(chiave);
   }
 
-  const dettaglio = Boolean(lezione || socio);
+  const dettaglio = Boolean(lezione || socio || wod);
 
   return (
     <div className="min-h-full flex flex-col">
@@ -63,6 +73,12 @@ export default function Guscio() {
             onCambiato={() => setVersione((v) => v + 1)}
             onMessaggio={avvisa}
           />
+        ) : wod ? (
+          <Wod
+            giornoIniziale={wod}
+            onIndietro={() => setWod(null)}
+            onMessaggio={avvisa}
+          />
         ) : socio ? (
           <Socio
             socio={socio}
@@ -74,6 +90,7 @@ export default function Guscio() {
           <Home
             onVaiAlCalendario={() => vaiA("prenota")}
             onVaiAlProfilo={() => vaiA("profilo")}
+            onVaiAlWod={() => setWod(oggi())}
             ricarica={versione}
           />
         ) : sezione === "prenota" ? (
