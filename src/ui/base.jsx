@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 /* Pezzi comuni a tutte le schermate di accesso. */
@@ -216,13 +216,31 @@ export function Messaggio({ testo }) {
   );
 }
 
-/** Il segno della montagna, lo stesso del marchio. Sta sullo sfondo
-    appena visibile: serve a far sentire che è PEAK, non a farsi
-    guardare. */
+/** Il segno della montagna: la stessa A del logo, piena e spessa,
+    che sfuma verso il basso. Sta sullo sfondo appena accennata —
+    serve a far sentire che è PEAK, non a farsi guardare. */
 export function Montagna({ className = "" }) {
+  // useId mette dei due punti nel nome, e url(#...) con i due punti
+  // su Safari ogni tanto non lo segue: li tolgo.
+  const id = `montagna${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   return (
-    <svg viewBox="0 0 100 60" className={className} fill="none" aria-hidden="true">
-      <path d="M2 58L50 4L98 58" stroke="currentColor" strokeWidth="6" strokeLinejoin="round" />
+    <svg viewBox="0 0 200 190" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
+          <stop offset="55%" stopColor="currentColor" stopOpacity="0.75" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0.15" />
+        </linearGradient>
+      </defs>
+      {/* Apice in alto, due gambe spesse che scendono: il contorno
+          esterno e quello interno in un tratto solo. */}
+      <path
+        d="M100 8 L196 178 L150 178 L100 88 L50 178 L4 178 Z"
+        fill={`url(#${id})`}
+        strokeLinejoin="round"
+        stroke={`url(#${id})`}
+        strokeWidth="8"
+      />
     </svg>
   );
 }

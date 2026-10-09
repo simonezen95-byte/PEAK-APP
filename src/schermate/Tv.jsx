@@ -47,7 +47,7 @@ export default function Tv({ codice }) {
 
   return (
     <div className="min-h-full flex flex-col px-10 py-8 relative overflow-hidden">
-      <Montagna className="absolute -right-16 -top-10 w-[34rem] h-[34rem] text-neutral-900/70 pointer-events-none" />
+      <Montagna className="absolute right-[-7rem] top-[-5rem] w-[40rem] h-[40rem] text-neutral-800/45 pointer-events-none" />
 
       {/* Testata */}
       <header className="flex items-center justify-between relative shrink-0">
