@@ -1,11 +1,13 @@
-import { LogOut, Mail, Phone, Hash, TrendingUp, ChevronRight } from "lucide-react";
+import {
+  LogOut, Mail, Phone, Hash, TrendingUp, ChevronRight, Tag,
+} from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { Card, Titolo } from "../ui/base";
 
 /* Per ora solo la tua scheda e l'uscita. Le impostazioni vere
    (notifiche, privacy, foto) arrivano con le prossime sezioni. */
 
-export default function Profilo({ onVaiAiProgressi }) {
+export default function Profilo({ onVaiAiProgressi, onVaiAlListino }) {
   const { profilo, esci } = useSessione();
 
   return (
@@ -30,20 +32,25 @@ export default function Profilo({ onVaiAiProgressi }) {
         </div>
       </div>
 
-      {onVaiAiProgressi && (
-        <button
-          onClick={onVaiAiProgressi}
-          className="w-full rounded-2xl border border-bordo bg-scheda p-3.5 flex items-center gap-3.5 mb-7"
-        >
-          <TrendingUp size={16} className="text-neutral-400 shrink-0" strokeWidth={1.8} />
-          <div className="flex-1 text-left">
-            <div className="text-[13px] text-neutral-100">Progressi</div>
-            <div className="text-[11px] text-neutral-500 mt-0.5">
-              Massimali, risultati dei WOD, allenamenti
-            </div>
-          </div>
-          <ChevronRight size={16} className="text-neutral-700 shrink-0" />
-        </button>
+      {(onVaiAiProgressi || onVaiAlListino) && (
+        <div className="flex flex-col gap-2 mb-7">
+          {onVaiAiProgressi && (
+            <Scorciatoia
+              icona={TrendingUp}
+              nome="Progressi"
+              nota="Massimali, risultati dei WOD, allenamenti"
+              onClick={onVaiAiProgressi}
+            />
+          )}
+          {onVaiAlListino && (
+            <Scorciatoia
+              icona={Tag}
+              nome="Listino"
+              nota="Prezzi e pacchetti che la reception può vendere"
+              onClick={onVaiAlListino}
+            />
+          )}
+        </div>
       )}
 
       <Titolo>I TUOI DATI</Titolo>
@@ -66,6 +73,22 @@ export default function Profilo({ onVaiAiProgressi }) {
         ESCI
       </button>
     </div>
+  );
+}
+
+function Scorciatoia({ icona: Icona, nome, nota, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-full rounded-2xl border border-bordo bg-scheda p-3.5 flex items-center gap-3.5"
+    >
+      <Icona size={16} className="text-neutral-400 shrink-0" strokeWidth={1.8} />
+      <div className="flex-1 text-left">
+        <div className="text-[13px] text-neutral-100">{nome}</div>
+        <div className="text-[11px] text-neutral-500 mt-0.5">{nota}</div>
+      </div>
+      <ChevronRight size={16} className="text-neutral-700 shrink-0" />
+    </button>
   );
 }
 

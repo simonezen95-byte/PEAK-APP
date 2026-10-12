@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { eStaff } from "../lib/staff";
+import { puoGestireListino } from "../lib/pacchetti";
 import { quanteDaLeggere } from "../lib/notifiche";
 import { Logo, Messaggio } from "./base";
 import Home from "../schermate/Home";
@@ -18,6 +19,7 @@ import Socio from "../schermate/Socio";
 import Profilo from "../schermate/Profilo";
 import Notifiche from "../schermate/Notifiche";
 import Presenze from "../schermate/Presenze";
+import Listino from "../schermate/Listino";
 
 /* La struttura dell'app una volta dentro.
 
@@ -79,6 +81,7 @@ export default function Guscio() {
   const [progressi, setProgressi] = useState(false);
   const [notifiche, setNotifiche] = useState(false);
   const [presenze, setPresenze] = useState(null);
+  const [listino, setListino] = useState(false);
   const [daLeggere, setDaLeggere] = useState(0);
   const [messaggio, setMessaggio] = useState("");
   // Cambiando questo numero le schermate rileggono i dati: serve dopo
@@ -102,6 +105,7 @@ export default function Guscio() {
     setProgressi(false);
     setNotifiche(false);
     setPresenze(null);
+    setListino(false);
     setSezione(chiave);
   }
 
@@ -112,10 +116,11 @@ export default function Guscio() {
     setProgressi(false);
     setNotifiche(false);
     setPresenze(null);
+    setListino(false);
     setSezione(nuovo === "staff" ? "oggi" : "home");
   }
 
-  const dettaglio = Boolean(lezione || socio || progressi || notifiche || presenze);
+  const dettaglio = Boolean(lezione || socio || progressi || notifiche || presenze || listino);
 
   return (
     <div className="min-h-full flex flex-col">
@@ -125,7 +130,7 @@ export default function Guscio() {
         <div className="flex items-center gap-4">
           {staff && <Interruttore modo={modo} onCambia={cambiaModo} profilo={profilo} />}
           <button
-            onClick={() => { setNotifiche(true); setLezione(null); setSocio(null); setProgressi(false); setPresenze(null); }}
+            onClick={() => { setNotifiche(true); setLezione(null); setSocio(null); setProgressi(false); setPresenze(null); setListino(false); }}
             aria-label={daLeggere > 0 ? `Notifiche, ${daLeggere} da leggere` : "Notifiche"}
             className="relative text-neutral-300 p-0.5"
           >
@@ -151,7 +156,9 @@ export default function Guscio() {
       </header>
 
       <main className="flex-1 max-w-md w-full mx-auto">
-        {presenze ? (
+        {listino ? (
+          <Listino onIndietro={() => setListino(false)} onMessaggio={avvisa} />
+        ) : presenze ? (
           <Presenze
             sessione={presenze}
             onIndietro={() => setPresenze(null)}
@@ -204,7 +211,14 @@ export default function Guscio() {
         ) : (
           // In modo staff i progressi non stanno in barra: si arriva
           // qui dal profilo.
-          <Profilo onVaiAiProgressi={comeStaff ? () => setProgressi(true) : undefined} />
+          <Profilo
+            onVaiAiProgressi={comeStaff ? () => setProgressi(true) : undefined}
+            onVaiAlListino={
+              comeStaff && puoGestireListino(profilo)
+                ? () => setListino(true)
+                : undefined
+            }
+          />
         )}
       </main>
 
