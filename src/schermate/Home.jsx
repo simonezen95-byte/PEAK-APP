@@ -5,7 +5,7 @@ import {
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import {
-  mieProssime, mioAccesso, mieStatistiche, mieSettimane, ostacoli,
+  mieProssime, mioAccesso, mieStatistiche, mieSettimane, ostacoli, dicitura,
   settimana as leggiSettimana,
 } from "../lib/prenotazioni";
 import { wodDelGiorno, puoScrivereWod, VARIANTI } from "../lib/wod";
@@ -348,7 +348,7 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
               nota={
                 accesso.abbonamento_fine
                   ? `fino al ${dataBreve(accesso.abbonamento_fine)}${
-                      accesso.residui != null ? ` · ${accesso.residui} ingressi` : ""
+                      dicitura(accesso) ? ` · ${dicitura(accesso)}` : ""
                     }`
                   : null
               }

@@ -97,7 +97,10 @@ export async function attivaAbbonamento(socioId, pacchetto, inizioIso, pagato) {
     inizio: inizioIso,
     fine: fineIso,
     pagato,
-    residui: conteggio ?? null,
+    // Solo il totale: gli ingressi rimasti non si scrivono più, si
+    // contano dalle prenotazioni ogni volta che servono. Un contatore
+    // scalato a mano, dopo due correzioni delle presenze, non torna
+    // più — e nessuno se ne accorge.
     totali: conteggio ?? null,
   });
   if (error) throw error;

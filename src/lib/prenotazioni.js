@@ -206,9 +206,41 @@ export function ostacoli(accesso, dataIso) {
       titolo: "Ingressi esauriti",
       testo: "Il tuo pacchetto è finito: passa in reception.",
     });
+  } else if (
+    accesso.lezioni_settimana != null &&
+    accesso.fatte_in_settimana >= accesso.lezioni_settimana
+  ) {
+    // Il tetto vale sulla settimana della lezione, non su quella di
+    // oggi: da lunedì si riparte, e dirlo evita il giro in reception.
+    lista.push({
+      titolo: `Hai già le tue ${accesso.lezioni_settimana} di questa settimana`,
+      testo: "Il tuo abbonamento ne apre "
+        + `${accesso.lezioni_settimana} a settimana. Da lunedì si riparte, `
+        + "e puoi già prenotare le lezioni della prossima.",
+    });
   }
 
   return lista;
+}
+
+/** Come si scrive un abbonamento in una riga: "Mensile 2 a settimana ·
+    2 a settimana", "Mensile 8 ingressi · 5 ingressi rimasti",
+    "Mensile libero". */
+export function dicitura(accesso) {
+  if (!accesso?.abbonamento) return null;
+  if (accesso.lezioni_settimana != null) {
+    const restano = Math.max(
+      0,
+      accesso.lezioni_settimana - (accesso.fatte_in_settimana ?? 0)
+    );
+    return restano === 0
+      ? "nessuna lezione questa settimana"
+      : `${restano} ${restano === 1 ? "lezione" : "lezioni"} questa settimana`;
+  }
+  if (accesso.residui != null) {
+    return `${accesso.residui} ${accesso.residui === 1 ? "ingresso" : "ingressi"}`;
+  }
+  return null;
 }
 
 /** Il caso particolare del pacchetto Open Box, che le classi non le apre. */
