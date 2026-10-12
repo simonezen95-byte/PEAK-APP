@@ -1,17 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
-import { Users, UserPlus, CalendarDays, DoorOpen, Dumbbell, Check } from "lucide-react";
+import {
+  Users, UserPlus, CalendarDays, DoorOpen, Dumbbell, Check, ClipboardCheck,
+} from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { numeriDiOggi, attivitaDiOggi, andamento, riempimento } from "../lib/cruscotto";
-import { soloOra, piuMinuti, dataEstesa, oggiIso, aData } from "../lib/date";
+import { classiDaChiudere } from "../lib/presenze";
+import { soloOra, piuMinuti, dataEstesa, oggiIso, aData, quando } from "../lib/date";
 import { Card, Sezione, Scheletro, Vuoto, Montagna } from "../ui/base";
 
 /* La home di chi apre il box: cosa c'è oggi e cosa chiede attenzione. */
 
-export default function Oggi({ onVaiAiSoci, onVaiAlleClassi, onVaiAlWod, ricarica }) {
+export default function Oggi({
+  onVaiAiSoci, onVaiAlleClassi, onVaiAlWod, onApriPresenze, ricarica,
+}) {
   const { profilo } = useSessione();
   const [n, setN] = useState(null);
   const [attivita, setAttivita] = useState(null);
   const [settimana, setSettimana] = useState([]);
+  const [daChiudere, setDaChiudere] = useState([]);
 
   const carica = useCallback(async () => {
     try {
@@ -23,6 +29,13 @@ export default function Oggi({ onVaiAiSoci, onVaiAlleClassi, onVaiAlWod, ricaric
       setSettimana(and_);
     } catch {
       setAttivita([]);
+    }
+    // A parte: un coach non ha i numeri del cruscotto ma ha le sue
+    // classi da chiudere, e il no dell'uno non deve nascondere l'altro.
+    try {
+      setDaChiudere(await classiDaChiudere(7));
+    } catch {
+      setDaChiudere([]);
     }
   }, []);
 
@@ -81,6 +94,45 @@ export default function Oggi({ onVaiAiSoci, onVaiAlleClassi, onVaiAlWod, ricaric
             onClick={onVaiAlleClassi}
           />
         </div>
+      )}
+
+      {/* Le presenze da confermare. Sta qui in alto perché è la cosa
+          che scade: più passa il tempo, meno il coach si ricorda chi
+          c'era. Se non c'è niente da chiudere, la sezione non compare. */}
+      {daChiudere.length > 0 && (
+        <>
+          <Sezione titolo={`PRESENZE DA CONFERMARE (${daChiudere.length})`} />
+          <div className="flex flex-col gap-2.5">
+            {daChiudere.slice(0, 5).map((c) => (
+              <button
+                key={c.sessione_id}
+                onClick={() => onApriPresenze(c)}
+                className="rounded-2xl border border-bordo bg-scheda p-3.5 flex items-center gap-3.5 text-left"
+              >
+                <ClipboardCheck size={17} className="text-neutral-500 shrink-0" strokeWidth={1.8} />
+                <div className="flex-1 min-w-0">
+                  <div className="text-[13px] text-neutral-100 truncate">
+                    {c.nome} · {soloOra(c.ora)}
+                  </div>
+                  <div className="text-[10.5px] text-neutral-500 mt-0.5 first-letter:uppercase truncate">
+                    {quando(c.data)} · {c.iscritti}{" "}
+                    {c.iscritti === 1 ? "iscritto" : "iscritti"}
+                  </div>
+                </div>
+                {/* Il chiaro sta solo qui: tre schede accese di fila
+                    coprivano tutto il resto della pagina. */}
+                <div className="text-[9.5px] tracking-[0.1em] font-semibold shrink-0 rounded-full bg-neutral-50 text-black px-2.5 py-1">
+                  SPUNTA
+                </div>
+              </button>
+            ))}
+            {daChiudere.length > 5 && (
+              <div className="text-[11px] text-neutral-600 text-center pt-1">
+                e altre {daChiudere.length - 5}
+              </div>
+            )}
+          </div>
+        </>
       )}
 
       {/* Oggi in palestra */}

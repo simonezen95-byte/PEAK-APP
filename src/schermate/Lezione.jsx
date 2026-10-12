@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { ChevronLeft, Dumbbell, DoorOpen, Users, Check, Clock } from "lucide-react";
+import {
+  ChevronLeft, Dumbbell, DoorOpen, Users, Check, Clock, ClipboardCheck,
+} from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { iscritti as leggiIscritti, prenota, disdici } from "../lib/prenotazioni";
+import { possoChiudere } from "../lib/presenze";
 import { dataEstesa, soloOra, piuMinuti, minutiAllInizio } from "../lib/date";
 import { Card, Titolo, Avviso } from "../ui/base";
 
@@ -9,12 +12,15 @@ const MINUTI_PER_DISDIRE = 15;
 
 /* Una lezione aperta: chi c'è, chi è in coda, e il bottone. */
 
-export default function Lezione({ sessione, onIndietro, onCambiato, onMessaggio }) {
+export default function Lezione({
+  sessione, onIndietro, onCambiato, onMessaggio, onApriPresenze,
+}) {
   const { profilo } = useSessione();
   const [gente, setGente] = useState(null);
   const [lavoro, setLavoro] = useState(false);
   const [errore, setErrore] = useState("");
   const [r, setR] = useState(sessione);
+  const [chiudibile, setChiudibile] = useState(false);
 
   const carica = useCallback(async () => {
     try {
@@ -25,6 +31,21 @@ export default function Lezione({ sessione, onIndietro, onCambiato, onMessaggio 
   }, [r.sessione_id]);
 
   useEffect(() => { carica(); }, [carica]);
+
+  // Se sono staff e la lezione è cominciata, chiedo al database se
+  // posso chiuderla io: un coach chiude le proprie e basta, e il
+  // bottone non deve comparire a chi poi si sentirebbe dire no.
+  useEffect(() => {
+    if (!onApriPresenze || minutiAllInizio(r.data, r.ora) >= 0) {
+      setChiudibile(false);
+      return;
+    }
+    let vivo = true;
+    possoChiudere(r.sessione_id)
+      .then((v) => { if (vivo) setChiudibile(v); })
+      .catch(() => { if (vivo) setChiudibile(false); });
+    return () => { vivo = false; };
+  }, [onApriPresenze, r.sessione_id, r.data, r.ora]);
 
   const dentro = r.mio_stato === "prenotato" || r.mio_stato === "presente";
   const inCoda = r.mio_stato === "lista_attesa";
@@ -206,19 +227,31 @@ export default function Lezione({ sessione, onIndietro, onCambiato, onMessaggio 
             style={{ bottom: "calc(60px + env(safe-area-inset-bottom))" }}
           >
             <div className="max-w-md mx-auto">
-              <Bottone
-                stato={
-                  passata ? "passata"
-                  : dentro && !inTempoPerDisdire ? "tardi"
-                  : dentro ? "disdici"
-                  : inCoda ? "esci"
-                  : !r.posso ? "bloccato"
-                  : pieno ? "coda"
-                  : "prenota"
-                }
-                lavoro={lavoro}
-                onClick={azione}
-              />
+              {chiudibile ? (
+                /* Per lo staff, su una lezione finita, la cosa da fare
+                   non è prenotare: è dire chi c'era. */
+                <button
+                  onClick={() => onApriPresenze(r)}
+                  className="w-full rounded-xl py-3.5 text-[13px] font-bold tracking-wide bg-neutral-50 text-black flex items-center justify-center gap-2.5"
+                >
+                  <ClipboardCheck size={16} strokeWidth={2.2} />
+                  {r.presenze_confermate_il ? "CORREGGI LE PRESENZE" : "SEGNA LE PRESENZE"}
+                </button>
+              ) : (
+                <Bottone
+                  stato={
+                    passata ? "passata"
+                    : dentro && !inTempoPerDisdire ? "tardi"
+                    : dentro ? "disdici"
+                    : inCoda ? "esci"
+                    : !r.posso ? "bloccato"
+                    : pieno ? "coda"
+                    : "prenota"
+                  }
+                  lavoro={lavoro}
+                  onClick={azione}
+                />
+              )}
             </div>
           </div>
         </>

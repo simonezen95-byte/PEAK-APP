@@ -17,6 +17,7 @@ import Soci from "../schermate/Soci";
 import Socio from "../schermate/Socio";
 import Profilo from "../schermate/Profilo";
 import Notifiche from "../schermate/Notifiche";
+import Presenze from "../schermate/Presenze";
 
 /* La struttura dell'app una volta dentro.
 
@@ -77,6 +78,7 @@ export default function Guscio() {
   const [socio, setSocio] = useState(null);
   const [progressi, setProgressi] = useState(false);
   const [notifiche, setNotifiche] = useState(false);
+  const [presenze, setPresenze] = useState(null);
   const [daLeggere, setDaLeggere] = useState(0);
   const [messaggio, setMessaggio] = useState("");
   // Cambiando questo numero le schermate rileggono i dati: serve dopo
@@ -99,6 +101,7 @@ export default function Guscio() {
     setSocio(null);
     setProgressi(false);
     setNotifiche(false);
+    setPresenze(null);
     setSezione(chiave);
   }
 
@@ -108,10 +111,11 @@ export default function Guscio() {
     setSocio(null);
     setProgressi(false);
     setNotifiche(false);
+    setPresenze(null);
     setSezione(nuovo === "staff" ? "oggi" : "home");
   }
 
-  const dettaglio = Boolean(lezione || socio || progressi || notifiche);
+  const dettaglio = Boolean(lezione || socio || progressi || notifiche || presenze);
 
   return (
     <div className="min-h-full flex flex-col">
@@ -121,7 +125,7 @@ export default function Guscio() {
         <div className="flex items-center gap-4">
           {staff && <Interruttore modo={modo} onCambia={cambiaModo} profilo={profilo} />}
           <button
-            onClick={() => { setNotifiche(true); setLezione(null); setSocio(null); setProgressi(false); }}
+            onClick={() => { setNotifiche(true); setLezione(null); setSocio(null); setProgressi(false); setPresenze(null); }}
             aria-label={daLeggere > 0 ? `Notifiche, ${daLeggere} da leggere` : "Notifiche"}
             className="relative text-neutral-300 p-0.5"
           >
@@ -147,7 +151,14 @@ export default function Guscio() {
       </header>
 
       <main className="flex-1 max-w-md w-full mx-auto">
-        {notifiche ? (
+        {presenze ? (
+          <Presenze
+            sessione={presenze}
+            onIndietro={() => setPresenze(null)}
+            onCambiato={() => setVersione((v) => v + 1)}
+            onMessaggio={avvisa}
+          />
+        ) : notifiche ? (
           <Notifiche onIndietro={() => setNotifiche(false)} onLette={contaNotifiche} />
         ) : lezione ? (
           <Lezione
@@ -155,6 +166,7 @@ export default function Guscio() {
             onIndietro={() => setLezione(null)}
             onCambiato={() => setVersione((v) => v + 1)}
             onMessaggio={avvisa}
+            onApriPresenze={comeStaff ? setPresenze : undefined}
           />
         ) : progressi ? (
           <Progressi onIndietro={() => setProgressi(false)} onMessaggio={avvisa} />
@@ -170,6 +182,7 @@ export default function Guscio() {
             onVaiAiSoci={() => vaiA("soci")}
             onVaiAlleClassi={() => vaiA("prenota")}
             onVaiAlWod={() => vaiA("wod")}
+            onApriPresenze={setPresenze}
             ricarica={versione}
           />
         ) : sezione === "home" ? (
