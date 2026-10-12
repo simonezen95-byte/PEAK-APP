@@ -4,6 +4,7 @@
    si cambia qui e basta. */
 
 import { supabase } from "./supabase";
+import { minutiAllInizio } from "./date";
 
 /** La settimana che comincia da questo lunedì: ogni lezione con i
     posti occupati e la tua prenotazione, se c'è. */
@@ -102,14 +103,23 @@ export async function mieProssime(profiloId, quante = 5) {
     .gte("sessioni.data", iso)
     .order("data", { referencedTable: "sessioni", ascending: true })
     .order("ora", { referencedTable: "sessioni", ascending: true })
-    .limit(quante);
+    // Ne chiedo qualcuna in più: quelle di stamattina, già finite,
+    // le scarto qui sotto e non devono lasciare buchi.
+    .limit(quante + 6);
   if (error) throw error;
 
-  const righe = (data ?? []).map((r) => ({
-    stato: r.stato,
-    posizione_coda: r.posizione_coda,
-    ...r.sessioni,
-  }));
+  const righe = (data ?? [])
+    .map((r) => ({
+      stato: r.stato,
+      posizione_coda: r.posizione_coda,
+      ...r.sessioni,
+    }))
+    // Il filtro del database è per giorno: una classe delle 6:30 è
+    // ancora "oggi" anche a mezzogiorno. Qui tolgo quelle finite,
+    // lasciando però quella in corso: finché sei dentro, è la tua.
+    .filter((r) => minutiAllInizio(r.data, r.ora) + (r.durata_min ?? 60) > 0)
+    .slice(0, quante);
+
   if (righe.length === 0) return righe;
 
   // Quanti posti restano: il conteggio arriva con una lettura sola per
