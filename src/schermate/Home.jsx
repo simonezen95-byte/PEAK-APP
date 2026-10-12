@@ -14,7 +14,7 @@ import {
   quando, soloOra, piuMinuti, dataBreve, aData, oggiIso, lunedi, minutiAllInizio,
 } from "../lib/date";
 import {
-  Card, Sezione, Scheletro, Montagna, Cerchio, Divisore, BottonePiccolo, Fiamma,
+  Card, Sezione, Scheletro, Montagna, Cerchio, Divisore, BottonePiccolo, Fiamma, Tacche,
 } from "../ui/base";
 
 /* La prima schermata del socio. */
@@ -270,14 +270,24 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
           <Sezione titolo="I TUOI NUMERI" azione={onVaiAlProfilo} etichetta="QUESTO MESE" />
           <Card className="!p-0 overflow-hidden">
             <div className="grid grid-cols-3 divide-x divide-filo">
-              <Tassello
-                sopra={<Fiamma accesa={numeri.settimana_fatta} settimane={settimane} />}
-                valore={numeri.settimane_di_fila}
-                nome={["SETTIMANE", "DI FILA"]}
-                nota={numeri.settimana_fatta
-                  ? "questa l'hai alimentata"
-                  : "questa è ancora da fare"}
-              />
+              {/* Qui il numero sta dentro la fiamma, quindi la casella
+                  non ne ha un altro sotto. */}
+              <div className="flex flex-col items-center text-center py-5 px-1.5">
+                <Fiamma
+                  accesa={numeri.settimana_fatta}
+                  serie={numeri.settimane_di_fila}
+                />
+                <div className="text-[8.5px] tracking-[0.1em] text-neutral-400 mt-3 font-semibold leading-[1.5]">
+                  <div>SETTIMANE</div>
+                  <div>DI FILA</div>
+                </div>
+                <div className="text-[8.5px] text-neutral-600 mt-1.5 mb-2.5 leading-[1.4] px-0.5">
+                  {numeri.settimana_fatta
+                    ? "questa l'hai alimentata"
+                    : "questa è ancora da fare"}
+                </div>
+                <Tacche settimane={settimane} />
+              </div>
               <Tassello
                 icona={CalendarCheck}
                 valore={numeri.questo_mese}
@@ -371,17 +381,17 @@ function Tassello({ icona: Icona, sopra, valore, nome, nota }) {
   const righe = Array.isArray(nome) ? nome : [nome];
   return (
     <div className="flex flex-col items-center text-center py-5 px-1.5">
-      <div className="mb-3">
-        {sopra ?? (
-          <div className="w-10 h-10 rounded-full bg-rilievo flex items-center justify-center">
-            <Icona size={16} className="text-neutral-200" strokeWidth={1.9} />
-          </div>
-        )}
+      {/* L'altezza è la stessa della fiamma dell'altra casella, così
+          le didascalie restano sulla stessa riga. */}
+      <div className="h-[52px] flex items-center justify-center">
+        <div className="w-11 h-11 rounded-full bg-rilievo flex items-center justify-center">
+          <Icona size={17} className="text-neutral-200" strokeWidth={1.9} />
+        </div>
       </div>
-      <div className="text-[26px] font-display font-bold text-neutral-50 leading-none">
+      <div className="text-[26px] font-display font-bold text-neutral-50 leading-none -mt-1">
         {valore}
       </div>
-      <div className="text-[8.5px] tracking-[0.1em] text-neutral-400 mt-2 font-semibold leading-[1.5]">
+      <div className="text-[8.5px] tracking-[0.1em] text-neutral-400 mt-3 font-semibold leading-[1.5]">
         {righe.map((r) => <div key={r}>{r}</div>)}
       </div>
       {nota && (

@@ -333,53 +333,79 @@ export function BottonePiccolo({ chiaro, children, ...resto }) {
   );
 }
 
-/** La fiamma della serie.
+/** La fiamma della serie, col numero dentro.
 
-    Accesa e con l'alone quando la settimana in corso è già
-    alimentata, spenta e vuota quando è ancora aperta: si deve capire
-    a colpo d'occhio se manca qualcosa da fare, non solo quante
-    settimane hai messo insieme.
+    Spenta e grigia finché non ti alleni in questa settimana, accesa
+    e bianca appena lo fai. L'alone cresce con la serie: a tre
+    settimane è un accenno, a dodici si vede da lontano. La fiamma
+    però resta della stessa misura, se no le tre caselle non starebbero
+    più allineate.
 
-    Sotto, una tacca per settimana: piene quelle fatte, l'ultima
-    pulsa finché resta da alimentare. */
-export function Fiamma({ accesa, settimane = [] }) {
+    Sotto, una tacca per settimana: piene quelle fatte, l'ultima è
+    quella in corso e pulsa finché resta da alimentare. */
+export function Fiamma({ accesa, serie = 0 }) {
+  const cifre = String(serie).length;
+  const corpo = accesa ? "#FAFAFA" : "#2E2F33";
+  const numero = accesa ? "#050507" : "#8F9196";
+
+  // Quanto scalda l'alone: niente a serie spenta, poi tre gradini.
+  const alone = !accesa ? null
+    : serie >= 12 ? "drop-shadow(0 0 17px rgba(255,255,255,0.5))"
+    : serie >= 6  ? "drop-shadow(0 0 13px rgba(255,255,255,0.38))"
+    : serie >= 3  ? "drop-shadow(0 0 10px rgba(255,255,255,0.28))"
+    :               "drop-shadow(0 0 7px rgba(255,255,255,0.2))";
+
   return (
     <div className="flex flex-col items-center">
-      <div
-        className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-          accesa ? "bg-neutral-100" : "bg-rilievo"
-        }`}
-        style={accesa ? { boxShadow: "0 0 16px 1px rgba(255,255,255,0.18)" } : undefined}
+      <svg
+        width="54" height="71" viewBox="0 0 100 132"
+        style={alone ? { filter: alone } : undefined}
+        role="img"
+        aria-label={`${serie} settimane di fila, ${accesa ? "questa già fatta" : "questa ancora da fare"}`}
       >
-        <svg
-          width={accesa ? 19 : 17} height={accesa ? 19 : 17} viewBox="0 0 24 24"
-          fill={accesa ? "currentColor" : "none"}
-          stroke="currentColor"
-          strokeWidth={accesa ? 1 : 1.8}
-          strokeLinecap="round" strokeLinejoin="round"
-          className={accesa ? "text-black" : "text-neutral-500"}
+        <path
+          d="M46 6 C 52 32, 60 42, 68 50 C 71 43, 73 36, 74 28 C 88 50, 95 68, 95 88 C 95 113, 75 131, 50 131 C 25 131, 5 113, 5 88 C 5 58, 32 38, 46 6 Z"
+          fill={corpo}
+          stroke={corpo}
+          strokeWidth="8"
+          strokeLinejoin="round"
+        />
+        <text
+          x="50"
+          y={cifre > 2 ? 106 : cifre === 2 ? 108 : 110}
+          textAnchor="middle"
+          fill={numero}
+          fontFamily="Barlow, sans-serif"
+          fontWeight="700"
+          fontSize={cifre > 2 ? 28 : cifre === 2 ? 36 : 44}
         >
-          <path d="M12 2c1 4 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 1-2-1-5 1-8z" />
-        </svg>
-      </div>
+          {serie}
+        </text>
+      </svg>
 
-      {settimane.length > 0 && (
-        <div className="flex items-end gap-[3px] mt-2.5 h-[9px]">
-          {settimane.map((s) => (
-            <span
-              key={s.inizio}
-              title={`${s.quanti} allenamenti`}
-              className={`w-[3px] rounded-full ${
-                s.fatta
-                  ? s.in_corso ? "bg-neutral-100 h-[9px]" : "bg-neutral-400 h-[7px]"
-                  : s.in_corso
-                  ? "bg-neutral-600 h-[9px] animate-pulse"
-                  : "bg-neutral-800 h-[4px]"
-              }`}
-            />
-          ))}
-        </div>
-      )}
+    </div>
+  );
+}
+
+/** Le ultime settimane, una tacca ciascuna: piene quelle fatte,
+    l'ultima è quella in corso e pulsa finché resta da alimentare. */
+export function Tacche({ settimane = [] }) {
+  if (settimane.length === 0) return null;
+  return (
+    <div className="flex items-end justify-center gap-[3px] h-[8px]">
+      {settimane.map((s) => (
+        <span
+          key={s.inizio}
+          title={`${s.quanti} allenamenti`}
+          className={`w-[3px] rounded-full ${
+            s.fatta
+              ? s.in_corso ? "bg-neutral-100 h-[8px]" : "bg-neutral-400 h-[6px]"
+              : s.in_corso
+              ? "bg-neutral-600 h-[8px] animate-pulse"
+              : "bg-neutral-800 h-[4px]"
+          }`}
+        />
+      ))}
     </div>
   );
 }
