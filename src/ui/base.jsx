@@ -358,7 +358,10 @@ export function Fiamma({ accesa, serie = 0 }) {
   return (
     <div className="flex flex-col items-center">
       <svg
-        width="54" height="71" viewBox="0 0 100 132"
+        // Il riquadro è più largo della sagoma: il contorno
+        // arrotondato sporge di quattro punti per lato e senza
+        // margine resterebbe tagliato in basso.
+        width="54" height="75" viewBox="-5 -5 110 142"
         style={alone ? { filter: alone } : undefined}
         role="img"
         aria-label={`${serie} settimane di fila, ${accesa ? "questa già fatta" : "questa ancora da fare"}`}
