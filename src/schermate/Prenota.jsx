@@ -12,11 +12,13 @@ import {
   meseEAnno, dataEstesa, soloOra, piuMinuti, minutiAllInizio, eOggi,
 } from "../lib/date";
 import { Card, Scheletro, Vuoto, Avviso } from "../ui/base";
+import { puoGestireClassi } from "../lib/classi";
+import NuovaLezione from "../ui/NuovaLezione";
 
 /* Il calendario del socio: una settimana per volta, un giorno alla
    volta. Le classi in alto, le fasce di Open Box sotto. */
 
-export default function Prenota({ onApri, ricarica }) {
+export default function Prenota({ onApri, ricarica, onMessaggio }) {
   const { profilo } = useSessione();
   const [settimanaDal, setSettimanaDal] = useState(() => lunedi(oggiIso()));
   const [giorno, setGiorno] = useState(() => oggiIso());
@@ -162,6 +164,17 @@ export default function Prenota({ onApri, ricarica }) {
             </section>
           )}
         </>
+      )}
+
+      {/* Solo per chi gestisce le classi. Sta in fondo al giorno che
+          si sta guardando, anche quando il giorno è vuoto: un giorno
+          vuoto è proprio quello in cui serve aggiungere qualcosa. */}
+      {puoGestireClassi(profilo) && giorno >= oggiIso() && (
+        <NuovaLezione
+          giorno={giorno}
+          onFatto={carica}
+          onMessaggio={onMessaggio ?? (() => {})}
+        />
       )}
     </div>
   );

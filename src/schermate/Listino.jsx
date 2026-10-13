@@ -4,7 +4,9 @@ import {
   listino, creaPacchetto, modificaPacchetto, spegniPacchetto, quantiInUso,
   FORME, formaDi, colonneDi, descrizione, durata,
 } from "../lib/pacchetti";
-import { Card, Titolo, Avviso, Vuoto, Campo, Bottone } from "../ui/base";
+import {
+  Card, Titolo, Avviso, Vuoto, Campo, Bottone, Numeretto,
+} from "../ui/base";
 
 /* Il listino, modificabile dal titolare.
 
@@ -397,38 +399,5 @@ function Tipo({ attivo, nome, spiega, onClick }) {
         <div className="text-[11px] text-neutral-500 mt-0.5 leading-relaxed">{spiega}</div>
       </div>
     </button>
-  );
-}
-
-/* Un numero con meno e più ai lati: su un telefono si cambia da uno a
-   due senza aprire la tastiera, che per un campo da una cifra è la
-   parte più lenta. Si può anche scrivere, per i numeri grandi. */
-function Numeretto({ valore, onCambia, etichetta }) {
-  const n = Number(valore) || 0;
-  return (
-    <div className="flex items-center bg-scheda border border-bordo rounded-xl px-1.5">
-      <button
-        onClick={() => onCambia(String(Math.max(1, n - 1)))}
-        aria-label="Uno in meno"
-        className="w-10 h-11 flex items-center justify-center text-neutral-400 text-[18px]"
-      >
-        −
-      </button>
-      <input
-        value={valore}
-        onChange={(e) => onCambia(e.target.value.replace(/[^0-9]/g, ""))}
-        inputMode="numeric"
-        aria-label={etichetta}
-        className="w-10 bg-transparent text-center text-[15px] text-neutral-50 outline-none tabular-nums"
-      />
-      <div className="text-[11.5px] text-neutral-500 flex-1 truncate">{etichetta}</div>
-      <button
-        onClick={() => onCambia(String(n + 1))}
-        aria-label="Uno in più"
-        className="w-10 h-11 flex items-center justify-center text-neutral-400 text-[18px]"
-      >
-        +
-      </button>
-    </div>
   );
 }

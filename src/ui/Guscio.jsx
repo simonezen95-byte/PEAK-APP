@@ -201,7 +201,7 @@ export default function Guscio() {
             ricarica={versione}
           />
         ) : sezione === "prenota" ? (
-          <Prenota onApri={setLezione} ricarica={versione} />
+          <Prenota onApri={setLezione} ricarica={versione} onMessaggio={avvisa} />
         ) : sezione === "wod" ? (
           <Wod giornoIniziale={oggi()} onMessaggio={avvisa} />
         ) : sezione === "progressi" ? (

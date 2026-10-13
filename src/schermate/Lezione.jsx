@@ -5,6 +5,8 @@ import {
 import { useSessione } from "../lib/sessione";
 import { iscritti as leggiIscritti, prenota, disdici } from "../lib/prenotazioni";
 import { possoChiudere } from "../lib/presenze";
+import { puoGestireClassi } from "../lib/classi";
+import GestioneClasse from "../ui/GestioneClasse";
 import { dataEstesa, soloOra, piuMinuti, minutiAllInizio } from "../lib/date";
 import { Card, Titolo, Avviso } from "../ui/base";
 
@@ -255,6 +257,22 @@ export default function Lezione({
             </div>
           </div>
         </>
+      )}
+
+      {/* Il pannello dello staff sta fuori dal bivio: su una lezione
+          annullata serve eccome, è da lì che si rimette in programma.
+          Su una passata no: non c'è più niente da annullare, e il
+          posto in fondo serve al bottone delle presenze. */}
+      {puoGestireClassi(profilo) && !passata && (
+        <GestioneClasse
+          r={r}
+          onCambiato={(patch) => {
+            if (patch) setR((v) => ({ ...v, ...patch }));
+            carica();
+            onCambiato();
+          }}
+          onMessaggio={onMessaggio}
+        />
       )}
     </div>
   );

@@ -412,3 +412,36 @@ export function Tacche({ settimane = [] }) {
     </div>
   );
 }
+
+/* Un numero con meno e più ai lati: su un telefono si cambia da uno a
+   due senza aprire la tastiera, che per un campo da una cifra è la
+   parte più lenta. Si può anche scrivere, per i numeri grandi. */
+export function Numeretto({ valore, onCambia, etichetta }) {
+  const n = Number(valore) || 0;
+  return (
+    <div className="flex items-center bg-scheda border border-bordo rounded-xl px-1.5">
+      <button
+        onClick={() => onCambia(String(Math.max(1, n - 1)))}
+        aria-label="Uno in meno"
+        className="w-10 h-11 flex items-center justify-center text-neutral-400 text-[18px]"
+      >
+        −
+      </button>
+      <input
+        value={valore}
+        onChange={(e) => onCambia(e.target.value.replace(/[^0-9]/g, ""))}
+        inputMode="numeric"
+        aria-label={etichetta || undefined}
+        className="w-10 bg-transparent text-center text-[15px] text-neutral-50 outline-none tabular-nums"
+      />
+      <div className="text-[11.5px] text-neutral-500 flex-1 truncate">{etichetta}</div>
+      <button
+        onClick={() => onCambia(String(n + 1))}
+        aria-label="Uno in più"
+        className="w-10 h-11 flex items-center justify-center text-neutral-400 text-[18px]"
+      >
+        +
+      </button>
+    </div>
+  );
+}
