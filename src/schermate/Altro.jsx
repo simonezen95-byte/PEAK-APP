@@ -2,7 +2,7 @@ import {
   ShieldCheck, Tag, Megaphone, Settings, TrendingUp, User, ChevronRight,
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
-import { eOwner } from "../lib/ruoli";
+import { eOwner, puo } from "../lib/ruoli";
 import { puoGestireListino } from "../lib/pacchetti";
 import { Titolo } from "../ui/base";
 
@@ -34,7 +34,7 @@ export default function Altro({ onApri, onVaiAlProfilo }) {
       nome: "Listino",
       nota: "Prezzi e pacchetti che la reception può vendere",
     },
-    {
+    (puo(profilo, "com_send") || puo(profilo, "com_board")) && {
       chiave: "comunicazioni",
       icona: Megaphone,
       nome: "Comunicazioni",
@@ -56,12 +56,18 @@ export default function Altro({ onApri, onVaiAlProfilo }) {
         Altro
       </div>
 
-      <Titolo>GESTIONE</Titolo>
-      <div className="flex flex-col gap-2 mb-7">
-        {gestione.map((v) => (
-          <Voce key={v.chiave} {...v} onClick={() => onApri(v.chiave)} />
-        ))}
-      </div>
+      {/* Niente titolo se sotto non c'e' niente: capita a un coach
+          senza permessi in piu', che qui non ha nessuna voce. */}
+      {gestione.length > 0 && (
+        <>
+          <Titolo>GESTIONE</Titolo>
+          <div className="flex flex-col gap-2 mb-7">
+            {gestione.map((v) => (
+              <Voce key={v.chiave} {...v} onClick={() => onApri(v.chiave)} />
+            ))}
+          </div>
+        </>
+      )}
 
       <Titolo>IL TUO</Titolo>
       <div className="flex flex-col gap-2">

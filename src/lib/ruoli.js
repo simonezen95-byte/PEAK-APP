@@ -107,6 +107,28 @@ export function eOwner(profilo) {
   return profilo?.ruolo === "owner";
 }
 
+/** Un permesso qualsiasi, letto come lo legge il database: prima
+    quello scritto a mano, poi quello che dà il ruolo. */
+export function puo(profilo, chiave, eDiCoach = false) {
+  if (!profilo) return false;
+  return valeOggi(profilo, chiave, eDiCoach);
+}
+
+/* C'è qualcosa in "Altro", per questa persona?
+
+   Un coach senza permessi in più ci troverebbe solo Progressi e
+   Profilo: una voce della barra buttata via per arrivare al profilo
+   con un tocco in più. In quel caso il quinto posto torna a essere
+   il profilo, e "Altro" non compare proprio. */
+export function haGestione(profilo) {
+  return (
+    eOwner(profilo) ||
+    puo(profilo, "abb_edit") ||
+    puo(profilo, "com_send") ||
+    puo(profilo, "com_board")
+  );
+}
+
 export async function cambiaRuolo(socioId, ruolo) {
   // Cambiando ruolo si azzerano i permessi scritti a mano: erano
   // eccezioni al ruolo di prima, e tenerle sul ruolo nuovo vorrebbe

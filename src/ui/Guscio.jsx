@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { eStaff } from "../lib/staff";
+import { haGestione } from "../lib/ruoli";
 import { quanteDaLeggere } from "../lib/notifiche";
 import { Logo, Messaggio } from "./base";
 import Home from "../schermate/Home";
@@ -62,7 +63,12 @@ export default function Guscio() {
         { chiave: "soci",    nome: "Soci",    icona: Users },
         { chiave: "wod",     nome: "WOD",     icona: Dumbbell },
         { chiave: "prenota", nome: "Classi",  icona: CalendarDays },
-        { chiave: "altro",   nome: "Altro",   icona: LayoutGrid },
+        // Quinta voce: "Altro" a chi ci trova qualcosa dentro, il
+        // profilo a chi no — un coach senza permessi in piu' ci
+        // troverebbe solo il profilo, con un tocco in piu'.
+        haGestione(profilo)
+          ? { chiave: "altro",   nome: "Altro",   icona: LayoutGrid }
+          : { chiave: "profilo", nome: "Profilo", icona: User },
       ]
     : [
         { chiave: "home",      nome: "Home",      icona: IconaHome },
