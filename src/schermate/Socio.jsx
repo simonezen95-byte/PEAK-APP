@@ -8,7 +8,7 @@ import Anagrafica from "../ui/Anagrafica";
 import {
   storicoSocio, schedaSocio, catalogo, elencoSoci, cambiaStato, registraCertificato,
   registraQuota, attivaAbbonamento, stagioneCorrente,
-  puoApprovare, puoGestireAbbonamenti,
+  puoApprovare, puoiModificare, puoGestireAbbonamenti,
 } from "../lib/staff";
 import { dataBreve, oggiIso, piuGiorni } from "../lib/date";
 import { Card, Titolo, Avviso, Bottone } from "../ui/base";
