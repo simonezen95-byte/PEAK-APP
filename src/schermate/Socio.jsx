@@ -4,8 +4,9 @@ import {
   Stethoscope, IdCard, CreditCard,
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
+import Anagrafica from "../ui/Anagrafica";
 import {
-  storicoSocio, catalogo, elencoSoci, cambiaStato, registraCertificato,
+  storicoSocio, schedaSocio, catalogo, elencoSoci, cambiaStato, registraCertificato,
   registraQuota, attivaAbbonamento, stagioneCorrente,
   puoApprovare, puoGestireAbbonamenti,
 } from "../lib/staff";
@@ -37,15 +38,21 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
       // Rileggo anche il riepilogo del socio: dopo aver attivato un
       // abbonamento o registrato una quota, quello che ho in mano
       // è vecchio di un secondo ma già sbagliato.
-      const [st, cat, elenco] = await Promise.all([
+      const [st, cat, elenco, scheda] = await Promise.all([
         storicoSocio(s.id),
         catalogo(),
         elencoSoci(s.email ?? ""),
+        // L'elenco e' un riassunto: data di nascita, comune e permessi
+        // arrivano solo leggendo la scheda vera, e senza quelli il
+        // modulo di modifica partirebbe vuoto.
+        schedaSocio(s.id).catch(() => null),
       ]);
       setStorico(st);
       setPacchetti(cat);
       const aggiornato = elenco.find((r) => r.id === s.id);
-      if (aggiornato) setS(aggiornato);
+      if (aggiornato || scheda) {
+        setS((v) => ({ ...v, ...(aggiornato ?? {}), ...(scheda ?? {}) }));
+      }
     } catch {
       setStorico([]);
     }
@@ -192,13 +199,14 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
         </Requisito>
       </div>
 
-      {/* Contatti */}
-      <Titolo>CONTATTI</Titolo>
-      <Card className="divide-y divide-filo mb-6">
-        <Dato icona={Mail} valore={s.email} />
-        <Dato icona={Phone} valore={s.telefono} />
-        <Dato icona={Hash} valore={`iscritto il ${dataBreve(String(s.iscritto_il).slice(0, 10))}`} />
-      </Card>
+      {/* La scheda, e per chi puo' il modo di correggerla */}
+      <Anagrafica
+        s={s}
+        puoi={puoiModificare(profilo)}
+        onCambiato={(patch) => setS((v) => ({ ...v, ...patch }))}
+        onMessaggio={onMessaggio}
+      />
+
 
       {/* Storico */}
       <Titolo>STORICO</Titolo>

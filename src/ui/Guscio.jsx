@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   Home as IconaHome, CalendarDays, Dumbbell, Users, User,
-  ChevronDown, Check, Bell, BarChart3,
+  ChevronDown, Check, Bell, BarChart3, LayoutGrid,
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { eStaff } from "../lib/staff";
-import { puoGestireListino } from "../lib/pacchetti";
 import { quanteDaLeggere } from "../lib/notifiche";
 import { Logo, Messaggio } from "./base";
 import Home from "../schermate/Home";
@@ -20,6 +19,8 @@ import Profilo from "../schermate/Profilo";
 import Notifiche from "../schermate/Notifiche";
 import Presenze from "../schermate/Presenze";
 import Listino from "../schermate/Listino";
+import Altro from "../schermate/Altro";
+import StaffSchermata from "../schermate/Staff";
 
 /* La struttura dell'app una volta dentro.
 
@@ -61,7 +62,7 @@ export default function Guscio() {
         { chiave: "soci",    nome: "Soci",    icona: Users },
         { chiave: "wod",     nome: "WOD",     icona: Dumbbell },
         { chiave: "prenota", nome: "Classi",  icona: CalendarDays },
-        { chiave: "profilo", nome: "Profilo", icona: User },
+        { chiave: "altro",   nome: "Altro",   icona: LayoutGrid },
       ]
     : [
         { chiave: "home",      nome: "Home",      icona: IconaHome },
@@ -82,6 +83,7 @@ export default function Guscio() {
   const [notifiche, setNotifiche] = useState(false);
   const [presenze, setPresenze] = useState(null);
   const [listino, setListino] = useState(false);
+  const [staff2, setStaff2] = useState(false);
   const [daLeggere, setDaLeggere] = useState(0);
   const [messaggio, setMessaggio] = useState("");
   // Cambiando questo numero le schermate rileggono i dati: serve dopo
@@ -106,6 +108,7 @@ export default function Guscio() {
     setNotifiche(false);
     setPresenze(null);
     setListino(false);
+    setStaff2(false);
     setSezione(chiave);
   }
 
@@ -117,10 +120,13 @@ export default function Guscio() {
     setNotifiche(false);
     setPresenze(null);
     setListino(false);
+    setStaff2(false);
     setSezione(nuovo === "staff" ? "oggi" : "home");
   }
 
-  const dettaglio = Boolean(lezione || socio || progressi || notifiche || presenze || listino);
+  const dettaglio = Boolean(
+    lezione || socio || progressi || notifiche || presenze || listino || staff2
+  );
 
   return (
     <div className="min-h-full flex flex-col">
@@ -130,7 +136,7 @@ export default function Guscio() {
         <div className="flex items-center gap-4">
           {staff && <Interruttore modo={modo} onCambia={cambiaModo} profilo={profilo} />}
           <button
-            onClick={() => { setNotifiche(true); setLezione(null); setSocio(null); setProgressi(false); setPresenze(null); setListino(false); }}
+            onClick={() => { setNotifiche(true); setLezione(null); setSocio(null); setProgressi(false); setPresenze(null); setListino(false); setStaff2(false); }}
             aria-label={daLeggere > 0 ? `Notifiche, ${daLeggere} da leggere` : "Notifiche"}
             className="relative text-neutral-300 p-0.5"
           >
@@ -156,7 +162,13 @@ export default function Guscio() {
       </header>
 
       <main className="flex-1 max-w-md w-full mx-auto">
-        {listino ? (
+        {staff2 ? (
+          <StaffSchermata
+            profilo={profilo}
+            onIndietro={() => setStaff2(false)}
+            onMessaggio={avvisa}
+          />
+        ) : listino ? (
           <Listino onIndietro={() => setListino(false)} onMessaggio={avvisa} />
         ) : presenze ? (
           <Presenze
@@ -208,17 +220,19 @@ export default function Guscio() {
           <Progressi onMessaggio={avvisa} />
         ) : sezione === "soci" ? (
           <Soci onApri={setSocio} ricarica={versione} />
+        ) : sezione === "altro" ? (
+          <Altro
+            onApri={(dove) => {
+              if (dove === "staff") setStaff2(true);
+              else if (dove === "listino") setListino(true);
+              else if (dove === "progressi") setProgressi(true);
+            }}
+            onVaiAlProfilo={() => vaiA("profilo")}
+          />
         ) : (
           // In modo staff i progressi non stanno in barra: si arriva
           // qui dal profilo.
-          <Profilo
-            onVaiAiProgressi={comeStaff ? () => setProgressi(true) : undefined}
-            onVaiAlListino={
-              comeStaff && puoGestireListino(profilo)
-                ? () => setListino(true)
-                : undefined
-            }
-          />
+          <Profilo />
         )}
       </main>
 

@@ -13,6 +13,14 @@ export function puoGestireAbbonamenti(profilo) {
   return profilo.permessi?.abb_edit === true;
 }
 
+/** Chi puo' correggere la scheda di un socio. Il permesso vero lo
+    controlla il database: qui si decide solo se mostrare il bottone. */
+export function puoiModificare(profilo) {
+  if (!profilo) return false;
+  if (profilo.ruolo === "owner" || profilo.ruolo === "admin") return true;
+  return profilo.permessi?.soci_edit === true;
+}
+
 export function puoApprovare(profilo) {
   if (!profilo) return false;
   if (profilo.ruolo === "owner" || profilo.ruolo === "admin") return true;
@@ -25,6 +33,22 @@ export async function elencoSoci(cerca = "") {
   const { data, error } = await supabase.rpc("soci_elenco", { cerca });
   if (error) throw error;
   return data ?? [];
+}
+
+/* La scheda completa di un socio.
+
+   L'elenco ne porta solo un riassunto: niente data di nascita, niente
+   comune, niente permessi. Senza questi, il modulo di modifica
+   partirebbe con i campi vuoti e salvando cancellerebbe la data di
+   nascita invece di lasciarla stare. */
+export async function schedaSocio(socioId) {
+  const { data, error } = await supabase
+    .from("profili")
+    .select("id, nome, cognome, email, telefono, data_nascita, comune, foto_url, numero_tessera, stato, ruolo, permessi, certificato_scadenza, iscritto_il")
+    .eq("id", socioId)
+    .single();
+  if (error) throw error;
+  return data;
 }
 
 export async function storicoSocio(socioId) {
