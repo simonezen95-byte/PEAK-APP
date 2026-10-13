@@ -15,7 +15,7 @@ const MINUTI_PER_DISDIRE = 15;
 /* Una lezione aperta: chi c'è, chi è in coda, e il bottone. */
 
 export default function Lezione({
-  sessione, onIndietro, onCambiato, onMessaggio, onApriPresenze,
+  sessione, onIndietro, onCambiato, onMessaggio, onApriPresenze, poteri,
 }) {
   const { profilo } = useSessione();
   const [gente, setGente] = useState(null);
@@ -263,7 +263,7 @@ export default function Lezione({
           annullata serve eccome, è da lì che si rimette in programma.
           Su una passata no: non c'è più niente da annullare, e il
           posto in fondo serve al bottone delle presenze. */}
-      {puoGestireClassi(profilo) && !passata && (
+      {puoGestireClassi(poteri ?? profilo) && !passata && (
         <GestioneClasse
           r={r}
           onCambiato={(patch) => {

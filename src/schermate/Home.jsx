@@ -19,7 +19,9 @@ import {
 
 /* La prima schermata del socio. */
 
-export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, onApriLezione, ricarica }) {
+export default function Home({
+  onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, onApriLezione, ricarica, poteri,
+}) {
   const { profilo } = useSessione();
   const [prossime, setProssime] = useState(null);
   const [accesso, setAccesso] = useState(null);
@@ -70,7 +72,9 @@ export default function Home({ onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, on
   useEffect(() => { carica(); }, [carica, ricarica]);
 
   const blocchi = ostacoli(accesso, oggiIso());
-  const puoScrivere = puoScrivereWod(profilo);
+  // Questa e' la home del socio: ci arriva anche il titolare quando
+  // guarda da socio, e li' non deve trovare la scorciatoia al WOD.
+  const puoScrivere = puoScrivereWod(poteri ?? profilo);
   const prima = prossime?.[0];
 
   return (

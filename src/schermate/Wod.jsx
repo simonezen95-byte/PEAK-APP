@@ -12,7 +12,7 @@ import Redazione from "./WodRedazione";
 /* Il WOD del giorno: cosa si fa, con quale versione, e come è andata
    agli altri. */
 
-export default function Wod({ giornoIniziale, onIndietro, onMessaggio }) {
+export default function Wod({ giornoIniziale, onIndietro, onMessaggio, poteri }) {
   const { profilo } = useSessione();
   const [giorno, setGiorno] = useState(giornoIniziale ?? oggiIso());
   const [w, setW] = useState(undefined);        // undefined = sto leggendo
@@ -21,7 +21,9 @@ export default function Wod({ giornoIniziale, onIndietro, onMessaggio }) {
   const [scrivo, setScrivo] = useState(false);
   const [errore, setErrore] = useState("");
 
-  const posso = puoScrivereWod(profilo);
+  // I poteri arrivano dal guscio: in vista socio sono quelli di un
+  // socio, anche se la persona e' il titolare.
+  const posso = puoScrivereWod(poteri ?? profilo);
 
   const carica = useCallback(async () => {
     setErrore("");

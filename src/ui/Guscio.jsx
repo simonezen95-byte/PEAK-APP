@@ -57,6 +57,25 @@ export default function Guscio() {
 
   const comeStaff = staff && modo === "staff";
 
+  /* Guardando da socio si guarda da socio davvero.
+
+     Non bastava cambiare la barra in basso: WOD e Classi sono le
+     stesse schermate per tutti, e dentro mostravano ancora l'editor
+     del WOD e i bottoni per gestire le lezioni. Uno switch che dice
+     "l'app come la vedono gli altri" e poi lascia lì i poteri non
+     serve a niente, perche' e' proprio il controllo che vuoi fare.
+
+     Qui il profilo viaggia spogliato: stessa persona, nessun ruolo.
+     Le schermate continuano a chiedere "puo' fare questo?" come
+     prima, e la risposta diventa no.
+
+     E' una questione di cosa si vede, non di sicurezza: il database
+     sa chi sei davvero e lo lascerebbe fare. Per quello esiste lo
+     switch — per guardare, non per proteggersi da se stessi. */
+  const poteri = comeStaff
+    ? profilo
+    : { ...profilo, ruolo: "socio", permessi: {} };
+
   const sezioni = comeStaff
     ? [
         { chiave: "oggi",    nome: "Oggi",    icona: IconaHome },
@@ -192,6 +211,7 @@ export default function Guscio() {
             onCambiato={() => setVersione((v) => v + 1)}
             onMessaggio={avvisa}
             onApriPresenze={comeStaff ? setPresenze : undefined}
+            poteri={poteri}
           />
         ) : progressi ? (
           <Progressi onIndietro={() => setProgressi(false)} onMessaggio={avvisa} />
@@ -217,11 +237,17 @@ export default function Guscio() {
             onVaiAlWod={() => vaiA("wod")}
             onApriLezione={setLezione}
             ricarica={versione}
+            poteri={poteri}
           />
         ) : sezione === "prenota" ? (
-          <Prenota onApri={setLezione} ricarica={versione} onMessaggio={avvisa} />
+          <Prenota
+            onApri={setLezione}
+            ricarica={versione}
+            onMessaggio={avvisa}
+            poteri={poteri}
+          />
         ) : sezione === "wod" ? (
-          <Wod giornoIniziale={oggi()} onMessaggio={avvisa} />
+          <Wod giornoIniziale={oggi()} onMessaggio={avvisa} poteri={poteri} />
         ) : sezione === "progressi" ? (
           <Progressi onMessaggio={avvisa} />
         ) : sezione === "soci" ? (

@@ -18,7 +18,7 @@ import NuovaLezione from "../ui/NuovaLezione";
 /* Il calendario del socio: una settimana per volta, un giorno alla
    volta. Le classi in alto, le fasce di Open Box sotto. */
 
-export default function Prenota({ onApri, ricarica, onMessaggio }) {
+export default function Prenota({ onApri, ricarica, onMessaggio, poteri }) {
   const { profilo } = useSessione();
   const [settimanaDal, setSettimanaDal] = useState(() => lunedi(oggiIso()));
   const [giorno, setGiorno] = useState(() => oggiIso());
@@ -169,7 +169,7 @@ export default function Prenota({ onApri, ricarica, onMessaggio }) {
       {/* Solo per chi gestisce le classi. Sta in fondo al giorno che
           si sta guardando, anche quando il giorno è vuoto: un giorno
           vuoto è proprio quello in cui serve aggiungere qualcosa. */}
-      {puoGestireClassi(profilo) && giorno >= oggiIso() && (
+      {puoGestireClassi(poteri ?? profilo) && giorno >= oggiIso() && (
         <NuovaLezione
           giorno={giorno}
           onFatto={carica}
