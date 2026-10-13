@@ -12,7 +12,9 @@ import Redazione from "./WodRedazione";
 /* Il WOD del giorno: cosa si fa, con quale versione, e come è andata
    agli altri. */
 
-export default function Wod({ giornoIniziale, onIndietro, onMessaggio, poteri }) {
+export default function Wod({
+  giornoIniziale, onIndietro, onMessaggio, poteri, comeStaff,
+}) {
   const { profilo } = useSessione();
   const [giorno, setGiorno] = useState(giornoIniziale ?? oggiIso());
   const [w, setW] = useState(undefined);        // undefined = sto leggendo
@@ -188,14 +190,20 @@ export default function Wod({ giornoIniziale, onIndietro, onMessaggio, poteri })
             </div>
           </Card>
 
-          <IlMioScore
-            w={w}
-            profilo={profilo}
-            onFatto={async (messaggio) => {
-              onMessaggio(messaggio);
-              await carica();
-            }}
-          />
+          {/* Il proprio risultato si mette da socio, non da staff: in
+              console il WOD si scrive e si guarda come e' andata. Chi
+              non e' staff lo vede sempre, perche' per lui non esiste
+              nessuna console. */}
+          {!comeStaff && (
+            <IlMioScore
+              w={w}
+              profilo={profilo}
+              onFatto={async (messaggio) => {
+                onMessaggio(messaggio);
+                await carica();
+              }}
+            />
+          )}
 
           {/* Classifica */}
           <Titolo>COME È ANDATA ({gara.length})</Titolo>

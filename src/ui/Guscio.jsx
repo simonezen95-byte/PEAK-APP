@@ -247,7 +247,12 @@ export default function Guscio() {
             poteri={poteri}
           />
         ) : sezione === "wod" ? (
-          <Wod giornoIniziale={oggi()} onMessaggio={avvisa} poteri={poteri} />
+          <Wod
+            giornoIniziale={oggi()}
+            onMessaggio={avvisa}
+            poteri={poteri}
+            comeStaff={comeStaff}
+          />
         ) : sezione === "progressi" ? (
           <Progressi onMessaggio={avvisa} />
         ) : sezione === "soci" ? (
