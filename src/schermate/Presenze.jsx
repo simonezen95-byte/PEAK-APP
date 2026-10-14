@@ -179,8 +179,8 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
       <div className="mt-2 mb-6">
         <div className="text-[10.5px] tracking-[0.2em] text-neutral-500 font-semibold">
           {giaConfermata ? "PRESENZE CONFERMATE"
-           : cominciata ? "CHI C'ERA"
-           : "CHI C'È IN CLASSE"}
+           : cominciata ? "REGISTRO PRESENZE"
+           : "ELENCO ISCRITTI"}
         </div>
         <div className="text-[21px] font-display font-bold text-neutral-50 leading-tight uppercase mt-1">
           {sessione.nome}

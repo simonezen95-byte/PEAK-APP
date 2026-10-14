@@ -227,44 +227,54 @@ function Riga({ r, onApri }) {
         <div className="text-[13.5px] text-neutral-100 font-semibold truncate">
           {r.annullata ? "Annullata" : r.nome}
         </div>
-        <div className="text-[11px] text-neutral-500 mt-0.5 truncate">
-          {r.annullata
-            ? r.motivo_annullo || "La lezione non si tiene"
-            : r.coach
-            ? r.coach
-            : `${r.durata_min} min`}
+        <div className="text-[11px] text-neutral-500 mt-0.5 truncate flex items-center gap-1">
+          {/* Lo stato personale sta qui, non al posto dei numeri.
+              Prima l'etichetta PRENOTATO prendeva il posto del conteggio,
+              e di una classe prenotata non si sapeva più quanti posti
+              fossero occupati senza aprirla. */}
+          {dentro && (
+            <>
+              <Check size={11} strokeWidth={2.6} className="text-neutral-300 shrink-0" />
+              <span className="text-neutral-300 font-semibold">Prenotato</span>
+              <span className="text-neutral-700">·</span>
+            </>
+          )}
+          {inCoda && (
+            <>
+              <Clock size={11} strokeWidth={2.2} className="text-neutral-400 shrink-0" />
+              <span className="text-neutral-400 font-semibold">
+                In coda, {r.mia_posizione}º
+              </span>
+              <span className="text-neutral-700">·</span>
+            </>
+          )}
+          <span className="truncate">
+            {r.annullata
+              ? r.motivo_annullo || "La lezione non si tiene"
+              : r.coach
+              ? r.coach
+              : `${r.durata_min} min`}
+          </span>
         </div>
       </div>
 
+      {/* I posti occupati ci sono sempre, prenotata o no. */}
       <div className="shrink-0 text-right">
-        {dentro ? (
-          <Etichetta chiara icona={Check}>PRENOTATO</Etichetta>
-        ) : inCoda ? (
-          <Etichetta icona={Clock}>IN CODA {r.mia_posizione}</Etichetta>
-        ) : (
-          <>
-            <div className={`text-[13px] font-semibold ${pieno ? "text-neutral-500" : "text-neutral-100"}`}>
-              {r.iscritti}<span className="text-neutral-600">/{r.capienza}</span>
-            </div>
-            <div className="text-[10px] text-neutral-600 mt-0.5">
-              {pieno ? "pieno" : r.in_coda > 0 ? `${r.in_coda} in coda` : "posti"}
-            </div>
-          </>
-        )}
+        <div className={`text-[13px] font-semibold ${pieno ? "text-neutral-500" : "text-neutral-100"}`}>
+          {r.iscritti}<span className="text-neutral-600">/{r.capienza}</span>
+        </div>
+        <div className="text-[10px] text-neutral-600 mt-0.5">
+          {/* La coda batte "al completo": che sia piena lo dice già
+              12/12, mentre quante persone aspettano non lo dice
+              nient'altro. */}
+          {r.in_coda > 0
+            ? `${r.in_coda} in coda`
+            : pieno
+            ? "al completo"
+            : "iscritti"}
+        </div>
       </div>
     </button>
   );
 }
 
-function Etichetta({ chiara, icona: Icona, children }) {
-  return (
-    <span
-      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[9.5px] font-bold tracking-wider ${
-        chiara ? "bg-neutral-50 text-black" : "border border-neutral-600 text-neutral-300"
-      }`}
-    >
-      <Icona size={10} strokeWidth={3} />
-      {children}
-    </span>
-  );
-}

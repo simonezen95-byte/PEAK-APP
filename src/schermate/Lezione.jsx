@@ -246,7 +246,7 @@ export default function Lezione({
                   className="w-full rounded-xl py-3.5 text-[13px] font-bold tracking-wide bg-neutral-50 text-black flex items-center justify-center gap-2.5"
                 >
                   <ClipboardCheck size={16} strokeWidth={2.2} />
-                  {r.presenze_confermate_il ? "CORREGGI LE PRESENZE" : "SEGNA LE PRESENZE"}
+                  {r.presenze_confermate_il ? "CORREGGI LE PRESENZE" : "REGISTRA LE PRESENZE"}
                 </button>
               ) : staff && onApriPresenze ? (
                 /* E su una lezione che deve ancora cominciare la cosa
@@ -259,7 +259,7 @@ export default function Lezione({
                   className="w-full rounded-xl py-3.5 text-[13px] font-bold tracking-wide bg-neutral-50 text-black flex items-center justify-center gap-2.5"
                 >
                   <Users size={16} strokeWidth={2.2} />
-                  CHI C'È IN CLASSE
+                  ELENCO ISCRITTI
                 </button>
               ) : (
                 <Bottone
