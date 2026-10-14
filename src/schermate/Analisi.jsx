@@ -9,6 +9,7 @@ import AnalisiSoci from "./AnalisiSoci";
 import AnalisiFermi from "./AnalisiFermi";
 import AnalisiScadenze from "./AnalisiScadenze";
 import AnalisiEconomia from "./AnalisiEconomia";
+import AnalisiProve from "./AnalisiProve";
 
 /* Analisi — l'indice.
 
@@ -74,8 +75,7 @@ const GRUPPI = [
       },
       {
         chiave: "prove", icona: UserRound, nome: "Prove",
-        nota: "Quante vengono a provare, per mese",
-        manca: "da costruire",
+        nota: "Quante vengono a provare e quante si iscrivono",
       },
       {
         chiave: "crescita", icona: TrendingUp, nome: "Crescita",
@@ -113,6 +113,9 @@ export default function Analisi({ onIndietro, onApriSocio }) {
   }
   if (dove === "economia") {
     return <AnalisiEconomia onIndietro={() => setDove(null)} />;
+  }
+  if (dove === "prove") {
+    return <AnalisiProve onIndietro={() => setDove(null)} />;
   }
 
   return (

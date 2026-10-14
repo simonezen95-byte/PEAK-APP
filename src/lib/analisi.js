@@ -212,3 +212,77 @@ export function meseCorto(iso) {
   if (!a || !m) return "";
   return `${MESI[m - 1]} ${String(a).slice(2)}`;
 }
+
+/* ----------------------------------------------------------------
+   Le prove.
+
+   Quante persone vengono a provare, da dove arrivano, quante si
+   iscrivono. Nessuna di queste righe ha un nome dietro: una prova
+   resta una prenotazione senza nessuno, e la provenienza è una
+   categoria, non una persona.
+   ---------------------------------------------------------------- */
+
+export async function proveRiassunto(giorni = 365) {
+  const { data, error } = await supabase.rpc("prove_riassunto", { giorni });
+  if (error) throw error;
+  return Array.isArray(data) ? (data[0] ?? null) : (data ?? null);
+}
+
+export async function provePerMese(quantiMesi = 12) {
+  const { data, error } = await supabase.rpc("prove_per_mese", {
+    quanti_mesi: quantiMesi,
+  });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function provePerFonte(giorni = 365) {
+  const { data, error } = await supabase.rpc("prove_per_fonte", { giorni });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function proveElenco(quante = 60) {
+  const { data, error } = await supabase.rpc("prove_elenco", { quante });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function segnaEsitoProva(rigaId, diventato) {
+  const { error } = await supabase.rpc("segna_esito_prova", {
+    riga: rigaId, diventato,
+  });
+  if (error) throw error;
+}
+
+/* Le provenienze.
+
+   Lo stesso elenco del foglio della reception, così i due si leggono
+   insieme. L'ordine è quello in cui conviene cercarle, non
+   alfabetico: in cima quelle che capitano più spesso. */
+export const FONTI = [
+  { chiave: "social",      nome: "Social" },
+  { chiave: "passaparola", nome: "Passaparola" },
+  { chiave: "amico",       nome: "Amico" },
+  { chiave: "internet",    nome: "Internet" },
+  { chiave: "staff",       nome: "Staff" },
+  { chiave: "altro",       nome: "Altro" },
+];
+
+export function nomeFonte(chiave) {
+  if (!chiave || chiave === "non indicata") return "Non indicata";
+  return FONTI.find((f) => f.chiave === chiave)?.nome ?? chiave;
+}
+
+/** Le fette del grafico per provenienza: stessa regola dei pacchetti,
+    massimo sei, il resto raggruppato. */
+export function fetteFonti(righe, quante = 5) {
+  return fette(
+    (righe ?? []).map((r) => ({
+      pacchetto: nomeFonte(r.fonte),
+      venduti: r.quante,
+      valore: r.convertite,
+    })),
+    quante
+  );
+}

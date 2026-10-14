@@ -54,9 +54,9 @@ export async function segnaPresenze(sessioneId, idRighe) {
 
 /** Chi viene a provare: occupa un posto, non è un socio, non lascia
     nessun dato suo. Torna l'identificativo della riga creata. */
-export async function aggiungiProva(sessioneId) {
+export async function aggiungiProva(sessioneId, fonte = null) {
   const { data, error } = await supabase.rpc("aggiungi_prova", {
-    sess: sessioneId,
+    sess: sessioneId, fonte,
   });
   if (error) throw error;
   return data;

@@ -7,6 +7,7 @@ import {
   aggiungiProva, togliRiga, spiega,
 } from "../lib/presenze";
 import { elencoSoci } from "../lib/staff";
+import { FONTI } from "../lib/analisi";
 import { dataEstesa, soloOra, piuMinuti, minutiAllInizio } from "../lib/date";
 import { Titolo, Avviso, Vuoto } from "../ui/base";
 
@@ -29,6 +30,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
   const [lavoro, setLavoro] = useState(false);
   const [errore, setErrore] = useState("");
   const [aggiungi, setAggiungi] = useState(false);
+  const [chiedoFonte, setChiedoFonte] = useState(false);
 
   const carica = useCallback(async () => {
     try {
@@ -121,10 +123,17 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
     }
   }
 
-  async function prova() {
+  /* Prima si chiede da dove arriva.
+
+     È l'unico momento in cui qualcuno lo sa: chi segna la prova ha la
+     persona davanti. Chiesto dopo, nessuno se lo ricorda, e la
+     provenienza — che è il numero per capire se la pubblicità
+     funziona — resta vuota per sempre. */
+  async function prova(fonte) {
     setErrore("");
+    setChiedoFonte(false);
     try {
-      await aggiungiProva(sessione.sessione_id);
+      await aggiungiProva(sessione.sessione_id, fonte);
       await carica();
       onMessaggio("Utente prova aggiunto alla classe.");
     } catch (e) {
@@ -200,7 +209,10 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
       ) : prenotati.length === 0 && coda.length === 0 ? (
         <>
           <Vuoto>Nessuno era iscritto a questa classe.</Vuoto>
-          <BottoneAggiungi onSocio={() => setAggiungi(true)} onProva={prova} />
+          <BottoneAggiungi
+            onSocio={() => setAggiungi(true)}
+            onProva={() => setChiedoFonte(true)}
+          />
         </>
       ) : (
         <>
@@ -253,8 +265,15 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
             </>
           )}
 
-          <BottoneAggiungi onSocio={() => setAggiungi(true)} onProva={prova} />
+          <BottoneAggiungi
+            onSocio={() => setAggiungi(true)}
+            onProva={() => setChiedoFonte(true)}
+          />
         </>
+      )}
+
+      {chiedoFonte && (
+        <ScegliFonte onScelto={prova} onAnnulla={() => setChiedoFonte(false)} />
       )}
 
       {/* Il bottone, appoggiato sopra la barra in basso. Su una
@@ -368,6 +387,59 @@ function Riga({ r, spuntato, inCoda, onSpunta, onTogli }) {
    Un socio senza prenotazione si cerca per cognome: è uno di casa, va
    nella sua storia e gli scala l'ingresso. Un utente prova no: non
    ha un nome da cercare perché non è nessuno, tiene solo il posto. */
+/* Da dove arriva.
+
+   Compare appoggiato in basso, sopra tutto il resto: è una domanda
+   sola e si risponde con un tocco, senza cambiare schermata e senza
+   perdere di vista la classe.
+
+   C'è anche "non lo so": una provenienza inventata è peggio di una
+   provenienza mancante, perché la seconda si vede nei conti e la
+   prima no. */
+function ScegliFonte({ onScelto, onAnnulla }) {
+  return (
+    <div
+      className="fixed inset-0 z-40 flex items-end"
+      role="dialog"
+      aria-label="Da dove arriva la persona"
+    >
+      <button
+        onClick={onAnnulla}
+        aria-label="Annulla"
+        className="absolute inset-0 bg-black/70"
+      />
+      <div className="relative w-full max-w-md mx-auto bg-scheda border-t border-bordo rounded-t-3xl p-5 pb-8">
+        <div className="text-[13px] text-neutral-100 mb-1">
+          Da dove arriva?
+        </div>
+        <div className="text-[11px] text-neutral-500 mb-4 leading-relaxed">
+          Serve a capire cosa porta gente in palestra. Non si registra
+          nient'altro della persona.
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          {FONTI.map((f) => (
+            <button
+              key={f.chiave}
+              onClick={() => onScelto(f.chiave)}
+              className="rounded-xl border border-bordo bg-rilievo py-3 text-[12.5px] text-neutral-100"
+            >
+              {f.nome}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={() => onScelto(null)}
+          className="w-full mt-3 py-3 text-[12px] text-neutral-500"
+        >
+          Non lo so
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function BottoneAggiungi({ onSocio, onProva }) {
   return (
     <div className="flex flex-col gap-2">
