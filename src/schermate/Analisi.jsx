@@ -230,8 +230,8 @@ function Riquadri({ n, settimane, giorni }) {
         approvati, e ognuno sta in uno solo: attivo chi si è allenato
         nelle ultime {settimane}{" "}
         {settimane === 1 ? "settimana" : "settimane"}, nuovo chi si è
-        iscritto da meno e non è ancora venuto. Io e i coach non siamo
-        contati.
+        iscritto da meno e non è ancora venuto. Ci siamo dentro anche
+        noi dello staff: ci alleniamo pure noi.
       </div>
 
       <Card className="mt-4 !p-0 flex items-stretch divide-x divide-rilievo">
@@ -317,8 +317,16 @@ function RigaFermo({ r, onApri }) {
     >
       <Faccia r={r} />
       <div className="flex-1 min-w-0">
-        <div className="text-[13px] text-neutral-100 truncate">
-          {r.nome} {r.cognome}
+        <div className="text-[13px] text-neutral-100 truncate flex items-center gap-2">
+          <span className="truncate">{r.nome} {r.cognome}</span>
+          {/* Lo staff è in lista perché si allena come gli altri, ma
+              non è gente da richiamare: marcato, e messo in fondo dal
+              database. */}
+          {r.staff && (
+            <span className="text-[8.5px] tracking-[0.1em] text-neutral-600 border border-filo rounded-full px-1.5 py-0.5 font-semibold shrink-0">
+              STAFF
+            </span>
+          )}
         </div>
         <div className="text-[11px] text-neutral-500 mt-0.5 truncate">
           {r.mai_venuto

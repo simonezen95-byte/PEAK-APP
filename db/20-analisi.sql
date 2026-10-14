@@ -87,7 +87,8 @@ returns table (
   mai_venuto       boolean,
   abbonamento      text,
   abbonamento_fine date,
-  paga_e_non_viene boolean
+  paga_e_non_viene boolean,
+  staff            boolean
 )
 language sql
 stable
@@ -104,7 +105,8 @@ as $$
     -- Il caso che brucia: l'abbonamento è attivo e pagato, i soldi
     -- sono entrati, e la persona non si vede. Qui una telefonata
     -- recupera ancora qualcosa.
-    a.id is not null
+    a.id is not null,
+    p.ruolo <> 'socio'
   from profili p
   cross join lateral (select ultima_presenza(p.id) as ultima) u
   left join lateral (
@@ -119,11 +121,6 @@ as $$
   left join pacchetti k on k.id = a.pacchetto_id
   where p.box_id = mio_box()
     and p.stato = 'approvato'
-    -- Solo i soci. Io e i coach siamo schede approvate come le altre,
-    -- ma questa lista serve a fare telefonate: vedersi dentro il
-    -- titolare "fermo da tre settimane" non aiuta nessuno, e con
-    -- quattro soci di partenza falserebbe tutti i numeri.
-    and p.ruolo = 'socio'
     and ho_permesso('soci_view')
     -- Chi si è iscritto la settimana scorsa e non è ancora venuto non
     -- è fermo: non ha ancora avuto tempo. Per questo chi non si è mai
@@ -131,7 +128,11 @@ as $$
     and coalesce(u.ultima, p.iscritto_il::date)
           < current_date - (coalesce(settimane, 3) * 7)
   order by
-    -- Prima chi paga e non viene, poi per quanto tempo è passato.
+    -- Noi dello staff in fondo. Ci siamo, perché ci alleniamo anche
+    -- noi e i numeri devono dire la verità; ma questa lista serve a
+    -- fare telefonate, e nessuno telefona a sé stesso.
+    (p.ruolo <> 'socio'),
+    -- Poi chi paga e non viene, poi per quanto tempo è passato.
     (a.id is not null) desc,
     coalesce(u.ultima, p.iscritto_il::date);
 $$;
@@ -153,10 +154,10 @@ grant execute on function soci_fermi(int) to authenticated;
 -- lista mostrasse solo il futuro sparirebbe proprio il giorno in cui
 -- diventa urgente.
 --
--- Qui dentro ci stanno anche io e i coach, al contrario della lista
--- di chi si è fermato. Il motivo è semplice: un coach col certificato
--- medico scaduto è un problema più grosso di un socio col certificato
--- scaduto, non più piccolo.
+-- Qui dentro ci stanno anche io e i coach, come in tutto il resto
+-- della schermata. Un coach col certificato medico scaduto è un
+-- problema più grosso di un socio col certificato scaduto, non più
+-- piccolo.
 -- ============================================================
 
 drop function if exists scadenze_prossime(int);
@@ -296,7 +297,7 @@ drop function if exists analisi_soci(int, int);
 create function analisi_soci(settimane int default 3,
                              giorni int default 30)
 returns table (
-  soci            int,  -- le schede socio vive, senza staff
+  soci            int,  -- le schede approvate, staff compreso
   attivi          int,  -- si sono allenati davvero, di recente
   fermi           int,  -- da richiamare
   appena_arrivati int,  -- iscritti da poco e non ancora venuti
@@ -309,13 +310,15 @@ stable
 security definer
 set search_path = public
 as $$
+  -- Tutti gli approvati, staff compreso: in un'associazione anche i
+  -- fondatori sono soci, e si allenano. Tenendoli fuori la schermata
+  -- diceva "zero attivi" di una palestra dove qualcuno si allenava.
   with soci as (
     select p.id, p.iscritto_il::date as iscritto,
            ultima_presenza(p.id) as ultima
     from profili p
     where p.box_id = mio_box()
       and p.stato = 'approvato'
-      and p.ruolo = 'socio'
   ),
   soglia as (
     select (current_date - (coalesce(settimane, 3) * 7)) as g
