@@ -153,10 +153,17 @@ export default function Guscio() {
     setSezione(nuovo === "staff" ? "oggi" : "home");
   }
 
-  const dettaglio = Boolean(
-    lezione || socio || progressi || notifiche || presenze || listino ||
-      staff2 || analisi
-  );
+  /* La barra in basso segue dove sei.
+
+     Prima spegneva tutte le voci appena si apriva qualcosa che non
+     fosse una delle cinque schermate principali: aprivi una lezione
+     dal calendario e la barra diventava tutta grigia, come se non
+     fossi da nessuna parte. Ma da qualche parte ci sei — sei dentro
+     la sezione da cui sei entrato, e la barra deve dirlo.
+
+     Adesso resta accesa la voce di partenza. Chi apre un dettaglio
+     che ha una voce sua in barra ci va direttamente: vedi i Progressi
+     qui sotto. */
 
   return (
     <div className="min-h-full flex flex-col">
@@ -251,7 +258,12 @@ export default function Guscio() {
           <Home
             onVaiAlCalendario={() => vaiA("prenota")}
             onVaiAlProfilo={() => vaiA("profilo")}
-            onVaiAiProgressi={() => setProgressi(true)}
+            onVaiAiProgressi={() =>
+              // Il socio ha i Progressi in barra: ci si va, e la barra
+              // lo segue. Lo staff no — lì si apre sopra, con "Altro"
+              // che resta acceso.
+              comeStaff ? setProgressi(true) : vaiA("progressi")
+            }
             onVaiAlWod={() => vaiA("wod")}
             onApriLezione={setLezione}
             ricarica={versione}
@@ -300,7 +312,7 @@ export default function Guscio() {
           style={{ gridTemplateColumns: `repeat(${sezioni.length}, minmax(0, 1fr))` }}
         >
           {sezioni.map(({ chiave, nome, icona: Icona }) => {
-            const attiva = sezione === chiave && !dettaglio;
+            const attiva = sezione === chiave;
             return (
               <button
                 key={chiave}
