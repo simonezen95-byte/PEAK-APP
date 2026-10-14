@@ -24,6 +24,10 @@ export default function Lezione({
   const [r, setR] = useState(sessione);
   const [chiudibile, setChiudibile] = useState(false);
 
+  // Guardo da staff? Lo dice il profilo spogliato che arriva dal
+  // guscio: in vista socio qui dentro non c'è niente di staff.
+  const staff = puoGestireClassi(poteri ?? profilo);
+
   const carica = useCallback(async () => {
     try {
       setGente(await leggiIscritti(r.sessione_id));
@@ -244,6 +248,19 @@ export default function Lezione({
                   <ClipboardCheck size={16} strokeWidth={2.2} />
                   {r.presenze_confermate_il ? "CORREGGI LE PRESENZE" : "SEGNA LE PRESENZE"}
                 </button>
+              ) : staff && onApriPresenze ? (
+                /* E su una lezione che deve ancora cominciare la cosa
+                   da fare non è prenotarsi: è tenere la lista. Chi
+                   vuole prenotarsi passa a vista socio, che è il posto
+                   dove ci si allena. Qui dentro si aggiunge un socio
+                   senza prenotazione o un utente prova. */
+                <button
+                  onClick={() => onApriPresenze(r)}
+                  className="w-full rounded-xl py-3.5 text-[13px] font-bold tracking-wide bg-neutral-50 text-black flex items-center justify-center gap-2.5"
+                >
+                  <Users size={16} strokeWidth={2.2} />
+                  CHI C'È IN CLASSE
+                </button>
               ) : (
                 <Bottone
                   stato={
@@ -268,7 +285,7 @@ export default function Lezione({
           annullata serve eccome, è da lì che si rimette in programma.
           Su una passata no: non c'è più niente da annullare, e il
           posto in fondo serve al bottone delle presenze. */}
-      {puoGestireClassi(poteri ?? profilo) && !passata && (
+      {staff && !passata && (
         <GestioneClasse
           r={r}
           onCambiato={(patch) => {

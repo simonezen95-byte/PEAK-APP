@@ -7,7 +7,7 @@ import {
   aggiungiProva, togliRiga, spiega,
 } from "../lib/presenze";
 import { elencoSoci } from "../lib/staff";
-import { dataEstesa, soloOra, piuMinuti } from "../lib/date";
+import { dataEstesa, soloOra, piuMinuti, minutiAllInizio } from "../lib/date";
 import { Titolo, Avviso, Vuoto } from "../ui/base";
 
 /* La lista da spuntare a fine classe.
@@ -64,6 +64,12 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
   const giaConfermata = (righe ?? []).some(
     (r) => r.stato === "presente" || r.stato === "assente"
   );
+
+  /* Su una lezione che deve ancora cominciare questa schermata serve
+     a tenere la lista — aggiungere un socio senza prenotazione, o un
+     utente prova che ha detto che viene — non a dire chi c'era. Il
+     bottone di conferma compare quando la lezione è cominciata. */
+  const cominciata = minutiAllInizio(sessione.data, sessione.ora) <= 0;
 
   function spunta(id) {
     setSpuntati((s) => {
@@ -152,7 +158,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
   const quanti = spuntati.size;
 
   return (
-    <div className="px-5 pb-56 pt-1">
+    <div className={cominciata ? "px-5 pb-56 pt-1" : "px-5 pb-28 pt-1"}>
       <button
         onClick={onIndietro}
         aria-label="Torna indietro"
@@ -163,7 +169,9 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
 
       <div className="mt-2 mb-6">
         <div className="text-[10.5px] tracking-[0.2em] text-neutral-500 font-semibold">
-          {giaConfermata ? "PRESENZE CONFERMATE" : "CHI C'ERA"}
+          {giaConfermata ? "PRESENZE CONFERMATE"
+           : cominciata ? "CHI C'ERA"
+           : "CHI C'È IN CLASSE"}
         </div>
         <div className="text-[21px] font-display font-bold text-neutral-50 leading-tight uppercase mt-1">
           {sessione.nome}
@@ -249,7 +257,10 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
         </>
       )}
 
-      {/* Il bottone, appoggiato sopra la barra in basso. */}
+      {/* Il bottone, appoggiato sopra la barra in basso. Su una
+          lezione non ancora cominciata non c'è: non si confermano
+          presenze di gente che deve ancora arrivare. */}
+      {cominciata && (
       <div
         className="fixed left-0 right-0 px-5 pb-3 pt-6 bg-gradient-to-t from-[#050507] via-[#050507] to-transparent"
         style={{ bottom: "calc(60px + env(safe-area-inset-bottom))" }}
@@ -275,6 +286,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
           </button>
         </div>
       </div>
+      )}
     </div>
   );
 }

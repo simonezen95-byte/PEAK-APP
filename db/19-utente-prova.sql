@@ -103,9 +103,17 @@ begin
     raise exception 'La classe è al completo.';
   end if;
 
-  -- Nasce già presente: una prova si aggiunge quando la persona è lì.
+  -- Lo stato dipende da quando siamo. Su una lezione già cominciata
+  -- la prova si aggiunge perché la persona è lì davanti: nasce
+  -- presente. Su una lezione futura è una prenotazione come le altre,
+  -- e presente lo diventerà quando il coach spunterà.
   insert into prenotazioni (sessione_id, profilo_id, stato, prova, walk_in, iscritto_da)
-  values (sess, null, 'presente', true, true, auth.uid())
+  values (
+    sess, null,
+    case when inizio_sessione(s.data, s.ora) <= now() then 'presente'
+         else 'prenotato' end::stato_prenotazione,
+    true, true, auth.uid()
+  )
   returning id into nuova;
 
   return nuova;
@@ -150,6 +158,61 @@ $$;
 
 revoke all on function togli_riga(uuid) from public;
 grant execute on function togli_riga(uuid) to authenticated;
+
+
+-- ============================================================
+-- 2bis. ANCHE IL SOCIO AGGIUNTO A MANO
+--
+-- Stessa ragione: la lista adesso si apre anche prima della lezione,
+-- e chi viene iscritto lì nasceva "presente" pur non essendo ancora
+-- arrivato. Sarebbe risultato allenato senza che nessuno l'avesse
+-- visto, che è esattamente quello che le presenze confermate servono
+-- a evitare.
+-- ============================================================
+
+create or replace function aggiungi_alla_classe(sess uuid, socio uuid)
+returns void
+language plpgsql
+volatile
+security definer
+set search_path = public
+as $$
+declare
+  s        sessioni;
+  occupati int;
+  nasce    stato_prenotazione;
+begin
+  select * into s from sessioni where id = sess for update;
+
+  if s.id is null or s.box_id <> mio_box()
+     or not (posso_chiudere(sess) or ho_permesso('cl_roster')) then
+    raise exception 'Non puoi modificare questa classe.';
+  end if;
+
+  if s.annullata then
+    raise exception 'Questa lezione è annullata.';
+  end if;
+
+  select count(*) into occupati
+  from prenotazioni
+  where sessione_id = sess and stato in ('prenotato', 'presente');
+
+  if occupati >= s.capienza then
+    raise exception 'La classe è al completo.';
+  end if;
+
+  nasce := case when inizio_sessione(s.data, s.ora) <= now()
+                then 'presente' else 'prenotato' end;
+
+  insert into prenotazioni (sessione_id, profilo_id, stato, walk_in, iscritto_da)
+  values (sess, socio, nasce, true, auth.uid())
+  on conflict (sessione_id, profilo_id) do update
+    set stato = nasce, disdetta_il = null;
+end;
+$$;
+
+revoke all on function aggiungi_alla_classe(uuid, uuid) from public;
+grant execute on function aggiungi_alla_classe(uuid, uuid) to authenticated;
 
 
 -- ============================================================
