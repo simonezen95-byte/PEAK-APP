@@ -321,11 +321,19 @@ export default function Guscio() {
                   attiva ? "text-neutral-50" : "text-neutral-600"
                 }`}
               >
-                <Icona
-                  size={19}
-                  strokeWidth={attiva ? 2 : 1.7}
-                  fill={attiva ? "currentColor" : "none"}
-                />
+                {/* Niente riempimento.
+
+                    Riempire funziona solo sulle icone che sono un
+                    contorno chiuso, tipo la casa. Quelle fatte di
+                    linee aperte — il grafico dei progressi, il
+                    bilanciere — vengono chiuse d'ufficio e si
+                    riempiono a metà: il grafico diventava un
+                    triangolo pieno che si mangiava mezza icona.
+
+                    Che la voce sia quella attiva si vede lo stesso da
+                    tre cose: il bianco, il tratto più spesso e la
+                    lineetta qui sotto. */}
+                <Icona size={19} strokeWidth={attiva ? 2.3 : 1.7} />
                 <span className="text-[9px] tracking-[0.06em] font-semibold whitespace-nowrap">
                   {nome.toUpperCase()}
                 </span>
