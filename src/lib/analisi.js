@@ -121,12 +121,80 @@ export async function economiaPerMese(quantiMesi = 12) {
   return data ?? [];
 }
 
-export async function economiaPerPacchetto(mesiIndietro = 12) {
+export async function economiaPerPacchetto(giorni = 365) {
   const { data, error } = await supabase.rpc("economia_per_pacchetto", {
-    mesi_indietro: mesiIndietro,
+    giorni,
   });
   if (error) throw error;
   return data ?? [];
+}
+
+/* I colori delle fette.
+
+   Sei colori per un grafico a torta sono più di quanti se ne possano
+   distinguere con sicurezza: due di questi, per chi ha una comune
+   alterazione della visione dei colori, arrivano quasi identici. Non
+   è un dettaglio che si risolve scegliendo colori migliori — li ho
+   cercati tutti, e non ce ne sono.
+
+   Si regge su altre tre cose, che valgono anche senza vedere i
+   colori: la percentuale scritta dentro la fetta, la percentuale
+   nella legenda, e l'ordine. Le fette sono disegnate dalla più grande
+   alla più piccola in senso orario, e la legenda segue lo stesso
+   ordine: la terza voce della legenda è la terza fetta, e si trova
+   contando, non riconoscendo un colore.
+
+   I sei valori vengono da una tavolozza verificata per il fondo scuro
+   di PEAK: stanno tutti nella stessa fascia di luminosità (nessuno
+   sembra più importante) e staccano abbastanza dallo sfondo. */
+export const COLORI_FETTE = [
+  "#3987e5", // blu
+  "#d95926", // arancio
+  "#199e70", // verde acqua
+  "#c98500", // giallo
+  "#d55181", // magenta
+  "#9085e9", // violetto
+];
+
+/** Il grigio del raggruppamento "Altri": non è una categoria, è il
+    resto, e un colore pieno lo farebbe sembrare un pacchetto. */
+export const COLORE_ALTRI = "#52525b";
+
+/* Da un elenco di pacchetti alle fette del grafico.
+
+   Oltre la sesta fetta il grafico smette di dire qualcosa: si
+   tengono le prime cinque e tutto il resto diventa "Altri". Chi vuole
+   il dettaglio ce l'ha nell'elenco sotto, completo. */
+export function fette(righe, quante = 5) {
+  const vivi = (righe ?? []).filter((r) => Number(r.venduti) > 0);
+  const totale = vivi.reduce((s, r) => s + Number(r.venduti), 0);
+  if (totale === 0) return { totale: 0, pezzi: [] };
+
+  const teste = vivi.slice(0, quante);
+  const coda = vivi.slice(quante);
+  const pezzi = teste.map((r, i) => ({
+    nome: r.pacchetto,
+    quanti: Number(r.venduti),
+    valore: Number(r.valore),
+    quota: Number(r.venduti) / totale,
+    colore: COLORI_FETTE[i],
+  }));
+
+  if (coda.length > 0) {
+    const q = coda.reduce((s, r) => s + Number(r.venduti), 0);
+    pezzi.push({
+      // Senza il numero: nella legenda il conteggio sta già nella
+      // colonna accanto, e "Altri 2" di fianco a un 2 si legge come
+      // se il nome del pacchetto fosse "Altri 2".
+      nome: coda.length === 1 ? coda[0].pacchetto : "Altri",
+      quanti: q,
+      valore: coda.reduce((s, r) => s + Number(r.valore), 0),
+      quota: q / totale,
+      colore: COLORE_ALTRI,
+      resto: coda.length > 1,
+    });
+  }
+  return { totale, pezzi };
 }
 
 /** Gli euro come si scrivono su un cartello: senza centesimi, con il

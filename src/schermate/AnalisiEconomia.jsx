@@ -2,8 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import { Wallet, CalendarClock, Clock3, Tag } from "lucide-react";
 import {
   economiaRiassunto, economiaPerMese, economiaPerPacchetto,
-  euro, meseCorto,
+  euro, meseCorto, fette,
 } from "../lib/analisi";
+import Ciambella from "../ui/Ciambella";
 import { Testata, Scelte, TitoloLista } from "../ui/pezzi-analisi";
 import { Card, Vuoto, Scheletro, Avviso } from "../ui/base";
 
@@ -23,6 +24,7 @@ export default function AnalisiEconomia({ onIndietro }) {
   const [mesi, setMesi] = useState(null);
   const [pacchetti, setPacchetti] = useState(null);
   const [quanti, setQuanti] = useState(6);
+  const [periodo, setPeriodo] = useState(90);
   const [errore, setErrore] = useState("");
 
   const carica = useCallback(async () => {
@@ -31,16 +33,18 @@ export default function AnalisiEconomia({ onIndietro }) {
       const [a, b, c] = await Promise.all([
         economiaRiassunto(),
         economiaPerMese(quanti),
-        economiaPerPacchetto(12),
+        economiaPerPacchetto(periodo),
       ]);
       setN(a); setMesi(b); setPacchetti(c);
     } catch {
       setErrore("Non riesco a leggere i dati.");
       setN(null); setMesi([]); setPacchetti([]);
     }
-  }, [quanti]);
+  }, [quanti, periodo]);
 
   useEffect(() => { carica(); }, [carica]);
+
+  const torta = fette(pacchetti);
 
   return (
     <div className="px-5 pb-28 pt-1">
@@ -129,24 +133,52 @@ export default function AnalisiEconomia({ onIndietro }) {
             </div>
           </div>
 
-          {/* ---------------- quale pacchetto tira ---------------- */}
+          {/* ---------------- vendite per pacchetto ---------------- */}
           <div className="mt-8">
-            <TitoloLista>VENDITE PER PACCHETTO</TitoloLista>
+            <TitoloLista
+              scelte={
+                <Scelte
+                  valore={periodo}
+                  opzioni={[
+                    { v: 30, nome: "30 gg" },
+                    { v: 90, nome: "90 gg" },
+                    { v: 365, nome: "anno" },
+                  ]}
+                  onCambia={setPeriodo}
+                />
+              }
+            >
+              VENDITE PER PACCHETTO
+            </TitoloLista>
+
             {pacchetti === null ? (
               <Scheletro righe={2} />
-            ) : pacchetti.length === 0 ? (
-              <Vuoto>Nessun pacchetto nel listino.</Vuoto>
+            ) : torta.totale === 0 ? (
+              <Vuoto>
+                Nessun abbonamento venduto {quandoDa(periodo)}.
+              </Vuoto>
             ) : (
-              <Card className="!p-0 divide-y divide-filo">
-                {pacchetti.map((p, i) => (
-                  <RigaPacchetto key={i} p={p} />
-                ))}
-              </Card>
+              <>
+                <Card className="mb-2">
+                  <Ciambella
+                    pezzi={torta.pezzi}
+                    totale={torta.totale}
+                    sotto="VENDUTI"
+                  />
+                </Card>
+                <Card className="!p-0 divide-y divide-filo">
+                  {pacchetti.map((p, i) => (
+                    <RigaPacchetto key={i} p={p} />
+                  ))}
+                </Card>
+              </>
             )}
+
             <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-              Ultimi dodici mesi, in ordine di quantità venduta. Serve
-              a capire quali formule sceglie la gente e quali restano
-              nel listino senza muoversi.
+              Abbonamenti cominciati {quandoDa(periodo)}, in ordine di
+              quantità. Nel grafico i primi cinque, il resto raccolto
+              in "Altri"; l'elenco sotto è completo e comprende i
+              pacchetti che non ha preso nessuno.
             </div>
           </div>
         </>
@@ -168,6 +200,14 @@ function quantiEChi(quanti, persone) {
   const p = Number(persone) || 0;
   if (a === p) return `${p} ${p === 1 ? "persona" : "persone"}`;
   return `${a} abbonamenti su ${p} ${p === 1 ? "persona" : "persone"}`;
+}
+
+/** "negli ultimi 90 giorni", "nell'ultimo anno": il periodo scritto
+    come lo si direbbe a voce. */
+function quandoDa(giorni) {
+  if (giorni >= 365) return "nell'ultimo anno";
+  if (giorni >= 180) return "negli ultimi sei mesi";
+  return `negli ultimi ${giorni} giorni`;
 }
 
 function Riquadro({ icona: Icona, valore, nome, nota, allarme }) {
