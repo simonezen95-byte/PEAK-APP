@@ -45,26 +45,44 @@ export function piuGiorni(iso, n) {
   return aIso(d);
 }
 
+/* Una data che non c'è non deve far saltare la schermata.
+
+   Le date qui dentro arrivano dal database, e quasi sempre ci sono.
+   Ma basta un dato mancante — una colonna che una funzione ha smesso
+   di restituire, un abbonamento senza fine — e queste funzioni
+   cercavano il mese numero "non è un numero" dentro l'elenco dei
+   mesi, trovavano il vuoto, e l'intera schermata diventava nera. Un
+   trattino al posto di una data è un problema che si vede e si
+   capisce; uno schermo nero no. */
+function valida(iso) {
+  const d = aData(iso);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
 /** "lun" */
 export function giornoCorto(iso) {
-  return GIORNI[aData(iso).getDay()];
+  const d = valida(iso);
+  return d ? GIORNI[d.getDay()] : "";
 }
 
 /** "12" */
 export function numeroGiorno(iso) {
-  return aData(iso).getDate();
+  const d = valida(iso);
+  return d ? d.getDate() : "";
 }
 
 /** "lunedì 12 ottobre" */
 export function dataEstesa(iso) {
-  const d = aData(iso);
+  const d = valida(iso);
+  if (!d) return "—";
   return `${GIORNI_LUNGHI[d.getDay()]} ${d.getDate()} ${MESI[d.getMonth()]}`;
 }
 
 /** "12 ott", e "12 ott 2027" se cade in un altro anno: una scadenza
     senza anno si legge come se fosse domani. */
 export function dataBreve(iso) {
-  const d = aData(iso);
+  const d = valida(iso);
+  if (!d) return "—";
   const anno = d.getFullYear() === new Date().getFullYear()
     ? ""
     : ` ${d.getFullYear()}`;
@@ -73,7 +91,8 @@ export function dataBreve(iso) {
 
 /** "ottobre 2026", per l'intestazione della settimana. */
 export function meseEAnno(iso) {
-  const d = aData(iso);
+  const d = valida(iso);
+  if (!d) return "";
   return `${MESI[d.getMonth()]} ${d.getFullYear()}`;
 }
 

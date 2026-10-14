@@ -7,7 +7,7 @@ import { useSessione } from "../lib/sessione";
 import Anagrafica from "../ui/Anagrafica";
 import {
   storicoSocio, schedaSocio, catalogo, elencoSoci, cambiaStato, registraCertificato,
-  registraQuota, attivaAbbonamento, stagioneCorrente,
+  registraQuota, attivaAbbonamento, stagioneCorrente, segnaPagato,
   puoApprovare, puoiModificare, puoGestireAbbonamenti,
 } from "../lib/staff";
 import { dataBreve, oggiIso, piuGiorni } from "../lib/date";
@@ -74,6 +74,17 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
       setErrore(leggibile(e));
     }
     setLavoro(false);
+  }
+
+  /* Il pagamento arrivato dopo. Chiede conferma perché è un
+     movimento di cassa: una ditata sul telefono non deve dire che
+     sono entrati sessanta euro che non sono entrati. */
+  function segnaIncassato(v) {
+    const ok = window.confirm(
+      `Segnare come pagato "${v.descrizione}" di ${s.nome} ${s.cognome}?`
+    );
+    if (!ok) return;
+    esegui(() => segnaPagato(v.id), "Segnato come pagato.", {});
   }
 
   return (
@@ -223,12 +234,29 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
                 <div className="text-[10.5px] text-neutral-600 mt-0.5">
                   {dataBreve(v.dal)} – {dataBreve(v.al)}
                   {v.totali != null && ` · ${v.residui}/${v.totali}`}
+                  {/* Un omaggio non è "pagato": non c'era niente da
+                      pagare, ed è giusto che si legga per quello. */}
+                  {v.gratuito && " · gratuito"}
                 </div>
               </div>
-              {!v.pagato && (
-                <span className="text-[9.5px] font-bold tracking-wider text-amber-300 border border-amber-900 rounded-full px-2 py-0.5 shrink-0 ml-2">
-                  NON PAGATO
-                </span>
+              {!v.pagato && !v.gratuito && (
+                possoAbb ? (
+                  /* Si tocca per segnare che il pagamento è arrivato.
+                     Prima l'etichetta era solo un cartello: chi
+                     attivava "paga la settimana prossima" non aveva
+                     poi modo di dire che aveva pagato. */
+                  <button
+                    onClick={() => segnaIncassato(v)}
+                    disabled={lavoro}
+                    className="text-[9.5px] font-bold tracking-wider text-amber-300 border border-amber-900 rounded-full px-2 py-0.5 shrink-0 ml-2"
+                  >
+                    NON PAGATO
+                  </button>
+                ) : (
+                  <span className="text-[9.5px] font-bold tracking-wider text-amber-300 border border-amber-900 rounded-full px-2 py-0.5 shrink-0 ml-2">
+                    NON PAGATO
+                  </span>
+                )
               )}
             </div>
           ))}

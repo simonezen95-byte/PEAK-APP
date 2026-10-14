@@ -57,6 +57,15 @@ export async function storicoSocio(socioId) {
   return data ?? [];
 }
 
+/** Segnare che un abbonamento è stato pagato — o disfare la spunta,
+    perché le mani sbagliano. Il permesso lo controlla il database. */
+export async function segnaPagato(abbonamentoId, si = true) {
+  const { error } = await supabase.rpc("segna_pagato", {
+    abb: abbonamentoId, si,
+  });
+  if (error) throw error;
+}
+
 export async function catalogo() {
   const { data, error } = await supabase
     .from("pacchetti")
