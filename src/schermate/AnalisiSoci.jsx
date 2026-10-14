@@ -82,8 +82,8 @@ export default function AnalisiSoci({ onIndietro, onApriFermi, onApriScadenze })
             approvati, e ognuno sta in uno solo: attivo chi si è allenato
             nelle ultime {settimane}{" "}
             {settimane === 1 ? "settimana" : "settimane"}, nuovo chi si è
-            iscritto da meno e non è ancora venuto. Ci siamo dentro anche
-            noi dello staff: ci alleniamo pure noi.
+            iscritto da meno e non è ancora venuto. Nel conto c'è anche
+            lo staff.
           </div>
 
           <Card className="mt-4 !p-0 flex items-stretch divide-x divide-rilievo">
@@ -95,8 +95,7 @@ export default function AnalisiSoci({ onIndietro, onApriFermi, onApriScadenze })
           </Card>
 
           <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-            I riquadri con il numero di persone da guardare si toccano, e
-            si apre l'elenco.
+            Tocca un riquadro per aprire l'elenco dei nomi.
           </div>
         </>
       ) : null}

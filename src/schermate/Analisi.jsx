@@ -153,9 +153,7 @@ export default function Analisi({ onIndietro, onApriSocio }) {
       ))}
 
       <div className="text-[10.5px] text-neutral-600 leading-relaxed">
-        Le voci spente sono le prossime da costruire. Se te ne serve una
-        che qui non c'è, o se l'ordine non è quello giusto per come
-        lavori, dimmelo.
+        Le voci spente non sono ancora disponibili.
       </div>
     </div>
   );

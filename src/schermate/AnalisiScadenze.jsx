@@ -78,9 +78,8 @@ export default function AnalisiScadenze({ onIndietro, onApriSocio }) {
             ))}
           </div>
           <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-            Dentro c'è anche quello scaduto nelle ultime due settimane,
-            in evidenza: è ancora recuperabile, ed è il momento in cui
-            serve guardarlo.
+            Sono compresi, in evidenza, i rinnovi scaduti nelle ultime
+            due settimane.
           </div>
         </>
       )}

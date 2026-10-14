@@ -63,7 +63,7 @@ export default function AnalisiEconomia({ onIndietro }) {
               icona={Wallet}
               valore={euro(n.attivi_valore)}
               nome="ABBONAMENTI IN CORSO"
-              nota={`${n.attivi_quanti} ${n.attivi_quanti === 1 ? "persona" : "persone"}`}
+              nota={quantiEChi(n.attivi_quanti, n.attivi_persone)}
             />
             <Riquadro
               icona={CalendarClock}
@@ -131,7 +131,7 @@ export default function AnalisiEconomia({ onIndietro }) {
 
           {/* ---------------- quale pacchetto tira ---------------- */}
           <div className="mt-8">
-            <TitoloLista>QUALE PACCHETTO TIRA</TitoloLista>
+            <TitoloLista>VENDITE PER PACCHETTO</TitoloLista>
             {pacchetti === null ? (
               <Scheletro righe={2} />
             ) : pacchetti.length === 0 ? (
@@ -144,8 +144,9 @@ export default function AnalisiEconomia({ onIndietro }) {
               </Card>
             )}
             <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-              Ultimi dodici mesi. Un pacchetto che non vende nessuno è
-              un pacchetto da ripensare o da togliere dalla vendita.
+              Ultimi dodici mesi, in ordine di quantità venduta. Serve
+              a capire quali formule sceglie la gente e quali restano
+              nel listino senza muoversi.
             </div>
           </div>
         </>
@@ -154,6 +155,20 @@ export default function AnalisiEconomia({ onIndietro }) {
   );
 }
 
+
+/* "4 abbonamenti" e "3 persone" non sono la stessa cosa.
+
+   Succede quando qualcuno ha due abbonamenti che si sovrappongono: un
+   rinnovo registrato in anticipo, un omaggio aggiunto sopra a uno
+   attivo. Finché i due numeri coincidono se ne scrive uno solo;
+   quando si separano si scrivono tutt'e due, invece di sceglierne uno
+   e lasciar credere che sia l'altro. */
+function quantiEChi(quanti, persone) {
+  const a = Number(quanti) || 0;
+  const p = Number(persone) || 0;
+  if (a === p) return `${p} ${p === 1 ? "persona" : "persone"}`;
+  return `${a} abbonamenti su ${p} ${p === 1 ? "persona" : "persone"}`;
+}
 
 function Riquadro({ icona: Icona, valore, nome, nota, allarme }) {
   return (

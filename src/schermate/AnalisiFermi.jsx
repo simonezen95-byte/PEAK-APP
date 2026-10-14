@@ -67,7 +67,6 @@ export default function AnalisiFermi({ onIndietro, onApriSocio }) {
       ) : righe.length === 0 ? (
         <Vuoto>
           Nessuno fermo da più di {daQuanto(settimane * 7)}.
-          <br />Buon segno.
         </Vuoto>
       ) : (
         <>
@@ -81,7 +80,7 @@ export default function AnalisiFermi({ onIndietro, onApriSocio }) {
               {daChiamare === 1
                 ? "Uno di questi ha l'abbonamento attivo e pagato"
                 : `${daChiamare} di questi hanno l'abbonamento attivo e pagato`}
-              : sono in cima, ed è da lì che conviene cominciare.
+              : sono in cima all'elenco.
             </div>
           )}
         </>
