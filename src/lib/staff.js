@@ -66,6 +66,22 @@ export async function segnaPagato(abbonamentoId, si = true) {
   if (error) throw error;
 }
 
+/* Togliere un abbonamento registrato per sbaglio.
+
+   Si cancella davvero: un abbonamento sbagliato non è una cosa
+   finita, è una cosa che non è mai esistita, e deve sparire da tutti
+   i conti. Prima di sparire lascia una riga nel registro attività con
+   dentro cosa c'era scritto, così cancellare non è un buco nero.
+
+   Non serve a chiudere in anticipo l'abbonamento di chi smette:
+   quello è un fatto vero e deve restare nella sua storia. */
+export async function togliAbbonamento(abbonamentoId, motivo = null) {
+  const { error } = await supabase.rpc("togli_abbonamento", {
+    abb: abbonamentoId, motivo,
+  });
+  if (error) throw error;
+}
+
 export async function catalogo() {
   const { data, error } = await supabase
     .from("pacchetti")

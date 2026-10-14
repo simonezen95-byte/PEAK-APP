@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   ChevronLeft, Mail, Phone, Hash, Check, AlertTriangle,
-  Stethoscope, IdCard, CreditCard,
+  Stethoscope, IdCard, CreditCard, Trash2,
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import Anagrafica from "../ui/Anagrafica";
 import {
   storicoSocio, schedaSocio, catalogo, elencoSoci, cambiaStato, registraCertificato,
   registraQuota, attivaAbbonamento, stagioneCorrente, segnaPagato,
+  togliAbbonamento,
   puoApprovare, puoiModificare, puoGestireAbbonamenti,
 } from "../lib/staff";
 import { dataBreve, oggiIso, piuGiorni } from "../lib/date";
@@ -85,6 +86,25 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
     );
     if (!ok) return;
     esegui(() => segnaPagato(v.id), "Segnato come pagato.", {});
+  }
+
+  /* Togliere un abbonamento sbagliato.
+
+     Chiede conferma scrivendo per esteso cosa sta per sparire — nome
+     del pacchetto e date — perché due righe uguali a colpo d'occhio
+     non lo sono: cambiano le date, e cancellare quella giusta invece
+     di quella sbagliata è un errore che non si vede subito. */
+  function togli(v) {
+    const ok = window.confirm(
+      `Togliere "${v.descrizione}" di ${s.nome} ${s.cognome}, ` +
+      `dal ${dataBreve(v.dal)} al ${dataBreve(v.al)}?\n\n` +
+      "Serve a rimediare a un errore di registrazione: la riga sparisce " +
+      "da tutti i conti. Resta scritto nel registro che l'hai tolta tu.\n\n" +
+      "Non usarlo per chiudere in anticipo l'abbonamento di chi smette: " +
+      "quello è un fatto vero e deve restare nella sua storia."
+    );
+    if (!ok) return;
+    esegui(() => togliAbbonamento(v.id), "Abbonamento tolto.", {});
   }
 
   return (
@@ -257,6 +277,18 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
                     NON PAGATO
                   </span>
                 )
+              )}
+              {/* Sempre per ultimo, così sta all'estrema destra anche
+                  quando accanto c'è l'etichetta "non pagato". */}
+              {possoAbb && v.id && (
+                <button
+                  onClick={() => togli(v)}
+                  disabled={lavoro}
+                  aria-label={`Togli ${v.descrizione}`}
+                  className="w-7 h-7 flex items-center justify-center text-neutral-700 shrink-0 ml-1.5"
+                >
+                  <Trash2 size={13} strokeWidth={1.8} />
+                </button>
               )}
             </div>
           ))}
