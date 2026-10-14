@@ -50,9 +50,9 @@ export default function AnalisiEconomia({ onIndietro }) {
     <div className="px-5 pb-28 pt-1">
       <Testata
         titolo="Economia"
-        spiega="Quanto portano abbonamenti e quote. Non è la cassa: i
-                pagamenti non passano dall'app, e i valori sono quelli di
-                listino."
+        spiega="Valore degli abbonamenti e delle quote associative. Non
+                sostituisce la contabilità: i pagamenti non transitano
+                dall'app e gli importi sono quelli di listino."
         onIndietro={onIndietro}
       />
 
@@ -66,40 +66,41 @@ export default function AnalisiEconomia({ onIndietro }) {
             <Riquadro
               icona={Wallet}
               valore={euro(n.attivi_valore)}
-              nome="ABBONAMENTI IN CORSO"
+              nome="ABBONAMENTI ATTIVI"
               nota={quantiEChi(n.attivi_quanti, n.attivi_persone)}
             />
             <Riquadro
               icona={CalendarClock}
               valore={euro(n.mese_valore)}
-              nome="PARTITI QUESTO MESE"
-              nota={`${n.mese_quanti} ${n.mese_quanti === 1 ? "abbonamento" : "abbonamenti"}, più le quote`}
+              nome="ATTIVATI QUESTO MESE"
+              nota={`${n.mese_quanti} ${n.mese_quanti === 1 ? "abbonamento" : "abbonamenti"}, quote incluse`}
             />
-            {/* Non è una perdita: è il lavoro da fare. */}
+            {/* Non è una perdita già avvenuta: è il rinnovo da
+                proporre. */}
             <Riquadro
               icona={Clock3}
               valore={euro(n.scadenze_valore)}
-              nome="DA RINNOVARE"
-              nota={`${n.scadenze_quanti} entro 30 giorni`}
+              nome="IN SCADENZA"
+              nota={`${n.scadenze_quanti} nei prossimi 30 giorni`}
             />
             <Riquadro
               icona={Tag}
               valore={euro(n.sospeso_valore)}
-              nome="SEGNATI NON PAGATI"
+              nome="DA INCASSARE"
               nota={
                 n.sospeso_quanti === 0
-                  ? "niente in sospeso"
-                  : `${n.sospeso_quanti} da sistemare`
+                  ? "nessuna posizione aperta"
+                  : `${n.sospeso_quanti} ${n.sospeso_quanti === 1 ? "posizione aperta" : "posizioni aperte"}`
               }
               allarme={Number(n.sospeso_quanti) > 0}
             />
           </div>
 
           <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-            I valori vengono dal listino di oggi, non dal prezzo
-            davvero incassato: sconti, rate, merchandising e tutto il
-            resto non ci sono. Le quote annuali invece hanno l'importo
-            scritto quando le registri, e quello è il soldo vero.
+            Importi calcolati sul listino corrente, non sul prezzo
+            effettivamente incassato: sconti, pagamenti rateizzati e
+            altre entrate non sono compresi. Fanno eccezione le quote
+            associative, registrate con l'importo effettivo.
           </div>
 
           {/* ---------------- mese per mese ---------------- */}
@@ -116,20 +117,22 @@ export default function AnalisiEconomia({ onIndietro }) {
                 />
               }
             >
-              MESE PER MESE
+              {/* L'euro nel titolo invece che su ogni colonna: su
+                  sei colonne larghe quaranta punti un "1.370 €" non ci
+                  sta, e detto una volta vale per tutte. */}
+              ANDAMENTO MENSILE (€)
             </TitoloLista>
 
             {mesi === null ? (
               <Scheletro righe={2} />
             ) : mesi.every((m) => Number(m.totale) === 0) ? (
-              <Vuoto>Ancora niente da mostrare.</Vuoto>
+              <Vuoto>Nessun dato nel periodo selezionato.</Vuoto>
             ) : (
               <Colonne righe={mesi} />
             )}
             <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-              Un abbonamento conta tutto nel mese in cui comincia, non
-              spalmato: è il mese in cui la persona ha deciso, ed è
-              quello che serve vedere.
+              Ogni abbonamento è attribuito per intero al mese di
+              decorrenza, non ripartito sulla durata.
             </div>
           </div>
 
@@ -155,7 +158,7 @@ export default function AnalisiEconomia({ onIndietro }) {
               <Scheletro righe={2} />
             ) : torta.totale === 0 ? (
               <Vuoto>
-                Nessun abbonamento venduto {quandoDa(periodo)}.
+                Nessun abbonamento attivato {quandoDa(periodo)}.
               </Vuoto>
             ) : (
               <>
@@ -163,7 +166,7 @@ export default function AnalisiEconomia({ onIndietro }) {
                   <Ciambella
                     pezzi={torta.pezzi}
                     totale={torta.totale}
-                    sotto="VENDUTI"
+                    sotto="ATTIVATI"
                   />
                 </Card>
                 <Card className="!p-0 divide-y divide-filo">
@@ -175,10 +178,10 @@ export default function AnalisiEconomia({ onIndietro }) {
             )}
 
             <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-              Abbonamenti cominciati {quandoDa(periodo)}, in ordine di
-              quantità. Nel grafico i primi cinque, il resto raccolto
-              in "Altri"; l'elenco sotto è completo e comprende i
-              pacchetti che non ha preso nessuno.
+              Abbonamenti con decorrenza {quandoDa(periodo)}, in ordine
+              di quantità. Il grafico riporta i primi cinque, i
+              restanti sono raggruppati in «Altri». L'elenco sottostante
+              è completo e comprende i pacchetti senza vendite.
             </div>
           </div>
         </>
@@ -198,8 +201,9 @@ export default function AnalisiEconomia({ onIndietro }) {
 function quantiEChi(quanti, persone) {
   const a = Number(quanti) || 0;
   const p = Number(persone) || 0;
-  if (a === p) return `${p} ${p === 1 ? "persona" : "persone"}`;
-  return `${a} abbonamenti su ${p} ${p === 1 ? "persona" : "persone"}`;
+  const soci = `${p} ${p === 1 ? "socio" : "soci"}`;
+  if (a === p) return soci;
+  return `${a} abbonamenti · ${soci}`;
 }
 
 /** "negli ultimi 90 giorni", "nell'ultimo anno": il periodo scritto
@@ -289,7 +293,7 @@ function RigaPacchetto({ p }) {
         </div>
         <div className="text-[10.5px] text-neutral-600 mt-0.5">
           {Number(p.prezzo) === 0 ? "gratuito" : euro(p.prezzo)}
-          {venduti > 0 && ` · ${p.attivi} in corso`}
+          {venduti > 0 && ` · ${p.attivi} attivi`}
         </div>
       </div>
       <div className="text-right shrink-0">
@@ -301,7 +305,7 @@ function RigaPacchetto({ p }) {
           {venduti}
         </div>
         <div className="text-[9px] text-neutral-600 mt-0.5 tabular-nums">
-          {venduti > 0 ? euro(p.valore) : "mai venduto"}
+          {venduti > 0 ? euro(p.valore) : "nessuna vendita"}
         </div>
       </div>
     </div>
