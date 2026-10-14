@@ -21,6 +21,7 @@ import Notifiche from "../schermate/Notifiche";
 import Presenze from "../schermate/Presenze";
 import Listino from "../schermate/Listino";
 import Altro from "../schermate/Altro";
+import Analisi from "../schermate/Analisi";
 import StaffSchermata from "../schermate/Staff";
 
 /* La struttura dell'app una volta dentro.
@@ -109,6 +110,7 @@ export default function Guscio() {
   const [presenze, setPresenze] = useState(null);
   const [listino, setListino] = useState(false);
   const [staff2, setStaff2] = useState(false);
+  const [analisi, setAnalisi] = useState(false);
   const [daLeggere, setDaLeggere] = useState(0);
   const [messaggio, setMessaggio] = useState("");
   // Cambiando questo numero le schermate rileggono i dati: serve dopo
@@ -134,6 +136,7 @@ export default function Guscio() {
     setPresenze(null);
     setListino(false);
     setStaff2(false);
+    setAnalisi(false);
     setSezione(chiave);
   }
 
@@ -146,11 +149,13 @@ export default function Guscio() {
     setPresenze(null);
     setListino(false);
     setStaff2(false);
+    setAnalisi(false);
     setSezione(nuovo === "staff" ? "oggi" : "home");
   }
 
   const dettaglio = Boolean(
-    lezione || socio || progressi || notifiche || presenze || listino || staff2
+    lezione || socio || progressi || notifiche || presenze || listino ||
+      staff2 || analisi
   );
 
   return (
@@ -161,7 +166,7 @@ export default function Guscio() {
         <div className="flex items-center gap-4">
           {staff && <Interruttore modo={modo} onCambia={cambiaModo} profilo={profilo} />}
           <button
-            onClick={() => { setNotifiche(true); setLezione(null); setSocio(null); setProgressi(false); setPresenze(null); setListino(false); setStaff2(false); }}
+            onClick={() => { setNotifiche(true); setLezione(null); setSocio(null); setProgressi(false); setPresenze(null); setListino(false); setStaff2(false); setAnalisi(false); }}
             aria-label={daLeggere > 0 ? `Notifiche, ${daLeggere} da leggere` : "Notifiche"}
             className="relative text-neutral-300 p-0.5"
           >
@@ -187,7 +192,19 @@ export default function Guscio() {
       </header>
 
       <main className="flex-1 max-w-md w-full mx-auto">
-        {staff2 ? (
+        {socio && analisi ? (
+          <Socio
+            socio={socio}
+            onIndietro={() => setSocio(null)}
+            onCambiato={() => setVersione((v) => v + 1)}
+            onMessaggio={avvisa}
+          />
+        ) : analisi ? (
+          <Analisi
+            onIndietro={() => setAnalisi(false)}
+            onApriSocio={setSocio}
+          />
+        ) : staff2 ? (
           <StaffSchermata
             profilo={profilo}
             onIndietro={() => setStaff2(false)}
@@ -260,7 +277,8 @@ export default function Guscio() {
         ) : sezione === "altro" ? (
           <Altro
             onApri={(dove) => {
-              if (dove === "staff") setStaff2(true);
+              if (dove === "analisi") setAnalisi(true);
+              else if (dove === "staff") setStaff2(true);
               else if (dove === "listino") setListino(true);
               else if (dove === "progressi") setProgressi(true);
             }}

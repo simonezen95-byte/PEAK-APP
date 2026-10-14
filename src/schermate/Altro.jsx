@@ -1,5 +1,6 @@
 import {
   ShieldCheck, Tag, Megaphone, Settings, TrendingUp, User, ChevronRight,
+  LineChart,
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { eOwner, puo } from "../lib/ruoli";
@@ -22,6 +23,14 @@ export default function Altro({ onApri, onVaiAlProfilo }) {
   const { profilo } = useSessione();
 
   const gestione = [
+    // Prima voce di proposito: è quella che si apre più spesso, e
+    // l'unica che risponde a "come sta andando".
+    puo(profilo, "soci_view") && {
+      chiave: "analisi",
+      icona: LineChart,
+      nome: "Analisi",
+      nota: "Stato dei soci, chi si è fermato, scadenze",
+    },
     eOwner(profilo) && {
       chiave: "staff",
       icona: ShieldCheck,
