@@ -97,3 +97,50 @@ export function giornoIntero(iso) {
   if (!a || !m || !g) return "";
   return `${g} ${MESI_INTERI[m - 1]}`;
 }
+
+/* ----------------------------------------------------------------
+   Economia.
+
+   Non è la contabilità e non deve diventarlo: è quanto portano
+   abbonamenti e quote, che è la parte che l'app conosce davvero. I
+   pagamenti non ci passano, quindi il valore è quello di listino, non
+   il denaro entrato in cassa.
+   ---------------------------------------------------------------- */
+
+export async function economiaRiassunto() {
+  const { data, error } = await supabase.rpc("economia_riassunto");
+  if (error) throw error;
+  return Array.isArray(data) ? (data[0] ?? null) : (data ?? null);
+}
+
+export async function economiaPerMese(quantiMesi = 12) {
+  const { data, error } = await supabase.rpc("economia_per_mese", {
+    quanti_mesi: quantiMesi,
+  });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function economiaPerPacchetto(mesiIndietro = 12) {
+  const { data, error } = await supabase.rpc("economia_per_pacchetto", {
+    mesi_indietro: mesiIndietro,
+  });
+  if (error) throw error;
+  return data ?? [];
+}
+
+/** Gli euro come si scrivono su un cartello: senza centesimi, con il
+    punto delle migliaia. In reception i centesimi non servono, e
+    occupano il posto che serve alla cifra. */
+export function euro(n) {
+  const v = Math.round(Number(n) || 0);
+  return `${v.toLocaleString("it-IT")} €`;
+}
+
+/** "ott 26", per le colonne dei mesi. */
+export function meseCorto(iso) {
+  if (!iso) return "";
+  const [a, m] = String(iso).slice(0, 10).split("-").map(Number);
+  if (!a || !m) return "";
+  return `${MESI[m - 1]} ${String(a).slice(2)}`;
+}

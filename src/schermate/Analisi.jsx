@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import {
   ChevronLeft, ChevronRight, Users, UserMinus, CalendarClock, Clock,
-  LayoutGrid, CreditCard, UserRound, TrendingUp, Dumbbell,
+  LayoutGrid, Wallet, UserRound, TrendingUp, Dumbbell,
 } from "lucide-react";
 import { analisiSoci } from "../lib/analisi";
 import { Titolo } from "../ui/base";
 import AnalisiSoci from "./AnalisiSoci";
 import AnalisiFermi from "./AnalisiFermi";
 import AnalisiScadenze from "./AnalisiScadenze";
+import AnalisiEconomia from "./AnalisiEconomia";
 
 /* Analisi — l'indice.
 
@@ -68,9 +69,8 @@ const GRUPPI = [
     titolo: "ANDAMENTO",
     voci: [
       {
-        chiave: "abbonamenti", icona: CreditCard, nome: "Abbonamenti",
-        nota: "Cosa si vende e chi rinnova",
-        manca: "da costruire",
+        chiave: "economia", icona: Wallet, nome: "Economia",
+        nota: "Cosa portano abbonamenti e quote",
       },
       {
         chiave: "prove", icona: UserRound, nome: "Prove",
@@ -110,6 +110,9 @@ export default function Analisi({ onIndietro, onApriSocio }) {
   }
   if (dove === "scadenze") {
     return <AnalisiScadenze onIndietro={() => setDove(null)} onApriSocio={onApriSocio} />;
+  }
+  if (dove === "economia") {
+    return <AnalisiEconomia onIndietro={() => setDove(null)} />;
   }
 
   return (
