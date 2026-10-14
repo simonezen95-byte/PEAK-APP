@@ -168,7 +168,9 @@ function Riga({ p, onApri, onAccendi }) {
       <div className={`text-[15px] font-display font-bold shrink-0 tabular-nums ${
         p.attivo ? "text-neutral-50" : "text-neutral-700"
       }`}>
-        {Number(p.prezzo).toFixed(0)}&thinsp;€
+        {Number(p.prezzo) === 0
+          ? <span className="text-[11px] tracking-wider">GRATUITO</span>
+          : <>{Number(p.prezzo).toFixed(0)}&thinsp;€</>}
       </div>
 
       <button
@@ -219,9 +221,21 @@ function Scheda({ pacchetto, onSalva, onIndietro, errore }) {
   const scelta = FORME.find((f) => f.chiave === forma);
   const serveNumero = Boolean(scelta?.numero);
 
+  /* Zero è un prezzo valido: serve per gli abbonamenti omaggio —
+     la compagna di un socio, una sorella, chi dà una mano. Quello che
+     non va bene è il campo lasciato vuoto: "" letto come numero fa
+     zero, e si creerebbe un pacchetto gratis per distrazione. Per
+     questo il campo deve contenere qualcosa, e quel qualcosa deve
+     essere un numero da zero in su. */
+  const prezzoScritto = prezzo.trim();
+  const prezzoOk =
+    prezzoScritto !== "" &&
+    Number.isFinite(Number(prezzoScritto)) &&
+    Number(prezzoScritto) >= 0;
+
   const pronto =
     nome.trim().length > 1 &&
-    Number(prezzo) > 0 &&
+    prezzoOk &&
     Number(mesi) >= 1 &&
     (tipo === "personal" ? Number(sessioni) >= 1 : !serveNumero || Number(numero) >= 1);
 
@@ -357,7 +371,11 @@ function Scheda({ pacchetto, onSalva, onIndietro, errore }) {
         <div className="text-[11px] text-neutral-500 mt-1">
           {Number(mesi) === 1 ? "1 mese" : `${mesi} mesi`} ·{" "}
           {anteprima(tipo, forma, numero, sessioni)} ·{" "}
-          {prezzo ? `${Number(prezzo).toFixed(0)} €` : "— €"}
+          {prezzoScritto === ""
+            ? "— €"
+            : Number(prezzoScritto) === 0
+              ? "gratuito"
+              : `${Number(prezzoScritto).toFixed(0)} €`}
         </div>
       </Card>
 

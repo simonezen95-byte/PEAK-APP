@@ -345,6 +345,15 @@ function FormAbbonamento({ pacchetti, onSalva, lavoro }) {
 
   const pacchetto = pacchetti.find((p) => p.id === scelto);
 
+  /* Un pacchetto gratuito non si può "non pagare".
+
+     La spunta "Già pagato" non è contabilità: è l'interruttore che
+     fa funzionare l'abbonamento. Un omaggio con la spunta tolta
+     sarebbe un abbonamento che non lascia prenotare, e nessuno
+     capirebbe perché. Quindi sui pacchetti a zero euro la spunta
+     sparisce e vale sempre sì. */
+  const omaggio = pacchetto && Number(pacchetto.prezzo) === 0;
+
   return (
     <div className="flex flex-col gap-3">
       <select
@@ -355,7 +364,8 @@ function FormAbbonamento({ pacchetti, onSalva, lavoro }) {
         <option value="">Scegli il pacchetto</option>
         {pacchetti.map((p) => (
           <option key={p.id} value={p.id}>
-            {p.nome} — € {Number(p.prezzo).toFixed(2)}
+            {p.nome}
+            {Number(p.prezzo) === 0 ? " — gratuito" : ` — € ${Number(p.prezzo).toFixed(2)}`}
           </option>
         ))}
       </select>
@@ -370,15 +380,22 @@ function FormAbbonamento({ pacchetti, onSalva, lavoro }) {
         />
       </div>
 
-      <label className="flex items-center gap-2.5 text-[12px] text-neutral-400">
-        <input
-          type="checkbox"
-          checked={pagato}
-          onChange={(e) => setPagato(e.target.checked)}
-          className="w-4 h-4 accent-neutral-200"
-        />
-        Già pagato
-      </label>
+      {omaggio ? (
+        <p className="text-[11.5px] text-neutral-500 leading-relaxed">
+          Pacchetto gratuito: non c'è niente da incassare, e
+          l'abbonamento parte subito.
+        </p>
+      ) : (
+        <label className="flex items-center gap-2.5 text-[12px] text-neutral-400">
+          <input
+            type="checkbox"
+            checked={pagato}
+            onChange={(e) => setPagato(e.target.checked)}
+            className="w-4 h-4 accent-neutral-200"
+          />
+          Già pagato
+        </label>
+      )}
 
       {pacchetto && (
         <p className="text-[10.5px] text-neutral-600 leading-relaxed">
@@ -391,7 +408,7 @@ function FormAbbonamento({ pacchetti, onSalva, lavoro }) {
       <Bottone
         carica={lavoro}
         disabled={!pacchetto}
-        onClick={() => onSalva(pacchetto, inizio, pagato)}
+        onClick={() => onSalva(pacchetto, inizio, omaggio ? true : pagato)}
       >
         ATTIVA ABBONAMENTO
       </Bottone>
