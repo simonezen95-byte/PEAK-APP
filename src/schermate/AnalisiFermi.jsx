@@ -38,15 +38,19 @@ export default function AnalisiFermi({ onIndietro, onApriSocio }) {
     <div className="px-5 pb-28 pt-1">
       <Testata
         titolo="Chi si è fermato"
-        spiega="Chi non si allena da un po'. Si misura sulle presenze
-                confermate dal coach, non sulle prenotazioni: chi prenota
-                e non si presenta non si è allenato."
+        spiega="Soci senza allenamenti recenti, in ordine di priorità."
+        nota="Si misura sulle presenze confermate dal coach, non sulle
+              prenotazioni. In testa chi ha un abbonamento attivo e
+              pagato: è lì che un contatto recupera ancora qualcosa. Il
+              personale interno è in fondo e contrassegnato."
         onIndietro={onIndietro}
       />
 
       {errore && <div className="mb-4"><Avviso>{errore}</Avviso></div>}
 
       <TitoloLista
+        nota="Chi si è iscritto da meno del periodo scelto e non è ancora
+              venuto non compare: non ha ancora avuto tempo."
         scelte={
           <Scelte
             valore={settimane}

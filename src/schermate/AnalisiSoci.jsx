@@ -41,9 +41,12 @@ export default function AnalisiSoci({ onIndietro, onApriFermi, onApriScadenze })
     <div className="px-5 pb-28 pt-1">
       <Testata
         titolo="Stato dei soci"
-        spiega="Quanti si allenano davvero. Conta solo quello che il coach
-                ha confermato: chi prenota e non si presenta non risulta
-                allenato."
+        spiega="Quanti si allenano davvero. Conta solo la presenza
+                confermata dal coach."
+        nota="Chi prenota e non si presenta non risulta allenato: la
+              prenotazione da sola non conta. I tre gruppi non si
+              sovrappongono — ogni socio sta in uno solo — e nel conto è
+              compreso lo staff."
         onIndietro={onIndietro}
       />
 
@@ -78,12 +81,9 @@ export default function AnalisiSoci({ onIndietro, onApriFermi, onApriScadenze })
           </div>
 
           <div className="text-[10.5px] text-neutral-600 mt-2.5 leading-relaxed">
-            I tre gruppi fanno i {soci} {soci === 1 ? "socio" : "soci"}{" "}
-            approvati, e ognuno sta in uno solo: attivo chi si è allenato
-            nelle ultime {settimane}{" "}
-            {settimane === 1 ? "settimana" : "settimane"}, nuovo chi si è
-            iscritto da meno e non è ancora venuto. Nel conto c'è anche
-            lo staff.
+            Attivo chi si è allenato nelle ultime {settimane}{" "}
+            {settimane === 1 ? "settimana" : "settimane"}; nuovo chi si è
+            iscritto da meno e non è ancora venuto.
           </div>
 
           <Card className="mt-4 !p-0 flex items-stretch divide-x divide-rilievo">
@@ -95,7 +95,7 @@ export default function AnalisiSoci({ onIndietro, onApriFermi, onApriScadenze })
           </Card>
 
           <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-            Tocca un riquadro per aprire l'elenco dei nomi.
+            Tocca un riquadro per aprire l'elenco.
           </div>
         </>
       ) : null}

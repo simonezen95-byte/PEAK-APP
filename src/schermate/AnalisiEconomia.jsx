@@ -51,8 +51,12 @@ export default function AnalisiEconomia({ onIndietro }) {
       <Testata
         titolo="Economia"
         spiega="Valore degli abbonamenti e delle quote associative. Non
-                sostituisce la contabilità: i pagamenti non transitano
-                dall'app e gli importi sono quelli di listino."
+                sostituisce la contabilità."
+        nota="Gli importi sono calcolati sul listino corrente, non sul
+              prezzo effettivamente incassato: i pagamenti non transitano
+              dall'app, e sconti, pagamenti rateizzati e altre entrate non
+              sono compresi. Fanno eccezione le quote associative,
+              registrate con l'importo effettivo."
         onIndietro={onIndietro}
       />
 
@@ -96,16 +100,12 @@ export default function AnalisiEconomia({ onIndietro }) {
             />
           </div>
 
-          <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-            Importi calcolati sul listino corrente, non sul prezzo
-            effettivamente incassato: sconti, pagamenti rateizzati e
-            altre entrate non sono compresi. Fanno eccezione le quote
-            associative, registrate con l'importo effettivo.
-          </div>
-
           {/* ---------------- mese per mese ---------------- */}
           <div className="mt-8">
             <TitoloLista
+              nota="Ogni abbonamento è attribuito per intero al mese di
+                    decorrenza, non ripartito sulla durata: è il mese in
+                    cui è stato sottoscritto."
               scelte={
                 <Scelte
                   valore={quanti}
@@ -130,15 +130,16 @@ export default function AnalisiEconomia({ onIndietro }) {
             ) : (
               <Colonne righe={mesi} />
             )}
-            <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-              Ogni abbonamento è attribuito per intero al mese di
-              decorrenza, non ripartito sulla durata.
-            </div>
           </div>
 
           {/* ---------------- vendite per pacchetto ---------------- */}
           <div className="mt-8">
             <TitoloLista
+              nota={`Abbonamenti con decorrenza ${quandoDa(periodo)}, in
+                     ordine di quantità. Il grafico riporta i primi cinque,
+                     i restanti sono raggruppati in «Altri». L'elenco
+                     sottostante è completo e comprende i pacchetti senza
+                     vendite.`}
               scelte={
                 <Scelte
                   valore={periodo}
@@ -176,13 +177,6 @@ export default function AnalisiEconomia({ onIndietro }) {
                 </Card>
               </>
             )}
-
-            <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-              Abbonamenti con decorrenza {quandoDa(periodo)}, in ordine
-              di quantità. Il grafico riporta i primi cinque, i
-              restanti sono raggruppati in «Altri». L'elenco sottostante
-              è completo e comprende i pacchetti senza vendite.
-            </div>
           </div>
         </>
       ) : null}

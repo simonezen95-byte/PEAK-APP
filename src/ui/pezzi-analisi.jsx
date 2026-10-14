@@ -1,6 +1,7 @@
+import { useState } from "react";
 import {
   ChevronLeft, Phone, AlertTriangle, Stethoscope, FileText,
-  CreditCard, CalendarClock,
+  CreditCard, CalendarClock, Info,
 } from "lucide-react";
 import { daQuanto, fraQuanto, giornoCorto, giornoIntero } from "../lib/analisi";
 import { elencoSoci } from "../lib/staff";
@@ -14,9 +15,52 @@ import { elencoSoci } from "../lib/staff";
    abbastanza. */
 
 
+/* La "i" che apre una nota.
+
+   Le spiegazioni di come è calcolato un numero servono, ma scritte
+   sotto a ogni riquadro occupavano più spazio dei numeri stessi.
+   Stanno qui dietro: chi se lo chiede preme, gli altri leggono i
+   numeri.
+
+   Quello che NON va qui è l'avvertenza che cambia come si legge il
+   dato — "non sostituisce la contabilità". Una nota che bisogna
+   aprire è una nota che non legge nessuno, e quella deve leggerla
+   chiunque guardi la schermata. */
+export function usaSpiegazione(testo, misura = 13) {
+  const [aperta, setAperta] = useState(false);
+  if (!testo) return { bottone: null, pannello: null };
+
+  const bottone = (
+    <button
+      onClick={() => setAperta((v) => !v)}
+      aria-expanded={aperta}
+      aria-label={aperta ? "Nascondi la spiegazione" : "Come si legge questo dato"}
+      className={`w-6 h-6 -my-1 flex items-center justify-center shrink-0 ${
+        aperta ? "text-neutral-300" : "text-neutral-600"
+      }`}
+    >
+      <Info size={misura} strokeWidth={2} />
+    </button>
+  );
+
+  const pannello = aperta ? (
+    <div className="text-[10.5px] text-neutral-500 leading-relaxed mt-2.5 border-l border-filo pl-3">
+      {testo}
+    </div>
+  ) : null;
+
+  return { bottone, pannello };
+}
+
+
 /** L'intestazione: freccia indietro, titolo, e una riga che dice cosa
     si sta guardando. Senza quella riga un numero resta un numero. */
-export function Testata({ titolo, spiega, onIndietro }) {
+export function Testata({ titolo, spiega, nota, onIndietro }) {
+  // Bottone accanto al titolo, pannello in fondo: messo subito sotto
+  // il titolo si infilava fra il titolo e la riga che dice cosa si
+  // sta guardando, spezzandola in due.
+  const { bottone, pannello } = usaSpiegazione(nota, 14);
+
   return (
     <>
       <button
@@ -27,14 +71,18 @@ export function Testata({ titolo, spiega, onIndietro }) {
         <ChevronLeft size={22} />
       </button>
       <div className="mt-2 mb-6">
-        <div className="text-[21px] font-display font-bold text-neutral-50 uppercase leading-tight">
-          {titolo}
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="text-[21px] font-display font-bold text-neutral-50 uppercase leading-tight">
+            {titolo}
+          </div>
+          {bottone}
         </div>
         {spiega && (
           <div className="text-[11.5px] text-neutral-500 mt-1 leading-relaxed">
             {spiega}
           </div>
         )}
+        {pannello}
       </div>
     </>
   );
@@ -63,14 +111,22 @@ export function Scelte({ valore, opzioni, onCambia }) {
 }
 
 
-/** Il titolo di una lista, con a destra i bottoncini della finestra. */
-export function TitoloLista({ children, scelte }) {
+/** Il titolo di una lista: a sinistra il nome e la "i", a destra i
+    bottoncini della finestra di tempo. */
+export function TitoloLista({ children, scelte, nota }) {
+  const { bottone, pannello } = usaSpiegazione(nota);
   return (
-    <div className="flex items-baseline justify-between mb-3">
-      <div className="text-[11px] tracking-[0.15em] text-neutral-400 font-semibold">
-        {children}
+    <div className="mb-3">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5">
+          <div className="text-[11px] tracking-[0.15em] text-neutral-400 font-semibold">
+            {children}
+          </div>
+          {bottone}
+        </div>
+        {scelte}
       </div>
-      {scelte}
+      {pannello}
     </div>
   );
 }

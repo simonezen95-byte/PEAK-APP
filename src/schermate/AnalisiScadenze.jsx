@@ -39,8 +39,11 @@ export default function AnalisiScadenze({ onIndietro, onApriSocio }) {
     <div className="px-5 pb-28 pt-1">
       <Testata
         titolo="Scadenze"
-        spiega="Certificati medici, quote annuali e abbonamenti, in ordine
-                di data. Chi ha già rinnovato non compare."
+        spiega="Certificati medici, quote associative e abbonamenti, in
+                ordine di data."
+        nota="Chi ha già rinnovato non compare. Sono compresi, in
+              evidenza, i rinnovi scaduti nelle ultime due settimane:
+              sono ancora recuperabili."
         onIndietro={onIndietro}
       />
 
@@ -76,10 +79,6 @@ export default function AnalisiScadenze({ onIndietro, onApriSocio }) {
                 onApri={apriSocio}
               />
             ))}
-          </div>
-          <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
-            Sono compresi, in evidenza, i rinnovi scaduti nelle ultime
-            due settimane.
           </div>
         </>
       )}
