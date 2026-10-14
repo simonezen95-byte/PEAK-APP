@@ -20,7 +20,8 @@ import {
 /* La prima schermata del socio. */
 
 export default function Home({
-  onVaiAlCalendario, onVaiAlProfilo, onVaiAlWod, onApriLezione, ricarica, poteri,
+  onVaiAlCalendario, onVaiAlProfilo, onVaiAiProgressi, onVaiAlWod,
+  onApriLezione, ricarica, poteri,
 }) {
   const { profilo } = useSessione();
   const [prossime, setProssime] = useState(null);
@@ -271,12 +272,21 @@ export default function Home({
       {/* I tuoi numeri */}
       {numeri && (
         <>
-          <Sezione titolo="I TUOI NUMERI" azione={onVaiAlProfilo} etichetta="QUESTO MESE" />
+          {/* Portano ai Progressi, non al profilo.
+
+              Erano numeri di allenamento che aprivano i dati
+              anagrafici: non c'entrava niente, e l'etichetta "questo
+              mese" non diceva nemmeno dove si andava. I Progressi sono
+              il posto dove quei numeri continuano. */}
+          <Sezione titolo="I TUOI NUMERI" azione={onVaiAiProgressi} etichetta="PROGRESSI" />
           <Card className="!p-0 overflow-hidden">
             <div className="grid grid-cols-3 divide-x divide-filo">
               {/* Qui il numero sta dentro la fiamma, quindi la casella
                   non ne ha un altro sotto. */}
-              <div className="flex flex-col items-center text-center py-5 px-1.5">
+              <button
+                onClick={onVaiAiProgressi}
+                className="flex flex-col items-center text-center py-5 px-1.5"
+              >
                 <Fiamma
                   accesa={numeri.settimana_fatta}
                   serie={numeri.settimane_di_fila}
@@ -291,8 +301,9 @@ export default function Home({
                     : "questa è ancora da fare"}
                 </div>
                 <Tacche settimane={settimane} />
-              </div>
+              </button>
               <Tassello
+                onClick={onVaiAiProgressi}
                 icona={CalendarCheck}
                 valore={numeri.questo_mese}
                 nome={["ALLENAMENTI", "QUESTO MESE"]}
@@ -301,6 +312,7 @@ export default function Home({
                   : null}
               />
               <Tassello
+                onClick={onVaiAiProgressi}
                 icona={BarChart3}
                 valore={numeri.variazione == null
                   ? "–"
@@ -381,10 +393,17 @@ export default function Home({
   );
 }
 
-function Tassello({ icona: Icona, sopra, valore, nome, nota }) {
+function Tassello({ icona: Icona, sopra, valore, nome, nota, onClick }) {
   const righe = Array.isArray(nome) ? nome : [nome];
+  // Bottone solo se c'è davvero qualcosa da aprire: una casella che si
+  // illumina al tocco e non porta da nessuna parte è peggio di una
+  // casella ferma.
+  const Scatola = onClick ? "button" : "div";
   return (
-    <div className="flex flex-col items-center text-center py-5 px-1.5">
+    <Scatola
+      onClick={onClick}
+      className="flex flex-col items-center text-center py-5 px-1.5"
+    >
       {/* L'altezza è la stessa della fiamma dell'altra casella, così
           le didascalie restano sulla stessa riga. */}
       <div className="h-[52px] flex items-center justify-center">
@@ -403,7 +422,7 @@ function Tassello({ icona: Icona, sopra, valore, nome, nota }) {
           {nota}
         </div>
       )}
-    </div>
+    </Scatola>
   );
 }
 

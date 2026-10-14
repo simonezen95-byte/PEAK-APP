@@ -251,6 +251,7 @@ export default function Guscio() {
           <Home
             onVaiAlCalendario={() => vaiA("prenota")}
             onVaiAlProfilo={() => vaiA("profilo")}
+            onVaiAiProgressi={() => setProgressi(true)}
             onVaiAlWod={() => vaiA("wod")}
             onApriLezione={setLezione}
             ricarica={versione}
