@@ -38,12 +38,41 @@ export async function possoChiudere(sessioneId) {
   return data === true;
 }
 
-/** Conferma. Arriva l'elenco di chi c'era; tutti gli altri fra i
-    prenotati diventano assenti. Torna quanti presenti risultano. */
-export async function segnaPresenze(sessioneId, idPresenti) {
+/* Conferma. Arrivano le RIGHE spuntate, non i soci.
+
+   Prima si passavano i soci presenti, ma un utente prova non ha un
+   socio da passare e sarebbe risultato sempre assente. Le righe della
+   lista invece ce le hanno tutti. */
+export async function segnaPresenze(sessioneId, idRighe) {
   const { data, error } = await supabase.rpc("segna_presenze", {
     sess: sessioneId,
-    presenti: idPresenti,
+    righe: idRighe,
+  });
+  if (error) throw error;
+  return data ?? 0;
+}
+
+/** Chi viene a provare: occupa un posto, non è un socio, non lascia
+    nessun dato suo. Torna l'identificativo della riga creata. */
+export async function aggiungiProva(sessioneId) {
+  const { data, error } = await supabase.rpc("aggiungi_prova", {
+    sess: sessioneId,
+  });
+  if (error) throw error;
+  return data;
+}
+
+/** Toglie una riga qualsiasi dalla classe, socio o prova che sia.
+    Per le prove serve per forza: non hanno un socio da nominare. */
+export async function togliRiga(rigaId) {
+  const { error } = await supabase.rpc("togli_riga", { riga: rigaId });
+  if (error) throw error;
+}
+
+/** Quante persone sono venute a provare, fra due date. */
+export async function quanteProve(dalIso, alIso) {
+  const { data, error } = await supabase.rpc("quante_prove", {
+    dal: dalIso, al: alIso,
   });
   if (error) throw error;
   return data ?? 0;

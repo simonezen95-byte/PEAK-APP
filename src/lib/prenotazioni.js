@@ -26,15 +26,21 @@ export async function mioAccesso() {
 export async function iscritti(sessioneId) {
   const { data, error } = await supabase
     .from("prenotazioni")
-    .select("id, profilo_id, stato, posizione_coda")
+    .select("id, profilo_id, stato, posizione_coda, prova")
     .eq("sessione_id", sessioneId)
     .in("stato", ["prenotato", "lista_attesa", "presente"])
     .order("posizione_coda", { ascending: true, nullsFirst: true })
     .order("prenotato_il", { ascending: true });
   if (error) throw error;
 
-  const ids = (data ?? []).map((r) => r.profilo_id);
-  if (ids.length === 0) return [];
+  // Le righe degli utenti prova non hanno nessun socio dietro: vanno
+  // tolte da qui, altrimenti si chiederebbero i nomi di un elenco che
+  // contiene un vuoto.
+  const ids = (data ?? []).map((r) => r.profilo_id).filter(Boolean);
+  if (data.length === 0) return [];
+  if (ids.length === 0) {
+    return data.map((r) => ({ ...r, socio: null }));
+  }
 
   // I nomi degli altri soci passano dalla vista pubblica: dell'archivio
   // completo ognuno vede solo la propria riga.

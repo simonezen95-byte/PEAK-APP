@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ChevronLeft, Check, Search, UserPlus, X, Clock } from "lucide-react";
+import {
+  ChevronLeft, Check, Search, UserPlus, X, Clock, UserRound,
+} from "lucide-react";
 import {
   elencoPresenze, segnaPresenze, aggiungiAllaClasse,
-  togliDallaClasse, spiega,
+  aggiungiProva, togliRiga, spiega,
 } from "../lib/presenze";
 import { elencoSoci } from "../lib/staff";
 import { dataEstesa, soloOra, piuMinuti } from "../lib/date";
@@ -36,7 +38,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
       // come l'avevano lasciata: si correggono due nomi, non si
       // rifà tutto.
       setSpuntati(
-        new Set(lista.filter((r) => r.stato === "presente").map((r) => r.profilo_id))
+        new Set(lista.filter((r) => r.stato === "presente").map((r) => r.prenotazione_id))
       );
     } catch (e) {
       setErrore(spiega(e));
@@ -72,7 +74,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
   }
 
   function tutti() {
-    setSpuntati(new Set(prenotati.map((r) => r.profilo_id)));
+    setSpuntati(new Set(prenotati.map((r) => r.prenotazione_id)));
   }
 
   function nessuno() {
@@ -84,7 +86,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
     setLavoro(true);
     try {
       const quanti = await segnaPresenze(sessione.sessione_id, [...spuntati]);
-      const mancati = prenotati.length - prenotati.filter((r) => spuntati.has(r.profilo_id)).length;
+      const mancati = prenotati.length - prenotati.filter((r) => spuntati.has(r.prenotazione_id)).length;
       onMessaggio(
         quanti === 0
           ? "Classe chiusa: nessun presente."
@@ -113,12 +115,25 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
     }
   }
 
+  async function prova() {
+    setErrore("");
+    try {
+      await aggiungiProva(sessione.sessione_id);
+      await carica();
+      onMessaggio("Utente prova aggiunto alla classe.");
+    } catch (e) {
+      setErrore(spiega(e));
+    }
+  }
+
   async function togli(r) {
     setErrore("");
     try {
-      await togliDallaClasse(sessione.sessione_id, r.profilo_id);
+      await togliRiga(r.prenotazione_id);
       await carica();
-      onMessaggio(`${r.nome} ${r.cognome} tolto dalla classe.`);
+      onMessaggio(
+        r.prova ? "Utente prova tolto." : `${r.nome} ${r.cognome} tolto dalla classe.`
+      );
     } catch (e) {
       setErrore(spiega(e));
     }
@@ -127,7 +142,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
   if (aggiungi) {
     return (
       <Cerca
-        esclusi={new Set((righe ?? []).map((r) => r.profilo_id))}
+        esclusi={new Set((righe ?? []).map((r) => r.profilo_id).filter(Boolean))}
         onScelto={aggiungiSocio}
         onIndietro={() => setAggiungi(false)}
       />
@@ -137,7 +152,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
   const quanti = spuntati.size;
 
   return (
-    <div className="px-5 pb-40 pt-1">
+    <div className="px-5 pb-56 pt-1">
       <button
         onClick={onIndietro}
         aria-label="Torna indietro"
@@ -177,7 +192,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
       ) : prenotati.length === 0 && coda.length === 0 ? (
         <>
           <Vuoto>Nessuno era iscritto a questa classe.</Vuoto>
-          <BottoneAggiungi onClick={() => setAggiungi(true)} />
+          <BottoneAggiungi onSocio={() => setAggiungi(true)} onProva={prova} />
         </>
       ) : (
         <>
@@ -201,8 +216,8 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
                   <Riga
                     key={r.prenotazione_id}
                     r={r}
-                    spuntato={spuntati.has(r.profilo_id)}
-                    onSpunta={() => spunta(r.profilo_id)}
+                    spuntato={spuntati.has(r.prenotazione_id)}
+                    onSpunta={() => spunta(r.prenotazione_id)}
                     onTogli={() => togli(r)}
                   />
                 ))}
@@ -222,15 +237,15 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
                     key={r.prenotazione_id}
                     r={r}
                     inCoda
-                    spuntato={spuntati.has(r.profilo_id)}
-                    onSpunta={() => spunta(r.profilo_id)}
+                    spuntato={spuntati.has(r.prenotazione_id)}
+                    onSpunta={() => spunta(r.prenotazione_id)}
                   />
                 ))}
               </div>
             </>
           )}
 
-          <BottoneAggiungi onClick={() => setAggiungi(true)} />
+          <BottoneAggiungi onSocio={() => setAggiungi(true)} onProva={prova} />
         </>
       )}
 
@@ -287,8 +302,12 @@ function Riga({ r, spuntato, inCoda, onSpunta, onTogli }) {
           {spuntato && <Check size={14} className="text-black" strokeWidth={3.5} />}
         </div>
 
-        <div className="w-9 h-9 rounded-full border border-neutral-700 overflow-hidden flex items-center justify-center shrink-0">
-          {r.foto_url ? (
+        <div className={`w-9 h-9 rounded-full border overflow-hidden flex items-center justify-center shrink-0 ${
+          r.prova ? "border-dashed border-neutral-700" : "border-neutral-700"
+        }`}>
+          {r.prova ? (
+            <UserRound size={15} className="text-neutral-600" strokeWidth={1.6} />
+          ) : r.foto_url ? (
             <img src={r.foto_url} alt="" className="w-full h-full object-cover" />
           ) : (
             <span className="text-[10.5px] font-display font-bold text-neutral-400">
@@ -298,11 +317,15 @@ function Riga({ r, spuntato, inCoda, onSpunta, onTogli }) {
         </div>
 
         <div className="min-w-0">
-          <div className="text-[13.5px] text-neutral-100 truncate">
-            {r.cognome} {r.nome}
+          <div className={`text-[13.5px] truncate ${
+            r.prova ? "text-neutral-400 italic" : "text-neutral-100"
+          }`}>
+            {r.prova ? "Utente prova" : `${r.cognome} ${r.nome}`}
           </div>
           <div className="text-[10px] text-neutral-600 mt-0.5 flex items-center gap-1">
-            {inCoda ? (
+            {r.prova ? (
+              "non è un socio"
+            ) : inCoda ? (
               <>
                 <Clock size={10} /> in coda, {r.posizione_coda}ª
               </>
@@ -328,17 +351,31 @@ function Riga({ r, spuntato, inCoda, onSpunta, onTogli }) {
   );
 }
 
-function BottoneAggiungi({ onClick }) {
+/* Due modi di aggiungere qualcuno, e sono cose diverse.
+
+   Un socio senza prenotazione si cerca per cognome: è uno di casa, va
+   nella sua storia e gli scala l'ingresso. Un utente prova no: non
+   ha un nome da cercare perché non è nessuno, tiene solo il posto. */
+function BottoneAggiungi({ onSocio, onProva }) {
   return (
-    <button
-      onClick={onClick}
-      className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-neutral-400"
-    >
-      <UserPlus size={15} strokeWidth={1.8} />
-      <span className="text-[12px] font-semibold">
-        È arrivato qualcuno senza prenotazione
-      </span>
-    </button>
+    <div className="flex flex-col gap-2">
+      <button
+        onClick={onSocio}
+        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-neutral-400"
+      >
+        <UserPlus size={15} strokeWidth={1.8} />
+        <span className="text-[12px] font-semibold">
+          È arrivato un socio senza prenotazione
+        </span>
+      </button>
+      <button
+        onClick={onProva}
+        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-neutral-500"
+      >
+        <UserRound size={15} strokeWidth={1.8} />
+        <span className="text-[12px] font-semibold">Aggiungi un utente prova</span>
+      </button>
+    </div>
   );
 }
 

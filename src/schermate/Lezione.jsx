@@ -197,7 +197,12 @@ export default function Lezione({
             ) : (
               <div className="grid grid-cols-4 gap-x-2 gap-y-5 mb-7">
                 {prenotati.map((g) => (
-                  <Faccia key={g.id} socio={g.socio} io={g.profilo_id === profilo.id} />
+                  <Faccia
+                    key={g.id}
+                    socio={g.socio}
+                    prova={g.prova}
+                    io={g.profilo_id === profilo.id}
+                  />
                 ))}
               </div>
             )}
@@ -318,10 +323,30 @@ function nome(socio) {
   return `${socio.nome} ${socio.cognome}`.trim();
 }
 
-function Faccia({ socio, io }) {
+function Faccia({ socio, io, prova }) {
   const iniziali = socio
     ? `${socio.nome?.[0] ?? ""}${socio.cognome?.[0] ?? ""}`.toUpperCase()
     : "?";
+
+  // Chi viene a provare occupa un posto ma non e' un socio: nella
+  // griglia si vede che c'e' qualcuno, senza dargli un nome che non
+  // ha.
+  if (prova) {
+    return (
+      <div className="flex flex-col items-center text-center">
+        <div
+          className="rounded-full border border-dashed border-neutral-700 flex items-center justify-center mb-2"
+          style={{ width: 52, height: 52 }}
+        >
+          <span className="text-[16px] text-neutral-700">+</span>
+        </div>
+        <div className="text-[10.5px] text-neutral-500 leading-tight">
+          <div>Utente</div>
+          <div className="text-neutral-600">prova</div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col items-center text-center">
       <div
