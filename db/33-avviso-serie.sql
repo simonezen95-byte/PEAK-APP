@@ -31,14 +31,17 @@
 -- ------------------------------------------------------------
 -- QUANDO
 --
--- Sabato mattina. La settimana chiude la domenica sera, quindi
--- restano due giorni per rimediare: abbastanza per fare qualcosa,
--- non così presto da sembrare assillo il mercoledì.
+-- Giovedì mattina.
 --
--- È una scelta fatta senza conoscere ancora gli orari veri della
--- palestra. Quando il palinsesto sarà deciso, se di domenica si è
--- chiusi il giorno giusto diventa il venerdì: si cambia la riga
--- dell'orologio in fondo, nient'altro.
+-- La settimana finisce la domenica, ma la domenica è chiusa e il
+-- sabato ci viene poca gente: i giorni veri per rimediare sono
+-- giovedì e venerdì. Chi a mercoledì sera non si è ancora fatto
+-- vedere ha saltato tre giorni, e giovedì mattina è l'ultimo
+-- momento in cui l'avviso serve ancora a qualcosa invece di
+-- arrivare a cose fatte.
+--
+-- Mandarlo prima — lunedì, martedì — sarebbe assillo: uno che si
+-- allena il giovedì non ha fatto niente di male il martedì.
 --
 -- Da eseguire dopo gli altri trentadue file.
 -- ============================================================
@@ -194,11 +197,12 @@ as $$
     insert into notifiche (profilo_id, gruppo, titolo, testo)
     select profilo_id, 'serie',
            'Sei a ' || settimane || ' settimane di fila',
-           -- Niente "mancano due giorni": sarebbe vero solo partendo
-           -- di sabato, e il giorno lo si può cambiare. La domenica
-           -- invece è la fine della settimana sempre.
-           'Questa settimana non ti sei ancora allenato. La settimana '
-             || 'si chiude domenica: prenota e tieni accesa la fiamma.'
+           -- Sabato e non domenica: la settimana finisce la
+           -- domenica, ma di domenica è chiuso, e dire a qualcuno
+           -- che ha tempo fino a un giorno in cui non può venire
+           -- non è dargli tempo.
+           'Questa settimana non ti sei ancora allenato. Hai tempo '
+             || 'fino a sabato: prenota e tieni accesa la fiamma.'
     from da_mandare
     returning 1
   )
@@ -209,7 +213,7 @@ revoke all on function avvisi_serie() from public, anon, authenticated;
 
 
 -- ============================================================
--- 4. L'OROLOGIO — sabato alle 10
+-- 4. L'OROLOGIO — giovedì alle 10
 -- ============================================================
 
 select cron.unschedule('peak-serie')
@@ -217,7 +221,7 @@ where exists (select 1 from cron.job where jobname = 'peak-serie');
 
 select cron.schedule(
   'peak-serie',
-  '0 10 * * 6',               -- 6 = sabato
+  '0 10 * * 4',               -- 4 = giovedì
   $$select avvisi_serie()$$
 );
 
