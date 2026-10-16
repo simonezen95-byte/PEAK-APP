@@ -3,9 +3,10 @@ import {
 } from "lucide-react";
 import { useSessione } from "../lib/sessione";
 import { Card, Titolo } from "../ui/base";
+import AvvisiTelefono from "../ui/AvvisiTelefono";
 
-/* Per ora solo la tua scheda e l'uscita. Le impostazioni vere
-   (notifiche, privacy, foto) arrivano con le prossime sezioni. */
+/* La tua scheda, gli avvisi sul telefono e l'uscita. Privacy e foto
+   arrivano con le prossime sezioni. */
 
 export default function Profilo({ onVaiAiProgressi, onVaiAlListino }) {
   const { profilo, esci } = useSessione();
@@ -52,6 +53,11 @@ export default function Profilo({ onVaiAiProgressi, onVaiAlListino }) {
           )}
         </div>
       )}
+
+      <Titolo>AVVISI</Titolo>
+      <div className="mb-8">
+        <AvvisiTelefono />
+      </div>
 
       <Titolo>I TUOI DATI</Titolo>
       <Card className="divide-y divide-filo mb-8">
