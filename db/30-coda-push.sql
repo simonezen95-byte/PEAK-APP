@@ -180,7 +180,14 @@ as $$
   join push_telefoni t on t.id = p.telefono_id;
 $$;
 
-revoke all on function prossime_push(int) from public, authenticated;
+-- Chiusa a tutti, poi riaperta a uno solo.
+--
+-- "Tutti" qui vuol dire davvero tutti: in PostgreSQL una funzione
+-- nuova è eseguibile da chiunque, e togliere il permesso a public lo
+-- toglie anche al ruolo con cui lavora il speditore. Va quindi
+-- ridato a lui, per nome.
+revoke all on function prossime_push(int) from public, anon, authenticated;
+grant execute on function prossime_push(int) to service_role;
 
 
 /** Com'è andata. Se il telefono non esiste più lo si toglie: è la
@@ -217,7 +224,10 @@ begin
 end;
 $$;
 
-revoke all on function chiudi_push(bigint, boolean, boolean, text) from public, authenticated;
+revoke all on function chiudi_push(bigint, boolean, boolean, text)
+  from public, anon, authenticated;
+grant execute on function chiudi_push(bigint, boolean, boolean, text)
+  to service_role;
 
 
 -- ============================================================
@@ -244,13 +254,19 @@ as $$
   select count(*)::int from via;
 $$;
 
-revoke all on function pulisci_coda_push() from public, authenticated;
+revoke all on function pulisci_coda_push() from public, anon, authenticated;
 
 
 -- ============================================================
 -- 6. CONTROLLO
 -- ============================================================
 
+-- Le ultime due righe sono le più importanti: il speditore deve
+-- poter chiamare le sue funzioni, e un socio non deve poterlo fare.
 select
-  (select count(*) from push_gruppi where esce)      as gruppi_che_escono,
-  (select count(*) from coda_push where spedita_il is null) as in_attesa;
+  (select count(*) from push_gruppi where esce)             as gruppi_che_escono,
+  (select count(*) from coda_push where spedita_il is null) as in_attesa,
+  has_function_privilege('service_role', 'prossime_push(int)', 'execute')
+    as speditore_puo,
+  not has_function_privilege('authenticated', 'prossime_push(int)', 'execute')
+    as socio_non_puo;
