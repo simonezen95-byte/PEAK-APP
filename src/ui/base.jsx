@@ -98,6 +98,58 @@ export function Spunta({ attiva, onChange, children }) {
   );
 }
 
+/** L'interruttore acceso/spento, quello che su un telefono si tocca
+    senza pensarci.
+
+    Non ha scritte: la posizione dice già tutto, e una scritta
+    ACCENDI/SPEGNI obbliga a chiedersi se dica lo stato attuale o
+    quello che succede toccandola. Chi usa un lettore di schermo
+    riceve lo stato dal ruolo "switch", che è il motivo per cui qui
+    non c'è un bottone qualsiasi.
+
+    Spento resta comunque toccabile: è il caso in cui si accende.
+    Bloccato è un'altra cosa — vuol dire che da qui non si può fare,
+    e allora accanto deve esserci scritto perché. */
+export function Interruttore({ acceso, onCambia, bloccato, etichetta }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={!!acceso}
+      aria-label={etichetta}
+      disabled={bloccato}
+      onClick={onCambia}
+      className={`relative w-[46px] h-[27px] rounded-full shrink-0 transition-colors ${
+        acceso ? "bg-neutral-100" : "bg-neutral-800 border border-neutral-700"
+      } ${bloccato ? "opacity-40" : ""}`}
+    >
+      <span
+        className={`absolute top-1/2 -translate-y-1/2 w-[21px] h-[21px] rounded-full transition-all ${
+          acceso ? "left-[22px] bg-black" : "left-[2px] bg-neutral-500"
+        }`}
+      />
+    </button>
+  );
+}
+
+/** Una riga di impostazione: cosa si sta scegliendo a sinistra,
+    l'interruttore a destra, e sotto la spiegazione quando serve. */
+export function RigaImpostazione({ nome, nota, children }) {
+  return (
+    <div className="py-3 first:pt-0 last:pb-0">
+      <div className="flex items-center gap-3">
+        <div className="text-[12.5px] text-neutral-200 flex-1">{nome}</div>
+        {children}
+      </div>
+      {nota && (
+        <p className="text-[11px] text-neutral-500 mt-1.5 leading-relaxed pr-12">
+          {nota}
+        </p>
+      )}
+    </div>
+  );
+}
+
 /** Data di nascita a tre tendine: un calendario costringerebbe a
     scorrere indietro di trent'anni, e un campo libero lascerebbe
     scrivere ogni data in un formato diverso. */

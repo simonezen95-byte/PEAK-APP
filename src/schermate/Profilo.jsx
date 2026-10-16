@@ -54,11 +54,6 @@ export default function Profilo({ onVaiAiProgressi, onVaiAlListino }) {
         </div>
       )}
 
-      <Titolo>AVVISI</Titolo>
-      <div className="mb-8">
-        <AvvisiTelefono />
-      </div>
-
       <Titolo>I TUOI DATI</Titolo>
       <Card className="divide-y divide-filo mb-8">
         <Riga icona={Hash} nome="Tessera" valore={profilo.numero_tessera ?? "–"} />
@@ -66,10 +61,12 @@ export default function Profilo({ onVaiAiProgressi, onVaiAlListino }) {
         <Riga icona={Phone} nome="Telefono" valore={profilo.telefono} />
       </Card>
 
-      <p className="text-[11px] text-neutral-600 leading-relaxed mb-6">
+      <p className="text-[11px] text-neutral-600 leading-relaxed mb-8">
         Nome, cognome e data di nascita li modifica lo staff in reception.
         Per cambiare email o telefono scrivici.
       </p>
+
+      <AvvisiTelefono />
 
       <button
         onClick={esci}
