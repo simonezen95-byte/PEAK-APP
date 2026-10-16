@@ -196,7 +196,7 @@ as $$
   scritte as (
     insert into notifiche (profilo_id, gruppo, titolo, testo)
     select profilo_id, 'serie',
-           'Sei a ' || settimane || ' settimane di fila',
+           settimane || ' settimane di fila. Non fermarti ora!',
            -- Sabato e non domenica: la settimana finisce la
            -- domenica, ma di domenica è chiuso, e dire a qualcuno
            -- che ha tempo fino a un giorno in cui non può venire
@@ -211,8 +211,8 @@ as $$
            -- E sta solo su questa notifica. Su "lezione annullata"
            -- uno slogan sarebbe fuori luogo: lì la persona ha un
            -- problema, non ha bisogno del marchio.
-           'Non ti sei ancora allenato, hai tempo fino a sabato. '
-             || 'Find your peak.'
+           'Hai tempo fino a sabato per mantenere la tua serie. '
+             || 'Find your Peak!'
     from da_mandare
     returning 1
   )
