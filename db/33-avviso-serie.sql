@@ -201,8 +201,18 @@ as $$
            -- domenica, ma di domenica è chiuso, e dire a qualcuno
            -- che ha tempo fino a un giorno in cui non può venire
            -- non è dargli tempo.
-           'Questa settimana non ti sei ancora allenato. Hai tempo '
-             || 'fino a sabato: prenota e tieni accesa la fiamma.'
+           --
+           -- Corto apposta. Sullo schermo bloccato il testo viene
+           -- tagliato dopo due righe, e tagliato dalla fine: una
+           -- firma in coda a un testo lungo è la prima cosa che
+           -- sparisce. Lo slogan sta qui solo perché il resto è
+           -- stato accorciato per fargli posto.
+           --
+           -- E sta solo su questa notifica. Su "lezione annullata"
+           -- uno slogan sarebbe fuori luogo: lì la persona ha un
+           -- problema, non ha bisogno del marchio.
+           'Non ti sei ancora allenato, hai tempo fino a sabato. '
+             || 'Find your peak.'
     from da_mandare
     returning 1
   )
