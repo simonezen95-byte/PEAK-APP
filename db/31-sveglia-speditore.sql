@@ -12,9 +12,12 @@
 --    È quello che permette al database di chiamare un indirizzo su
 --    internet. Senza, questo file dà errore e te ne accorgi subito.
 --
--- 2. Scrivere qui sotto l'indirizzo del speditore e la parola
---    d'ordine, nelle due righe segnate. La parola d'ordine deve
+-- 2. Dopo aver eseguito questo file, mettere la parola d'ordine con
+--    un comando a parte (non si scrive qui dentro: vedi sotto). Deve
 --    essere la stessa messa nelle impostazioni di Vercel.
+--
+--      update impostazioni_push
+--      set segreto = 'la-parola-d-ordine' where id = 1;
 --
 -- ------------------------------------------------------------
 -- PERCHÉ LA CHIAMATA NON ASPETTA RISPOSTA
@@ -62,15 +65,23 @@ alter table impostazioni_push enable row level security;
 -- deve essere raggiungibile da nessun socio, per nessuna strada.
 
 
--- ↓↓↓ LE DUE RIGHE DA RIEMPIRE ↓↓↓
+-- L'indirizzo è quello dell'APP, non quello del sito pubblico:
+-- peakfunctionalfitness.it è un altro sito, un altro repo, e lì
+-- /api/spedisci non esiste. Se un domani l'app cambia indirizzo, si
+-- cambia questa riga e basta.
 insert into impostazioni_push (id, indirizzo, segreto)
 values (
   1,
-  'https://peakfunctionalfitness.it/api/spedisci',   -- l'indirizzo
-  'CAMBIAMI-con-una-parola-lunga-a-caso'             -- la parola d'ordine
+  'https://peak-app-weld.vercel.app/api/spedisci',
+  'CAMBIAMI-con-una-parola-lunga-a-caso'   -- ← si cambia subito dopo
 )
-on conflict (id) do nothing;
--- ↑↑↑ e la stessa parola d'ordine va nelle impostazioni di Vercel ↑↑↑
+on conflict (id) do update set indirizzo = excluded.indirizzo;
+-- Rieseguendo il file l'indirizzo si aggiorna, la parola d'ordine no:
+-- quella è stata messa a mano e il file non la conosce. Senza questa
+-- riga un cambio di indirizzo non verrebbe recepito, e in silenzio.
+-- La parola d'ordine non si scrive qui: questo file sta su GitHub, e
+-- una parola d'ordine pubblica non è una parola d'ordine. Si mette con
+-- un comando a parte, e la stessa va nelle impostazioni di Vercel.
 
 
 -- ============================================================
