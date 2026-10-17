@@ -24,9 +24,9 @@ export default function Profilo({ onVaiAiProgressi, onVaiAlListino }) {
           )}
         </div>
         <div className="min-w-0">
-          <div className="text-[20px] font-display font-bold text-neutral-50 leading-tight truncate">
+          <h1 className="text-[20px] font-display font-bold text-neutral-50 leading-tight truncate">
             {profilo.nome} {profilo.cognome}
-          </div>
+          </h1>
           <div className="text-[11.5px] text-dettaglio mt-0.5 first-letter:uppercase">
             {profilo.ruolo === "socio" ? "socio" : profilo.ruolo}
           </div>

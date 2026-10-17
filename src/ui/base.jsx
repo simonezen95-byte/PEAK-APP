@@ -228,11 +228,39 @@ export function Card({ className = "", ...resto }) {
   );
 }
 
-export function Titolo({ children }) {
+/** L'intestazione di una sezione.
+
+    È un <h2> e non un <div>, e la differenza non si vede: si sente.
+    Chi usa VoiceOver naviga una schermata saltando da un titolo al
+    successivo. Se i titoli sono finti — testo scritto in piccolo e
+    spaziato, ma per il telefono un riquadro qualsiasi — quel salto
+    non esiste e tocca ascoltare tutto dall'inizio ogni volta.
+
+    Il livello si può cambiare dove serve, perché un titolo dentro a
+    un altro deve scendere di un gradino: saltare da h2 a h4 confonde
+    chi ascolta tanto quanto non averne. */
+export function Titolo({ children, livello = 2 }) {
+  const Tag = `h${livello}`;
   return (
-    <div className="text-[11px] tracking-[0.15em] text-dettaglio font-semibold mb-3">
+    <Tag className="text-[11px] tracking-[0.15em] text-dettaglio font-semibold mb-3">
       {children}
-    </div>
+    </Tag>
+  );
+}
+
+/** Il titolo della schermata.
+
+    Uno per schermata, è la prima cosa che VoiceOver annuncia quando
+    si arriva. Dove la schermata un titolo scritto ce l'ha già — il
+    nome del WOD, il proprio nome nel profilo — si usa quello e si
+    passa `comeSta` per non cambiargli l'aspetto. Dove non c'è, si
+    scrive lo stesso e lo si nasconde: una schermata che non si
+    presenta lascia chi ascolta a indovinare dov'è finito. */
+export function TitoloSchermata({ children, comeSta, nascosto = false }) {
+  return (
+    <h1 className={nascosto ? "sr-only" : comeSta}>
+      {children}
+    </h1>
   );
 }
 
@@ -307,16 +335,19 @@ export function Montagna({ className = "" }) {
 }
 
 /** Titolo di sezione con, a destra, il rimando al resto. */
-export function Sezione({ titolo, azione, etichetta = "VEDI TUTTO" }) {
+export function Sezione({ titolo, azione, etichetta = "VEDI TUTTO", livello = 2 }) {
+  const Tag = `h${livello}`;
   return (
     <div className="flex items-center justify-between mt-7 mb-3">
-      <div className="text-[11px] tracking-[0.15em] text-etichetta font-semibold">
+      {/* Il titolo è un titolo vero; il rimando a fianco resta fuori,
+          perché è un'azione e non fa parte dell'intestazione. */}
+      <Tag className="text-[11px] tracking-[0.15em] text-etichetta font-semibold">
         {titolo}
-      </div>
+      </Tag>
       {azione && (
         <button
           onClick={azione}
-          className="text-[10.5px] text-dettaglio flex items-center gap-0.5 font-semibold tracking-wider"
+          className="text-[10.5px] text-dettaglio flex items-center gap-0.5 font-semibold tracking-wider py-2 -my-2 pl-3"
         >
           {etichetta}
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"

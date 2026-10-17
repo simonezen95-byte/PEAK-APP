@@ -87,9 +87,11 @@ export default function Home({
         <div className="text-[11px] tracking-[0.22em] text-etichetta font-semibold">
           {saluto()}
         </div>
-        <div className="text-[2.6rem] leading-[1.02] font-display font-bold text-neutral-50 uppercase mt-0.5">
+        {/* Il nome è il titolo della schermata: è la prima cosa che
+            VoiceOver annuncia arrivando qui. */}
+        <h1 className="text-[2.6rem] leading-[1.02] font-display font-bold text-neutral-50 uppercase mt-0.5">
           {profilo.nome}
-        </div>
+        </h1>
         <div className="w-10 h-[3px] bg-neutral-50 my-3.5" />
         <div className="text-[10px] tracking-[0.25em] text-dettaglio font-semibold">
           FOCUS. TRAIN. IMPROVE. REPEAT.

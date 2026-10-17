@@ -305,6 +305,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
           <input
             value={cerca}
             onChange={(e) => setCerca(e.target.value)}
+            aria-label="Cerca l'esercizio"
             placeholder="Cerca l'esercizio"
             autoComplete="off"
             autoCorrect="off"
@@ -375,9 +376,13 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
 
           <div className="text-[11px] text-etichetta font-semibold mb-2">Peso</div>
           <div className="flex items-center gap-2.5 bg-scheda border border-bordo rounded-xl px-3.5 mb-5 focus-within:border-neutral-600">
+            {/* L'etichetta "Peso" è scritta qui sopra, ma per il
+                telefono quello è un riquadro qualsiasi: va detto
+                anche a lui a quale campo appartiene. */}
             <input
               value={peso}
               onChange={(e) => setPeso(e.target.value)}
+              aria-label="Peso in chili"
               inputMode="decimal"
               autoComplete="off"
               placeholder="100"
@@ -390,6 +395,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
           <input
             type="date"
             value={data}
+            aria-label="Quando"
             max={oggiIso()}
             onChange={(e) => setData(e.target.value)}
             className="w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 outline-none focus:border-neutral-600 mb-5"

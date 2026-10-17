@@ -134,9 +134,9 @@ export default function Wod({
         <>
           {/* Titolo */}
           <div className="relative mb-5">
-            <div className="text-[2.1rem] leading-none font-display font-bold text-neutral-50 uppercase">
+            <h1 className="text-[2.1rem] leading-none font-display font-bold text-neutral-50 uppercase">
               {w.titolo}
-            </div>
+            </h1>
             <div className="flex items-center gap-3 mt-2.5 text-[11px] text-dettaglio">
               <span className="tracking-wider font-semibold uppercase">
                 {w.tipo_score === "tempo" ? "A TEMPO"
@@ -333,6 +333,7 @@ function IlMioScore({ w, profilo, onFatto }) {
 
       <input
         name="mio-risultato"
+        aria-label="Il tuo risultato"
         autoComplete="off"
         autoCorrect="off"
         spellCheck={false}

@@ -11,7 +11,7 @@ import {
   lunedi, piuGiorni, oggiIso, giornoCorto, numeroGiorno,
   meseEAnno, dataEstesa, soloOra, piuMinuti, minutiAllInizio, eOggi,
 } from "../lib/date";
-import { Card, Scheletro, Vuoto, Avviso } from "../ui/base";
+import { Card, Scheletro, Vuoto, Avviso, TitoloSchermata } from "../ui/base";
 import { puoGestireClassi } from "../lib/classi";
 import NuovaLezione from "../ui/NuovaLezione";
 
@@ -61,6 +61,12 @@ export default function Prenota({ onApri, ricarica, onMessaggio, poteri }) {
 
   return (
     <div className="px-5 pb-28 pt-2">
+      {/* Un titolo scritto non c'è — in cima c'è il mese, che cambia
+          scorrendo. Ma una schermata che non si presenta lascia chi
+          ascolta a indovinare dov'è arrivato, quindi il titolo c'è e
+          lo sente solo chi ne ha bisogno. */}
+      <TitoloSchermata nascosto>Calendario</TitoloSchermata>
+
       {/* Settimana */}
       <div className="flex items-center justify-between mb-4">
         <button
