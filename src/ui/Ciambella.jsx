@@ -143,11 +143,11 @@ function Legenda({ pezzi }) {
             className="w-2.5 h-2.5 rounded-[3px] shrink-0"
           />
           <span
-            className={`truncate ${p.resto ? "text-neutral-500" : "text-neutral-300"}`}
+            className={`truncate ${p.resto ? "text-dettaglio" : "text-neutral-300"}`}
           >
             {p.nome}
           </span>
-          <span className="ml-auto pl-3 text-neutral-500 tabular-nums shrink-0">
+          <span className="ml-auto pl-3 text-dettaglio tabular-nums shrink-0">
             {p.quanti}
           </span>
           <span className="w-10 text-right text-neutral-100 font-semibold tabular-nums shrink-0">

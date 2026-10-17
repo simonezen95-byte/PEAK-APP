@@ -45,7 +45,7 @@ export default function Accesso({ onRegistrati }) {
       <div className="flex-1 flex flex-col justify-center">
         <div className="flex flex-col items-center mb-10">
           <Logo altezza={58} />
-          <p className="text-[12.5px] text-neutral-500 mt-5 tracking-wide">
+          <p className="text-[12.5px] text-dettaglio mt-5 tracking-wide">
             Find your peak. Become your peak.
           </p>
         </div>
@@ -76,7 +76,7 @@ export default function Accesso({ onRegistrati }) {
           <button
             type="button"
             onClick={recuperaPassword}
-            className="text-[12px] text-neutral-400 hover:text-neutral-200"
+            className="text-[12px] text-etichetta hover:text-neutral-200"
           >
             Password dimenticata?
           </button>
@@ -98,7 +98,7 @@ export default function Accesso({ onRegistrati }) {
 
         <div className="flex items-center gap-3 my-5">
           <div className="h-px flex-1 bg-rilievo" />
-          <span className="text-[11px] text-neutral-600">oppure</span>
+          <span className="text-[11px] text-spento">oppure</span>
           <div className="h-px flex-1 bg-rilievo" />
         </div>
 
@@ -107,7 +107,7 @@ export default function Accesso({ onRegistrati }) {
         </Bottone>
       </div>
 
-      <p className="text-[11px] text-neutral-600 text-center leading-relaxed mt-10">
+      <p className="text-[11px] text-spento text-center leading-relaxed mt-10">
         PEAK Functional Fitness A.S.D.
         <br />
         Via Enrico Mattei 18 · Maser (TV)

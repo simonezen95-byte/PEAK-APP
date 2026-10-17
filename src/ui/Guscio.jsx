@@ -318,7 +318,7 @@ export default function Guscio() {
                 key={chiave}
                 onClick={() => vaiA(chiave)}
                 className={`flex flex-col items-center gap-1 pt-3 pb-2.5 relative ${
-                  attiva ? "text-neutral-50" : "text-neutral-600"
+                  attiva ? "text-neutral-50" : "text-spento"
                 }`}
               >
                 {/* Niente riempimento.
@@ -362,7 +362,7 @@ function Interruttore({ modo, onCambia, profilo }) {
     <div className="relative">
       <button
         onClick={() => setAperto((v) => !v)}
-        className="flex items-center gap-1 text-neutral-400"
+        className="flex items-center gap-1 text-etichetta"
         aria-label="Cambia vista"
       >
         <span className="text-[11px] font-semibold">
@@ -375,7 +375,7 @@ function Interruttore({ modo, onCambia, profilo }) {
         <>
           <div className="fixed inset-0 z-10" onClick={() => setAperto(false)} />
           <div className="absolute right-0 mt-2.5 w-56 bg-scheda border border-bordo rounded-2xl p-1.5 z-20 shadow-xl shadow-black/60">
-            <div className="px-3 py-2 text-[9.5px] text-neutral-500 tracking-[0.15em] font-semibold">
+            <div className="px-3 py-2 text-[9.5px] text-dettaglio tracking-[0.15em] font-semibold">
               VISUALIZZA COME
             </div>
             {voci.map((v) => (
@@ -392,7 +392,7 @@ function Interruttore({ modo, onCambia, profilo }) {
                     <Check size={13} className="text-neutral-100" strokeWidth={3} />
                   )}
                 </div>
-                <div className="text-[10.5px] text-neutral-500 mt-0.5">{v.nota}</div>
+                <div className="text-[10.5px] text-dettaglio mt-0.5">{v.nota}</div>
               </button>
             ))}
           </div>

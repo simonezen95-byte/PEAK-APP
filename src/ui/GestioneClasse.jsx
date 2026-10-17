@@ -57,11 +57,11 @@ export default function GestioneClasse({ r, onCambiato, onMessaggio }) {
         onClick={() => setAperto(true)}
         className="w-full rounded-2xl border border-bordo bg-scheda p-3.5 flex items-center gap-3 mt-7"
       >
-        <Settings2 size={15} className="text-neutral-500 shrink-0" strokeWidth={1.8} />
+        <Settings2 size={15} className="text-dettaglio shrink-0" strokeWidth={1.8} />
         <span className="text-[12.5px] text-neutral-300 flex-1 text-left">
           Gestisci la lezione
         </span>
-        <ChevronDown size={15} className="text-neutral-600 shrink-0" />
+        <ChevronDown size={15} className="text-spento shrink-0" />
       </button>
     );
   }
@@ -101,7 +101,7 @@ export default function GestioneClasse({ r, onCambiato, onMessaggio }) {
         <>
           {/* Coach */}
           <div className="mb-5">
-            <div className="text-[11.5px] text-neutral-500 mb-2">Coach</div>
+            <div className="text-[11.5px] text-dettaglio mb-2">Coach</div>
             <div className="flex gap-2">
               <div className="flex-1 bg-scheda border border-bordo rounded-xl px-3.5 focus-within:border-neutral-600">
                 <select
@@ -139,7 +139,7 @@ export default function GestioneClasse({ r, onCambiato, onMessaggio }) {
                 </button>
               )}
             </div>
-            <div className="text-[10.5px] text-neutral-600 mt-1.5 leading-relaxed">
+            <div className="text-[10.5px] text-spento mt-1.5 leading-relaxed">
               Chi tiene la classe la chiude da solo a fine lezione, senza
               bisogno di essere amministratore.
             </div>
@@ -147,7 +147,7 @@ export default function GestioneClasse({ r, onCambiato, onMessaggio }) {
 
           {/* Capienza */}
           <div className="mb-5">
-            <div className="text-[11.5px] text-neutral-500 mb-2">Posti</div>
+            <div className="text-[11.5px] text-dettaglio mb-2">Posti</div>
             <div className="flex gap-2">
               <div className="flex-1">
                 <Numeretto valore={posti} onCambia={setPosti} etichetta="posti" />
@@ -172,7 +172,7 @@ export default function GestioneClasse({ r, onCambiato, onMessaggio }) {
                 </button>
               )}
             </div>
-            <div className="text-[10.5px] text-neutral-600 mt-1.5 leading-relaxed">
+            <div className="text-[10.5px] text-spento mt-1.5 leading-relaxed">
               Aggiungendo posti entra chi è in lista d'attesa, e viene
               avvisato. Per toglierne sotto il numero degli iscritti,
               prima togli qualcuno dalla classe.
@@ -185,7 +185,7 @@ export default function GestioneClasse({ r, onCambiato, onMessaggio }) {
           {!conferma ? (
             <button
               onClick={() => setConferma(true)}
-              className="w-full rounded-xl border border-bordo text-neutral-400 py-3.5 text-[12.5px] font-semibold flex items-center justify-center gap-2"
+              className="w-full rounded-xl border border-bordo text-etichetta py-3.5 text-[12.5px] font-semibold flex items-center justify-center gap-2"
             >
               <AlertTriangle size={14} />
               ANNULLA LA LEZIONE
@@ -218,7 +218,7 @@ export default function GestioneClasse({ r, onCambiato, onMessaggio }) {
                   placeholder="Motivo (facoltativo)"
                   autoFocus
                 />
-                <div className="text-[10.5px] text-neutral-600 mt-1.5 leading-relaxed">
+                <div className="text-[10.5px] text-spento mt-1.5 leading-relaxed">
                   Quello che scrivi finisce nella notifica. Una riga basta:
                   "il coach è malato", "chiusi per neve".
                 </div>
@@ -227,7 +227,7 @@ export default function GestioneClasse({ r, onCambiato, onMessaggio }) {
               <div className="flex gap-2">
                 <button
                   onClick={() => { setConferma(false); setMotivo(""); }}
-                  className="flex-1 rounded-xl border border-bordo text-neutral-400 py-3.5 text-[12.5px] font-semibold"
+                  className="flex-1 rounded-xl border border-bordo text-etichetta py-3.5 text-[12.5px] font-semibold"
                 >
                   LASCIA STARE
                 </button>
@@ -256,7 +256,7 @@ export default function GestioneClasse({ r, onCambiato, onMessaggio }) {
 
       <button
         onClick={() => { setAperto(false); setConferma(false); setErrore(""); }}
-        className="w-full text-[11px] tracking-[0.1em] text-neutral-600 font-semibold py-4"
+        className="w-full text-[11px] tracking-[0.1em] text-spento font-semibold py-4"
       >
         CHIUDI
       </button>

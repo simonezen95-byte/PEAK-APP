@@ -56,7 +56,7 @@ export default function NuovaLezione({ giorno, onFatto, onMessaggio }) {
     return (
       <button
         onClick={() => setAperto(true)}
-        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-neutral-400 mt-6"
+        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-etichetta mt-6"
       >
         <Plus size={15} strokeWidth={2} />
         <span className="text-[12.5px] font-semibold">Aggiungi una lezione</span>
@@ -71,14 +71,14 @@ export default function NuovaLezione({ giorno, onFatto, onMessaggio }) {
       <div className="flex items-start mb-4">
         <div className="flex-1">
           <Titolo>NUOVA LEZIONE</Titolo>
-          <div className="text-[11.5px] text-neutral-500 -mt-2 first-letter:uppercase">
+          <div className="text-[11.5px] text-dettaglio -mt-2 first-letter:uppercase">
             {dataEstesa(giorno)}
           </div>
         </div>
         <button
           onClick={() => { setAperto(false); setErrore(""); }}
           aria-label="Chiudi"
-          className="w-8 h-8 -mr-1 -mt-1 flex items-center justify-center text-neutral-600 shrink-0"
+          className="w-8 h-8 -mr-1 -mt-1 flex items-center justify-center text-spento shrink-0"
         >
           <X size={16} />
         </button>
@@ -92,7 +92,7 @@ export default function NuovaLezione({ giorno, onFatto, onMessaggio }) {
           className={`flex-1 rounded-xl py-2.5 text-[12px] font-semibold border ${
             tipo === "classe"
               ? "bg-neutral-50 border-neutral-50 text-black"
-              : "border-bordo text-neutral-400"
+              : "border-bordo text-etichetta"
           }`}
         >
           CLASSE
@@ -102,7 +102,7 @@ export default function NuovaLezione({ giorno, onFatto, onMessaggio }) {
           className={`flex-1 rounded-xl py-2.5 text-[12px] font-semibold border ${
             tipo === "openbox"
               ? "bg-neutral-50 border-neutral-50 text-black"
-              : "border-bordo text-neutral-400"
+              : "border-bordo text-etichetta"
           }`}
         >
           OPEN BOX
@@ -120,18 +120,18 @@ export default function NuovaLezione({ giorno, onFatto, onMessaggio }) {
             parola veniva tagliata a "m...". */}
         <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <div className="text-[11px] text-neutral-500 mb-1.5">Ora</div>
+            <div className="text-[11px] text-dettaglio mb-1.5">Ora</div>
             {/* L'ora a tendina del telefono: scriverla a mano su uno
                 schermo piccolo è il modo più facile per sbagliarla. */}
             <Campo tipo="time" value={ora} onChange={(e) => setOra(e.target.value)} />
           </div>
           <div>
-            <div className="text-[11px] text-neutral-500 mb-1.5">Durata, minuti</div>
+            <div className="text-[11px] text-dettaglio mb-1.5">Durata, minuti</div>
             <Numeretto valore={durata} onCambia={setDurata} etichetta="" />
           </div>
         </div>
         <div>
-          <div className="text-[11px] text-neutral-500 mb-1.5">Posti</div>
+          <div className="text-[11px] text-dettaglio mb-1.5">Posti</div>
           <Numeretto valore={posti} onCambia={setPosti} etichetta="" />
         </div>
 

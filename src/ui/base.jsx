@@ -24,18 +24,18 @@ export function Campo({
 }) {
   return (
     <div className="flex items-center gap-3 bg-scheda border border-bordo rounded-xl px-3.5 focus-within:border-neutral-600">
-      {Icona && <Icona size={17} className="text-neutral-500 shrink-0" />}
+      {Icona && <Icona size={17} className="text-dettaglio shrink-0" />}
       <input
         {...resto}
         type={mostraOcchio ? (visibile ? "text" : "password") : tipo}
-        className="flex-1 min-w-0 bg-transparent py-3.5 text-[15px] text-neutral-50 placeholder:text-neutral-600 outline-none"
+        className="flex-1 min-w-0 bg-transparent py-3.5 text-[15px] text-neutral-50 placeholder:text-spento outline-none"
       />
       {mostraOcchio && (
         <button
           type="button"
           onClick={onOcchio}
           aria-label={visibile ? "Nascondi la password" : "Mostra la password"}
-          className="text-neutral-500 shrink-0 p-1"
+          className="text-dettaglio shrink-0 p-1"
         >
           {visibile ? <EyeOff size={17} /> : <Eye size={17} />}
         </button>
@@ -93,7 +93,7 @@ export function Spunta({ attiva, onChange, children }) {
           </svg>
         )}
       </button>
-      <div className="text-[11.5px] text-neutral-400 leading-relaxed flex-1">{children}</div>
+      <div className="text-[11.5px] text-etichetta leading-relaxed flex-1">{children}</div>
     </div>
   );
 }
@@ -142,7 +142,7 @@ export function RigaImpostazione({ nome, nota, children }) {
         {children}
       </div>
       {nota && (
-        <p className="text-[11px] text-neutral-500 mt-1.5 leading-relaxed pr-12">
+        <p className="text-[11px] text-dettaglio mt-1.5 leading-relaxed pr-12">
           {nota}
         </p>
       )}
@@ -190,7 +190,7 @@ export function DataNascita({ valore, onChange }) {
 
   return (
     <div>
-      <div className="text-[11px] text-neutral-500 mb-2 ml-1">Data di nascita</div>
+      <div className="text-[11px] text-dettaglio mb-2 ml-1">Data di nascita</div>
       <div className="grid grid-cols-[1fr_1.3fr_1.2fr] gap-2">
         <select value={g} onChange={(e) => aggiorna({ g: e.target.value, m, a })} className={stile}>
           <option value="">Giorno</option>
@@ -230,7 +230,7 @@ export function Card({ className = "", ...resto }) {
 
 export function Titolo({ children }) {
   return (
-    <div className="text-[11px] tracking-[0.15em] text-neutral-500 font-semibold mb-3">
+    <div className="text-[11px] tracking-[0.15em] text-dettaglio font-semibold mb-3">
       {children}
     </div>
   );
@@ -250,7 +250,7 @@ export function Scheletro({ righe = 3 }) {
 
 export function Vuoto({ children }) {
   return (
-    <div className="text-center text-[12.5px] text-neutral-600 py-10 leading-relaxed">
+    <div className="text-center text-[12.5px] text-spento py-10 leading-relaxed">
       {children}
     </div>
   );
@@ -310,13 +310,13 @@ export function Montagna({ className = "" }) {
 export function Sezione({ titolo, azione, etichetta = "VEDI TUTTO" }) {
   return (
     <div className="flex items-center justify-between mt-7 mb-3">
-      <div className="text-[11px] tracking-[0.15em] text-neutral-400 font-semibold">
+      <div className="text-[11px] tracking-[0.15em] text-etichetta font-semibold">
         {titolo}
       </div>
       {azione && (
         <button
           onClick={azione}
-          className="text-[10.5px] text-neutral-500 flex items-center gap-0.5 font-semibold tracking-wider"
+          className="text-[10.5px] text-dettaglio flex items-center gap-0.5 font-semibold tracking-wider"
         >
           {etichetta}
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -333,14 +333,14 @@ export function Sezione({ titolo, azione, etichetta = "VEDI TUTTO" }) {
 export function Numero({ icona: Icona, valore, nome, nota }) {
   return (
     <div className="flex flex-col items-center text-center py-4 px-2">
-      {Icona && <Icona size={17} className="text-neutral-400 mb-2" strokeWidth={1.8} />}
+      {Icona && <Icona size={17} className="text-etichetta mb-2" strokeWidth={1.8} />}
       <div className="text-[22px] font-display font-bold text-neutral-50 leading-none">
         {valore}
       </div>
-      <div className="text-[9px] tracking-[0.12em] text-neutral-500 mt-1.5 font-semibold">
+      <div className="text-[9px] tracking-[0.12em] text-dettaglio mt-1.5 font-semibold">
         {nome}
       </div>
-      {nota && <div className="text-[9px] text-neutral-700 mt-1">{nota}</div>}
+      {nota && <div className="text-[9px] text-spento mt-1">{nota}</div>}
     </div>
   );
 }
@@ -475,7 +475,7 @@ export function Numeretto({ valore, onCambia, etichetta }) {
       <button
         onClick={() => onCambia(String(Math.max(1, n - 1)))}
         aria-label="Uno in meno"
-        className="w-10 h-11 flex items-center justify-center text-neutral-400 text-[18px]"
+        className="w-10 h-11 flex items-center justify-center text-etichetta text-[18px]"
       >
         −
       </button>
@@ -486,11 +486,11 @@ export function Numeretto({ valore, onCambia, etichetta }) {
         aria-label={etichetta || undefined}
         className="w-10 bg-transparent text-center text-[15px] text-neutral-50 outline-none tabular-nums"
       />
-      <div className="text-[11.5px] text-neutral-500 flex-1 truncate">{etichetta}</div>
+      <div className="text-[11.5px] text-dettaglio flex-1 truncate">{etichetta}</div>
       <button
         onClick={() => onCambia(String(n + 1))}
         aria-label="Uno in più"
-        className="w-10 h-11 flex items-center justify-center text-neutral-400 text-[18px]"
+        className="w-10 h-11 flex items-center justify-center text-etichetta text-[18px]"
       >
         +
       </button>

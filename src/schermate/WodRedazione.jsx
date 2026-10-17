@@ -70,7 +70,7 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
       <h1 className="text-[20px] font-display font-bold text-neutral-50 mt-2">
         {wod ? "Modifica il WOD" : "Scrivi il WOD"}
       </h1>
-      <p className="text-[11.5px] text-neutral-500 mt-1 mb-6 first-letter:uppercase">
+      <p className="text-[11.5px] text-dettaglio mt-1 mb-6 first-letter:uppercase">
         {dataEstesa(giorno)}
       </p>
 
@@ -94,7 +94,7 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
               className={`flex-1 rounded-xl py-2.5 text-[11px] font-bold tracking-wider border ${
                 tipo === t
                   ? "bg-neutral-50 border-neutral-50 text-black"
-                  : "border-bordo text-neutral-400"
+                  : "border-bordo text-etichetta"
               }`}
             >
               {nomeTipo(t).replace("A ", "").toUpperCase()}
@@ -155,7 +155,7 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
       </Bottone>
 
       {!completo && (
-        <p className="text-[10.5px] text-neutral-600 mt-2.5 text-center">
+        <p className="text-[10.5px] text-spento mt-2.5 text-center">
           Servono almeno il titolo e la versione RX.
         </p>
       )}
@@ -164,7 +164,7 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
         <button
           onClick={elimina}
           disabled={lavoro}
-          className="w-full mt-5 rounded-xl border border-bordo text-neutral-500 py-3 text-[12px] font-semibold flex items-center justify-center gap-2 disabled:opacity-40"
+          className="w-full mt-5 rounded-xl border border-bordo text-dettaglio py-3 text-[12px] font-semibold flex items-center justify-center gap-2 disabled:opacity-40"
         >
           <Trash2 size={14} />
           ELIMINA IL WOD DI QUESTO GIORNO
@@ -175,7 +175,7 @@ export default function Redazione({ giorno, wod, onIndietro, onSalvato }) {
 }
 
 const stileCampo =
-  "w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 placeholder:text-neutral-700 outline-none focus:border-neutral-600";
+  "w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 placeholder:text-spento outline-none focus:border-neutral-600";
 
 /* Il browser, se non gli si dice niente, prova a riempire i campi con
    quello che conosce: indirizzi, nomi, numeri di telefono. Qui dentro
@@ -191,9 +191,9 @@ const senzaAiuti = {
 function Campo({ nome, nota, children }) {
   return (
     <div className="mb-5">
-      <div className="text-[11px] text-neutral-400 font-semibold mb-1.5">{nome}</div>
+      <div className="text-[11px] text-etichetta font-semibold mb-1.5">{nome}</div>
       {children}
-      {nota && <div className="text-[10.5px] text-neutral-600 mt-1.5 leading-relaxed">{nota}</div>}
+      {nota && <div className="text-[10.5px] text-spento mt-1.5 leading-relaxed">{nota}</div>}
     </div>
   );
 }

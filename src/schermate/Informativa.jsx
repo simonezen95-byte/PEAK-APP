@@ -24,7 +24,7 @@ export default function Informativa({ onIndietro }) {
       <h1 className="font-display font-bold text-[22px] text-neutral-50 mt-2">
         Informativa privacy
       </h1>
-      <p className="text-[11px] text-neutral-500 mt-1.5">
+      <p className="text-[11px] text-dettaglio mt-1.5">
         Versione {VERSIONE_INFORMATIVA}
       </p>
 

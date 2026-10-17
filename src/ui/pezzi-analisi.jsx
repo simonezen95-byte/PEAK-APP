@@ -36,7 +36,7 @@ export function usaSpiegazione(testo, misura = 13) {
       aria-expanded={aperta}
       aria-label={aperta ? "Nascondi la spiegazione" : "Come si legge questo dato"}
       className={`w-6 h-6 -my-1 flex items-center justify-center shrink-0 ${
-        aperta ? "text-neutral-300" : "text-neutral-600"
+        aperta ? "text-neutral-300" : "text-spento"
       }`}
     >
       <Info size={misura} strokeWidth={2} />
@@ -44,7 +44,7 @@ export function usaSpiegazione(testo, misura = 13) {
   );
 
   const pannello = aperta ? (
-    <div className="text-[10.5px] text-neutral-500 leading-relaxed mt-2.5 border-l border-filo pl-3">
+    <div className="text-[10.5px] text-dettaglio leading-relaxed mt-2.5 border-l border-filo pl-3">
       {testo}
     </div>
   ) : null;
@@ -78,7 +78,7 @@ export function Testata({ titolo, spiega, nota, onIndietro }) {
           {bottone}
         </div>
         {spiega && (
-          <div className="text-[11.5px] text-neutral-500 mt-1 leading-relaxed">
+          <div className="text-[11.5px] text-dettaglio mt-1 leading-relaxed">
             {spiega}
           </div>
         )}
@@ -100,7 +100,7 @@ export function Scelte({ valore, opzioni, onCambia }) {
           className={`text-[10px] font-semibold tracking-wider px-2 py-1 rounded-full ${
             o.v === valore
               ? "bg-neutral-100 text-black"
-              : "text-neutral-600 border border-filo"
+              : "text-spento border border-filo"
           }`}
         >
           {o.nome.toUpperCase()}
@@ -119,7 +119,7 @@ export function TitoloLista({ children, scelte, nota }) {
     <div className="mb-3">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-1.5">
-          <div className="text-[11px] tracking-[0.15em] text-neutral-400 font-semibold">
+          <div className="text-[11px] tracking-[0.15em] text-etichetta font-semibold">
             {children}
           </div>
           {bottone}
@@ -183,12 +183,12 @@ export function RigaFermo({ r, onApri }) {
               non è gente da richiamare: marcato, e messo in fondo dal
               database. */}
           {r.staff && (
-            <span className="text-[8.5px] tracking-[0.1em] text-neutral-600 border border-filo rounded-full px-1.5 py-0.5 font-semibold shrink-0">
+            <span className="text-[8.5px] tracking-[0.1em] text-spento border border-filo rounded-full px-1.5 py-0.5 font-semibold shrink-0">
               STAFF
             </span>
           )}
         </div>
-        <div className="text-[11px] text-neutral-500 mt-0.5 truncate">
+        <div className="text-[11px] text-dettaglio mt-0.5 truncate">
           {r.mai_venuto
             ? `Mai in classe — iscrizione ${daQuanto(r.giorni_fermo)} fa`
             : `Ultima volta ${daQuanto(r.giorni_fermo)} fa, il ${giornoIntero(r.ultima)}`}
@@ -204,7 +204,7 @@ export function RigaFermo({ r, onApri }) {
         )}
       </div>
       {r.telefono && (
-        <Phone size={14} className="text-neutral-700 shrink-0" strokeWidth={1.8} />
+        <Phone size={14} className="text-spento shrink-0" strokeWidth={1.8} />
       )}
     </button>
   );
@@ -223,7 +223,7 @@ export function Faccia({ r }) {
   }
   return (
     <div className="w-10 h-10 rounded-full border border-neutral-700 flex items-center justify-center shrink-0">
-      <span className="text-[11px] font-display font-bold text-neutral-400">
+      <span className="text-[11px] font-display font-bold text-etichetta">
         {(r.nome?.[0] ?? "") + (r.cognome?.[0] ?? "")}
       </span>
     </div>
@@ -247,25 +247,25 @@ export function RigaScadenza({ r, onApri }) {
       }`}
     >
       <div className="w-9 h-9 rounded-full border border-neutral-700 flex items-center justify-center shrink-0">
-        <Icona size={15} className="text-neutral-400" strokeWidth={1.7} />
+        <Icona size={15} className="text-etichetta" strokeWidth={1.7} />
       </div>
       <div className="flex-1 min-w-0">
         <div className="text-[13px] text-neutral-100 truncate">
           {r.nome} {r.cognome}
         </div>
-        <div className="text-[11px] text-neutral-500 mt-0.5 truncate">
+        <div className="text-[11px] text-dettaglio mt-0.5 truncate">
           {r.cosa}
         </div>
       </div>
       <div className="text-right shrink-0">
         <div
           className={`text-[11px] ${
-            r.scaduta ? "text-neutral-200 font-semibold" : "text-neutral-400"
+            r.scaduta ? "text-neutral-200 font-semibold" : "text-etichetta"
           }`}
         >
           {giornoCorto(r.quando)}
         </div>
-        <div className="text-[9.5px] text-neutral-600 mt-0.5">
+        <div className="text-[9.5px] text-spento mt-0.5">
           {fraQuanto(r.giorni_a)}
         </div>
       </div>

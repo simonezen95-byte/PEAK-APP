@@ -27,14 +27,14 @@ export default function Attesa({ sospeso = false }) {
 
       <div className="flex-1 flex flex-col justify-center text-center">
         <div className="w-16 h-16 rounded-full bg-scheda border border-bordo flex items-center justify-center mx-auto mb-6">
-          <Icona size={26} strokeWidth={1.5} className="text-neutral-400" />
+          <Icona size={26} strokeWidth={1.5} className="text-etichetta" />
         </div>
 
         <h1 className="font-display font-bold text-[22px] text-neutral-50">
           {sospeso ? "Accesso sospeso" : "Iscrizione in attesa"}
         </h1>
 
-        <p className="text-[13px] text-neutral-400 mt-3 leading-relaxed">
+        <p className="text-[13px] text-etichetta mt-3 leading-relaxed">
           {sospeso ? (
             <>
               Il tuo accesso all'app è stato sospeso dallo staff. Storico,
@@ -63,7 +63,7 @@ export default function Attesa({ sospeso = false }) {
         )}
 
         <div className="mt-6 pt-6 border-t border-filo">
-          <p className="text-[12px] text-neutral-500 leading-relaxed">
+          <p className="text-[12px] text-dettaglio leading-relaxed">
             Serve aiuto? Scrivi o chiama lo
             <br />
             <a href="https://wa.me/393937652236" className="text-neutral-300 underline underline-offset-2">
@@ -75,7 +75,7 @@ export default function Attesa({ sospeso = false }) {
 
       <button
         onClick={esci}
-        className="flex items-center justify-center gap-2 text-[12.5px] text-neutral-500 hover:text-neutral-300 py-3"
+        className="flex items-center justify-center gap-2 text-[12.5px] text-dettaglio hover:text-neutral-300 py-3"
       >
         <LogOut size={15} />
         Esci

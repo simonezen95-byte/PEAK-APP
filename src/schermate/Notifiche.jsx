@@ -70,11 +70,11 @@ export default function Notifiche({ onIndietro, onLette }) {
                 <div className="flex-1 min-w-0">
                   <div className="text-[13px] text-neutral-100">{r.titolo}</div>
                   {r.testo && (
-                    <div className="text-[11.5px] text-neutral-400 mt-1 leading-relaxed">
+                    <div className="text-[11.5px] text-etichetta mt-1 leading-relaxed">
                       {r.testo}
                     </div>
                   )}
-                  <div className="text-[10px] text-neutral-600 mt-1.5">
+                  <div className="text-[10px] text-spento mt-1.5">
                     {quantoFa(r.creata_il)}
                   </div>
                 </div>

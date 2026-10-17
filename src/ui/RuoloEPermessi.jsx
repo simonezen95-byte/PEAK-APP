@@ -68,12 +68,12 @@ export default function RuoloEPermessi({ s, onCambiato, onMessaggio }) {
         onClick={() => setAperto(true)}
         className="w-full rounded-2xl border border-bordo bg-scheda p-3.5 flex items-center gap-3 mb-6"
       >
-        <ShieldCheck size={15} className="text-neutral-500 shrink-0" strokeWidth={1.8} />
+        <ShieldCheck size={15} className="text-dettaglio shrink-0" strokeWidth={1.8} />
         <span className="text-[12.5px] text-neutral-300 flex-1 text-left">
           Ruolo e permessi
         </span>
-        <span className="text-[11.5px] text-neutral-500 shrink-0">{scelto.nome}</span>
-        <ChevronDown size={15} className="text-neutral-600 shrink-0" />
+        <span className="text-[11.5px] text-dettaglio shrink-0">{scelto.nome}</span>
+        <ChevronDown size={15} className="text-spento shrink-0" />
       </button>
     );
   }
@@ -106,7 +106,7 @@ export default function RuoloEPermessi({ s, onCambiato, onMessaggio }) {
             </div>
             <div className="min-w-0">
               <div className="text-[13px] text-neutral-100">{v.nome}</div>
-              <div className="text-[11px] text-neutral-500 mt-0.5 leading-relaxed">
+              <div className="text-[11px] text-dettaglio mt-0.5 leading-relaxed">
                 {v.spiega}
               </div>
             </div>
@@ -115,19 +115,19 @@ export default function RuoloEPermessi({ s, onCambiato, onMessaggio }) {
       </div>
 
       {s.ruolo === "owner" ? (
-        <div className="text-[11px] text-neutral-600 leading-relaxed mb-4">
+        <div className="text-[11px] text-spento leading-relaxed mb-4">
           Un titolare può tutto: non c'è niente da aggiungere o togliere.
         </div>
       ) : !fini ? (
         <button
           onClick={() => setFini(true)}
-          className="w-full rounded-xl border border-bordo text-neutral-400 py-3 text-[11.5px] font-semibold mb-4"
+          className="w-full rounded-xl border border-bordo text-etichetta py-3 text-[11.5px] font-semibold mb-4"
         >
           PERMESSI UNO PER UNO
         </button>
       ) : (
         <div className="mb-4">
-          <div className="text-[11px] text-neutral-600 leading-relaxed mb-4">
+          <div className="text-[11px] text-spento leading-relaxed mb-4">
             Servono ai casi storti: dare a un coach qualcosa in più, o
             togliere a un admin qualcosa. Quello che il ruolo dà già è
             spuntato; cambiandolo resta scritto come eccezione.
@@ -135,7 +135,7 @@ export default function RuoloEPermessi({ s, onCambiato, onMessaggio }) {
 
           {PERMESSI.map((g) => (
             <div key={g.gruppo} className="mb-4">
-              <div className="text-[10px] tracking-[0.15em] text-neutral-600 font-semibold mb-2">
+              <div className="text-[10px] tracking-[0.15em] text-spento font-semibold mb-2">
                 {g.gruppo.toUpperCase()}
               </div>
               <div className="rounded-2xl border border-bordo bg-scheda divide-y divide-filo">
@@ -160,7 +160,7 @@ export default function RuoloEPermessi({ s, onCambiato, onMessaggio }) {
                       </div>
                       <span className="text-[12.5px] text-neutral-200 flex-1">{v.nome}</span>
                       {acceso !== normale && (
-                        <span className="text-[9px] tracking-wider text-neutral-500 font-semibold shrink-0">
+                        <span className="text-[9px] tracking-wider text-dettaglio font-semibold shrink-0">
                           ECCEZIONE
                         </span>
                       )}
@@ -175,7 +175,7 @@ export default function RuoloEPermessi({ s, onCambiato, onMessaggio }) {
 
       <button
         onClick={() => { setAperto(false); setFini(false); setErrore(""); }}
-        className="w-full text-[11px] tracking-[0.1em] text-neutral-600 font-semibold py-3"
+        className="w-full text-[11px] tracking-[0.1em] text-spento font-semibold py-3"
       >
         CHIUDI
       </button>

@@ -80,7 +80,7 @@ export default function AnalisiSoci({ onIndietro, onApriFermi, onApriScadenze })
                     nota={`${q(n.appena_arrivati)}%`} />
           </div>
 
-          <div className="text-[10.5px] text-neutral-600 mt-2.5 leading-relaxed">
+          <div className="text-[10.5px] text-spento mt-2.5 leading-relaxed">
             Attivo chi si è allenato nelle ultime {settimane}{" "}
             {settimane === 1 ? "settimana" : "settimane"}; nuovo chi si è
             iscritto da meno e non è ancora venuto.
@@ -94,7 +94,7 @@ export default function AnalisiSoci({ onIndietro, onApriFermi, onApriScadenze })
                      nome="PROVE DEL MESE" />
           </Card>
 
-          <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
+          <div className="text-[10.5px] text-spento mt-3 leading-relaxed">
             Tocca un riquadro per aprire l'elenco.
           </div>
         </>
@@ -106,14 +106,14 @@ export default function AnalisiSoci({ onIndietro, onApriFermi, onApriScadenze })
 function Grosso({ icona: Icona, valore, nome, nota, allarme, onClick }) {
   const dentro = (
     <>
-      <Icona size={15} className="text-neutral-400 mb-2" strokeWidth={1.8} />
+      <Icona size={15} className="text-etichetta mb-2" strokeWidth={1.8} />
       <div className="text-[24px] font-display font-bold text-neutral-50 leading-none">
         {valore ?? 0}
       </div>
-      <div className="text-[8.5px] tracking-[0.1em] text-neutral-500 mt-2 font-semibold leading-tight">
+      <div className="text-[8.5px] tracking-[0.1em] text-dettaglio mt-2 font-semibold leading-tight">
         {nome}
       </div>
-      {nota && <div className="text-[9px] text-neutral-600 mt-1">{nota}</div>}
+      {nota && <div className="text-[9px] text-spento mt-1">{nota}</div>}
     </>
   );
   const vestito = `rounded-2xl border p-3 flex flex-col items-center text-center ${
@@ -127,11 +127,11 @@ function Grosso({ icona: Icona, valore, nome, nota, allarme, onClick }) {
 function Piccolo({ icona: Icona, valore, nome, onClick }) {
   const dentro = (
     <>
-      <Icona size={14} className="text-neutral-500 mb-1.5" strokeWidth={1.8} />
+      <Icona size={14} className="text-dettaglio mb-1.5" strokeWidth={1.8} />
       <div className="text-[17px] font-display font-bold text-neutral-100 leading-none">
         {valore ?? 0}
       </div>
-      <div className="text-[8px] tracking-[0.1em] text-neutral-600 mt-1.5 font-semibold leading-tight">
+      <div className="text-[8px] tracking-[0.1em] text-spento mt-1.5 font-semibold leading-tight">
         {nome}
       </div>
     </>

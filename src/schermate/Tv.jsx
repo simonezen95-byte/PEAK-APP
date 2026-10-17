@@ -56,25 +56,25 @@ export default function Tv({ codice }) {
           <div className="text-[2.6rem] font-display font-bold text-neutral-50 leading-none tabular-nums">
             {orologio}
           </div>
-          <div className="text-[0.95rem] text-neutral-500 mt-1.5 first-letter:uppercase">
+          <div className="text-[0.95rem] text-dettaglio mt-1.5 first-letter:uppercase">
             {dataEstesa(oggiIso())}
           </div>
         </div>
       </header>
 
       {dati === undefined ? (
-        <Centro><span className="text-neutral-700">…</span></Centro>
+        <Centro><span className="text-spento">…</span></Centro>
       ) : dati === null ? (
         <Centro>
-          <div className="text-[1.4rem] text-neutral-500">Schermo non riconosciuto.</div>
-          <div className="text-[1rem] text-neutral-700 mt-3">
+          <div className="text-[1.4rem] text-dettaglio">Schermo non riconosciuto.</div>
+          <div className="text-[1rem] text-spento mt-3">
             Controlla il codice nell'indirizzo.
           </div>
         </Centro>
       ) : !dati.titolo ? (
         <Centro>
           <Logo altezza={70} />
-          <div className="text-[1.6rem] text-neutral-400 mt-10">
+          <div className="text-[1.6rem] text-etichetta mt-10">
             Oggi nessun WOD in programma.
           </div>
         </Centro>
@@ -86,7 +86,7 @@ export default function Tv({ codice }) {
             </h1>
             {dati.time_cap && (
               <div className="pb-3">
-                <div className="text-[0.8rem] tracking-[0.2em] text-neutral-600 font-semibold">
+                <div className="text-[0.8rem] tracking-[0.2em] text-spento font-semibold">
                   TIME CAP
                 </div>
                 <div className="text-[2.2rem] font-display font-bold text-neutral-300 leading-none tabular-nums">
@@ -104,7 +104,7 @@ export default function Tv({ codice }) {
           >
             {presenti.map((v) => (
               <section key={v} className="min-w-0">
-                <div className="text-[0.85rem] tracking-[0.28em] text-neutral-500 font-semibold mb-5">
+                <div className="text-[0.85rem] tracking-[0.28em] text-dettaglio font-semibold mb-5">
                   {v}
                 </div>
                 <div
@@ -119,10 +119,10 @@ export default function Tv({ codice }) {
 
           {dati.warm_up && (
             <footer className="shrink-0 border-t border-filo pt-5 mt-8">
-              <div className="text-[0.75rem] tracking-[0.25em] text-neutral-600 font-semibold mb-2">
+              <div className="text-[0.75rem] tracking-[0.25em] text-spento font-semibold mb-2">
                 WARM UP
               </div>
-              <div className="text-[1.15rem] text-neutral-400 whitespace-pre-line leading-relaxed">
+              <div className="text-[1.15rem] text-etichetta whitespace-pre-line leading-relaxed">
                 {dati.warm_up}
               </div>
             </footer>

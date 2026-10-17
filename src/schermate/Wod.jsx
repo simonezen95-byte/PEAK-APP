@@ -95,7 +95,7 @@ export default function Wod({
         <button
           onClick={() => setGiorno(piuGiorni(giorno, -1))}
           aria-label="Giorno precedente"
-          className="w-9 h-9 flex items-center justify-center text-neutral-500"
+          className="w-9 h-9 flex items-center justify-center text-dettaglio"
         >
           <ChevronLeft size={18} />
         </button>
@@ -106,7 +106,7 @@ export default function Wod({
           {giorno !== oggiIso() && (
             <button
               onClick={() => setGiorno(oggiIso())}
-              className="text-[10px] text-neutral-600 underline underline-offset-2 mt-0.5"
+              className="text-[10px] text-spento underline underline-offset-2 mt-0.5"
             >
               torna a oggi
             </button>
@@ -115,7 +115,7 @@ export default function Wod({
         <button
           onClick={() => setGiorno(piuGiorni(giorno, 1))}
           aria-label="Giorno successivo"
-          className="w-9 h-9 flex items-center justify-center text-neutral-500"
+          className="w-9 h-9 flex items-center justify-center text-dettaglio"
         >
           <ChevronRight size={18} />
         </button>
@@ -137,7 +137,7 @@ export default function Wod({
             <div className="text-[2.1rem] leading-none font-display font-bold text-neutral-50 uppercase">
               {w.titolo}
             </div>
-            <div className="flex items-center gap-3 mt-2.5 text-[11px] text-neutral-500">
+            <div className="flex items-center gap-3 mt-2.5 text-[11px] text-dettaglio">
               <span className="tracking-wider font-semibold uppercase">
                 {w.tipo_score === "tempo" ? "A TEMPO"
                  : w.tipo_score === "carico" ? "A CARICO" : "A RIPETIZIONI"}
@@ -154,8 +154,8 @@ export default function Wod({
           {w.warm_up && (
             <Card className="mb-4 border-bordo">
               <div className="flex items-center gap-2 mb-2">
-                <Flame size={12} className="text-neutral-500" />
-                <span className="text-[10px] tracking-[0.15em] text-neutral-500 font-semibold">
+                <Flame size={12} className="text-dettaglio" />
+                <span className="text-[10px] tracking-[0.15em] text-dettaglio font-semibold">
                   RISCALDAMENTO · SOLO STAFF
                 </span>
               </div>
@@ -175,7 +175,7 @@ export default function Wod({
                   className={`flex-1 rounded-xl py-2 text-[11px] font-bold tracking-wider border transition-colors ${
                     variante === v
                       ? "bg-neutral-50 border-neutral-50 text-black"
-                      : "border-bordo text-neutral-400"
+                      : "border-bordo text-etichetta"
                   }`}
                 >
                   {v}
@@ -208,22 +208,22 @@ export default function Wod({
           {/* Classifica */}
           <Titolo>COME È ANDATA ({gara.length})</Titolo>
           {gara.length === 0 ? (
-            <div className="text-[12px] text-neutral-600">
+            <div className="text-[12px] text-spento">
               Ancora nessun risultato.
             </div>
           ) : (
             <Card className="divide-y divide-filo">
               {gara.map((r, i) => (
                 <div key={r.profilo_id} className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
-                  <span className="w-5 text-[11px] text-neutral-600 tabular-nums shrink-0">
+                  <span className="w-5 text-[11px] text-spento tabular-nums shrink-0">
                     {i + 1}
                   </span>
                   <span className={`flex-1 text-[12.5px] truncate ${r.sono_io ? "text-neutral-50 font-semibold" : "text-neutral-300"}`}>
                     {r.nome} {r.cognome}
                     {r.sono_io && " (tu)"}
                   </span>
-                  {r.privato && <Lock size={11} className="text-neutral-700 shrink-0" />}
-                  <span className="text-[10px] text-neutral-600 shrink-0">{r.variante}</span>
+                  {r.privato && <Lock size={11} className="text-spento shrink-0" />}
+                  <span className="text-[10px] text-spento shrink-0">{r.variante}</span>
                   <span className="text-[13px] font-display font-bold text-neutral-100 tabular-nums shrink-0 w-16 text-right">
                     {scriviScore(r.valore, w.tipo_score)}
                   </span>
@@ -288,7 +288,7 @@ function IlMioScore({ w, profilo, onFatto }) {
         }`}
       >
         <div className="flex-1">
-          <div className="text-[10px] tracking-[0.15em] text-neutral-500 font-semibold mb-1">
+          <div className="text-[10px] tracking-[0.15em] text-dettaglio font-semibold mb-1">
             IL TUO RISULTATO
           </div>
           {w.mio_score != null ? (
@@ -296,20 +296,20 @@ function IlMioScore({ w, profilo, onFatto }) {
               <span className="text-[25px] font-display font-bold text-neutral-50 leading-none">
                 {scriviScore(w.mio_score, w.tipo_score)}
               </span>
-              <span className="text-[11px] text-neutral-500">{w.mia_variante}</span>
+              <span className="text-[11px] text-dettaglio">{w.mia_variante}</span>
             </div>
           ) : (
-            <div className="text-[13px] text-neutral-400">Non l'hai ancora messo.</div>
+            <div className="text-[13px] text-etichetta">Non l'hai ancora messo.</div>
           )}
         </div>
-        <ChevronRight size={16} className="text-neutral-600 shrink-0" />
+        <ChevronRight size={16} className="text-spento shrink-0" />
       </button>
     );
   }
 
   return (
     <Card className="mb-7">
-      <div className="text-[10px] tracking-[0.15em] text-neutral-500 font-semibold mb-3.5">
+      <div className="text-[10px] tracking-[0.15em] text-dettaglio font-semibold mb-3.5">
         IL TUO RISULTATO
       </div>
 
@@ -322,7 +322,7 @@ function IlMioScore({ w, profilo, onFatto }) {
               className={`flex-1 rounded-lg py-1.5 text-[10.5px] font-bold tracking-wider border ${
                 variante === v
                   ? "bg-neutral-50 border-neutral-50 text-black"
-                  : "border-bordo text-neutral-400"
+                  : "border-bordo text-etichetta"
               }`}
             >
               {v}
@@ -340,13 +340,13 @@ function IlMioScore({ w, profilo, onFatto }) {
         onChange={(e) => setTesto(e.target.value)}
         inputMode={w.tipo_score === "tempo" ? "text" : "decimal"}
         placeholder={w.tipo_score === "tempo" ? "3:45" : w.tipo_score === "carico" ? "80" : "150"}
-        className="w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[15px] text-neutral-50 placeholder:text-neutral-600 outline-none focus:border-neutral-600"
+        className="w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[15px] text-neutral-50 placeholder:text-spento outline-none focus:border-neutral-600"
       />
-      <div className="text-[10.5px] text-neutral-600 mt-1.5 mb-3">
+      <div className="text-[10.5px] text-spento mt-1.5 mb-3">
         in {unitaScore(w.tipo_score)}
       </div>
 
-      <label className="flex items-center gap-2.5 text-[11.5px] text-neutral-400 mb-4">
+      <label className="flex items-center gap-2.5 text-[11.5px] text-etichetta mb-4">
         <input
           type="checkbox"
           checked={privato}
@@ -361,7 +361,7 @@ function IlMioScore({ w, profilo, onFatto }) {
       <div className="flex gap-2.5">
         <button
           onClick={() => setApro(false)}
-          className="flex-1 rounded-xl border border-bordo text-neutral-400 py-3 text-[12px] font-semibold"
+          className="flex-1 rounded-xl border border-bordo text-etichetta py-3 text-[12px] font-semibold"
         >
           ANNULLA
         </button>
@@ -374,7 +374,7 @@ function IlMioScore({ w, profilo, onFatto }) {
         <button
           onClick={togli}
           disabled={lavoro}
-          className="w-full mt-3 text-[11px] text-neutral-600 underline underline-offset-2"
+          className="w-full mt-3 text-[11px] text-spento underline underline-offset-2"
         >
           togli il mio risultato
         </button>

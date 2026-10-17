@@ -109,21 +109,21 @@ function Voce({ icona: Icona, nome, nota, manca, onClick }) {
     >
       <Icona
         size={16}
-        className={spento ? "text-neutral-700 shrink-0" : "text-neutral-400 shrink-0"}
+        className={spento ? "text-spento shrink-0" : "text-etichetta shrink-0"}
         strokeWidth={1.8}
       />
       <div className="flex-1 min-w-0">
-        <div className={`text-[13px] ${spento ? "text-neutral-600" : "text-neutral-100"}`}>
+        <div className={`text-[13px] ${spento ? "text-spento" : "text-neutral-100"}`}>
           {nome}
         </div>
-        <div className="text-[11px] text-neutral-500 mt-0.5 truncate">{nota}</div>
+        <div className="text-[11px] text-dettaglio mt-0.5 truncate">{nota}</div>
       </div>
       {spento ? (
-        <span className="text-[9.5px] tracking-[0.1em] text-neutral-700 font-semibold shrink-0">
+        <span className="text-[9.5px] tracking-[0.1em] text-spento font-semibold shrink-0">
           {manca.toUpperCase()}
         </span>
       ) : (
-        <ChevronRight size={16} className="text-neutral-700 shrink-0" />
+        <ChevronRight size={16} className="text-spento shrink-0" />
       )}
     </button>
   );

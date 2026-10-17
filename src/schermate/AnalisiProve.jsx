@@ -207,14 +207,14 @@ function Riquadro({ icona: Icona, valore, nome, nota, allarme }) {
         allarme ? "border-neutral-600 bg-rilievo" : "border-bordo bg-scheda"
       }`}
     >
-      <Icona size={14} className="text-neutral-500 mb-2" strokeWidth={1.8} />
+      <Icona size={14} className="text-dettaglio mb-2" strokeWidth={1.8} />
       <div className="text-[19px] font-display font-bold text-neutral-50 leading-none tabular-nums">
         {valore ?? 0}
       </div>
-      <div className="text-[8.5px] tracking-[0.1em] text-neutral-500 mt-2 font-semibold leading-tight">
+      <div className="text-[8.5px] tracking-[0.1em] text-dettaglio mt-2 font-semibold leading-tight">
         {nome}
       </div>
-      <div className="text-[9.5px] text-neutral-600 mt-1">{nota}</div>
+      <div className="text-[9.5px] text-spento mt-1">{nota}</div>
     </div>
   );
 }
@@ -227,7 +227,7 @@ function RigaFonte({ f }) {
         <div className="text-[12.5px] text-neutral-200 truncate">
           {nomeFonte(f.fonte)}
         </div>
-        <div className="text-[10.5px] text-neutral-600 mt-0.5">
+        <div className="text-[10.5px] text-spento mt-0.5">
           {f.quante} {f.quante === 1 ? "prova" : "prove"} ·{" "}
           {f.convertite} {f.convertite === 1 ? "iscritto" : "iscritti"}
         </div>
@@ -236,7 +236,7 @@ function RigaFonte({ f }) {
         <div className="text-[13px] font-display font-bold text-neutral-50 tabular-nums">
           {f.conversione == null ? "–" : `${f.conversione}%`}
         </div>
-        <div className="text-[9px] text-neutral-600 mt-0.5">conversione</div>
+        <div className="text-[9px] text-spento mt-0.5">conversione</div>
       </div>
     </div>
   );
@@ -259,7 +259,7 @@ function Colonne({ righe }) {
           const alta = Math.max(2, Math.round((q / massimo) * 100));
           return (
             <div key={i} className="flex-1 flex flex-col items-center justify-end h-full gap-1.5">
-              <div className="text-[8.5px] text-neutral-500 tabular-nums">
+              <div className="text-[8.5px] text-dettaglio tabular-nums">
                 {q > 0 ? q : ""}
               </div>
               <div
@@ -279,12 +279,12 @@ function Colonne({ righe }) {
       </div>
       <div className="flex items-end justify-between gap-1.5 mt-2">
         {righe.map((r, i) => (
-          <div key={i} className="flex-1 text-center text-[8.5px] text-neutral-600">
+          <div key={i} className="flex-1 text-center text-[8.5px] text-spento">
             {meseCorto(r.mese)}
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-4 mt-3 text-[9.5px] text-neutral-600">
+      <div className="flex items-center gap-4 mt-3 text-[9.5px] text-spento">
         <span className="flex items-center gap-1.5">
           <i className="w-2.5 h-2.5 rounded-[2px] bg-neutral-100 inline-block" />
           iscritti
@@ -318,7 +318,7 @@ function RigaProva({ r, lavoro, onSegna }) {
         <div className="text-[12.5px] text-neutral-200">
           {giorno(r.quando)} · {nomeFonte(r.fonte)}
         </div>
-        <div className="text-[10.5px] text-neutral-600 mt-0.5 truncate">
+        <div className="text-[10.5px] text-spento mt-0.5 truncate">
           {r.classe} delle {String(r.ora).slice(0, 5)}
         </div>
       </div>
@@ -357,7 +357,7 @@ function Scelta({ attiva, children, etichetta, ...resto }) {
       className={`w-8 h-8 rounded-full flex items-center justify-center border ${
         attiva
           ? "bg-neutral-100 text-black border-neutral-100"
-          : "border-filo text-neutral-700"
+          : "border-filo text-spento"
       }`}
     >
       {children}

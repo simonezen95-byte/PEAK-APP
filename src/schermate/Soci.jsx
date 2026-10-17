@@ -49,12 +49,12 @@ export default function Soci({ onApri, ricarica }) {
       </div>
 
       <div className="flex items-center gap-2.5 bg-scheda border border-bordo rounded-xl px-3.5 mb-4 focus-within:border-neutral-600">
-        <Search size={16} className="text-neutral-600 shrink-0" />
+        <Search size={16} className="text-spento shrink-0" />
         <input
           value={cerca}
           onChange={(e) => setCerca(e.target.value)}
           placeholder="Cerca per nome o email"
-          className="flex-1 min-w-0 bg-transparent py-3 text-[14px] text-neutral-50 placeholder:text-neutral-600 outline-none"
+          className="flex-1 min-w-0 bg-transparent py-3 text-[14px] text-neutral-50 placeholder:text-spento outline-none"
         />
       </div>
 
@@ -66,7 +66,7 @@ export default function Soci({ onApri, ricarica }) {
             className={`shrink-0 rounded-full px-3.5 py-1.5 text-[11.5px] font-semibold border transition-colors ${
               filtro === f.chiave
                 ? "bg-neutral-50 border-neutral-50 text-black"
-                : "border-bordo text-neutral-400"
+                : "border-bordo text-etichetta"
             }`}
           >
             {f.nome}
@@ -114,7 +114,7 @@ function Riga({ s, onApri }) {
       }`}
     >
       <div className="w-10 h-10 rounded-full border border-neutral-700 flex items-center justify-center shrink-0">
-        <span className="text-[12px] font-display font-bold text-neutral-400">
+        <span className="text-[12px] font-display font-bold text-etichetta">
           {(s.nome?.[0] ?? "") + (s.cognome?.[0] ?? "")}
         </span>
       </div>
@@ -127,9 +127,9 @@ function Riga({ s, onApri }) {
           {attesa ? (
             <span className="text-neutral-300">da approvare</span>
           ) : sospeso ? (
-            <span className="text-neutral-500">sospeso</span>
+            <span className="text-dettaglio">sospeso</span>
           ) : s.in_regola ? (
-            <span className="text-neutral-500">{s.abbonamento}</span>
+            <span className="text-dettaglio">{s.abbonamento}</span>
           ) : (
             <span className="text-amber-300/80">{manca(s)}</span>
           )}
@@ -138,10 +138,10 @@ function Riga({ s, onApri }) {
 
       {!attesa && !sospeso && (
         s.in_regola
-          ? <Check size={15} className="text-neutral-500 shrink-0" strokeWidth={2.5} />
+          ? <Check size={15} className="text-dettaglio shrink-0" strokeWidth={2.5} />
           : <AlertTriangle size={15} className="text-amber-400/70 shrink-0" />
       )}
-      <ChevronRight size={16} className="text-neutral-700 shrink-0" />
+      <ChevronRight size={16} className="text-spento shrink-0" />
     </button>
   );
 }

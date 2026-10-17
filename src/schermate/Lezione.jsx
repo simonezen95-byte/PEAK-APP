@@ -133,10 +133,10 @@ export default function Lezione({
           <div className="text-[21px] font-display font-bold text-neutral-50 leading-tight uppercase truncate">
             {r.nome}
           </div>
-          <div className="text-[12px] text-neutral-500 first-letter:uppercase">{dataEstesa(r.data)}</div>
-          <div className="text-[11.5px] text-neutral-400 mt-0.5">
+          <div className="text-[12px] text-dettaglio first-letter:uppercase">{dataEstesa(r.data)}</div>
+          <div className="text-[11.5px] text-etichetta mt-0.5">
             {soloOra(r.ora)} – {piuMinuti(r.ora, r.durata_min)}
-            {r.coach && <span className="text-neutral-600"> · {r.coach}</span>}
+            {r.coach && <span className="text-spento"> · {r.coach}</span>}
           </div>
         </div>
       </div>
@@ -151,13 +151,13 @@ export default function Lezione({
           {/* Posti */}
           <Card className="mb-4 flex items-center">
             <div className="flex-1 flex items-center gap-3">
-              <Users size={17} className="text-neutral-500" />
+              <Users size={17} className="text-dettaglio" />
               <div>
                 <div className="text-[19px] font-display font-bold text-neutral-50 leading-none">
                   {r.iscritti}
-                  <span className="text-neutral-600 text-[15px] font-medium"> / {r.capienza}</span>
+                  <span className="text-spento text-[15px] font-medium"> / {r.capienza}</span>
                 </div>
-                <div className="text-[10.5px] text-neutral-500 mt-1">prenotati</div>
+                <div className="text-[10.5px] text-dettaglio mt-1">prenotati</div>
               </div>
             </div>
             <div className="w-px self-stretch bg-rilievo mx-3" />
@@ -165,7 +165,7 @@ export default function Lezione({
               <div className="text-[19px] font-display font-bold text-neutral-50 leading-none">
                 {pieno ? r.in_coda : liberi}
               </div>
-              <div className="text-[10.5px] text-neutral-500 mt-1">
+              <div className="text-[10.5px] text-dettaglio mt-1">
                 {pieno ? "in lista d'attesa" : "posti liberi"}
               </div>
             </div>
@@ -197,7 +197,7 @@ export default function Lezione({
             {gente === null ? (
               <div className="h-20 rounded-2xl bg-scheda animate-pulse" />
             ) : prenotati.length === 0 ? (
-              <div className="text-[12px] text-neutral-600 mb-6">Ancora nessuno.</div>
+              <div className="text-[12px] text-spento mb-6">Ancora nessuno.</div>
             ) : (
               <div className="grid grid-cols-4 gap-x-2 gap-y-5 mb-7">
                 {prenotati.map((g) => (
@@ -219,8 +219,8 @@ export default function Lezione({
               <div className="flex flex-col gap-2 mb-6">
                 {coda.map((g, i) => (
                   <div key={g.id} className="flex items-center gap-3 text-[12.5px]">
-                    <span className="w-5 text-neutral-600 tabular-nums">{i + 1}.</span>
-                    <span className={g.profilo_id === profilo.id ? "text-neutral-50 font-semibold" : "text-neutral-400"}>
+                    <span className="w-5 text-spento tabular-nums">{i + 1}.</span>
+                    <span className={g.profilo_id === profilo.id ? "text-neutral-50 font-semibold" : "text-etichetta"}>
                       {nome(g.socio)}
                       {g.profilo_id === profilo.id && " (tu)"}
                     </span>
@@ -330,7 +330,7 @@ function Nota({ icona: Icona, children }) {
   return (
     <Card className="mb-3 flex items-start gap-3">
       <Icona size={15} className="text-neutral-300 shrink-0 mt-0.5" strokeWidth={2.5} />
-      <div className="text-[11.5px] text-neutral-400 leading-relaxed">{children}</div>
+      <div className="text-[11.5px] text-etichetta leading-relaxed">{children}</div>
     </Card>
   );
 }
@@ -355,11 +355,11 @@ function Faccia({ socio, io, prova }) {
           className="rounded-full border border-dashed border-neutral-700 flex items-center justify-center mb-2"
           style={{ width: 52, height: 52 }}
         >
-          <span className="text-[16px] text-neutral-700">+</span>
+          <span className="text-[16px] text-spento">+</span>
         </div>
-        <div className="text-[10.5px] text-neutral-500 leading-tight">
+        <div className="text-[10.5px] text-dettaglio leading-tight">
           <div>Utente</div>
-          <div className="text-neutral-600">prova</div>
+          <div className="text-spento">prova</div>
         </div>
       </div>
     );
@@ -375,14 +375,14 @@ function Faccia({ socio, io, prova }) {
         {socio?.foto_url ? (
           <img src={socio.foto_url} alt="" className="w-full h-full object-cover" />
         ) : (
-          <span className="text-[13px] font-display font-bold text-neutral-400">
+          <span className="text-[13px] font-display font-bold text-etichetta">
             {iniziali}
           </span>
         )}
       </div>
       <div className="text-[10.5px] text-neutral-300 leading-tight">
         <div>{socio?.nome ?? "Socio"}</div>
-        <div className="text-neutral-500">{io ? "(tu)" : socio?.cognome}</div>
+        <div className="text-dettaglio">{io ? "(tu)" : socio?.cognome}</div>
       </div>
     </div>
   );

@@ -84,14 +84,14 @@ export default function Home({
 
       {/* Chi sei */}
       <div className="relative mb-1">
-        <div className="text-[11px] tracking-[0.22em] text-neutral-400 font-semibold">
+        <div className="text-[11px] tracking-[0.22em] text-etichetta font-semibold">
           {saluto()}
         </div>
         <div className="text-[2.6rem] leading-[1.02] font-display font-bold text-neutral-50 uppercase mt-0.5">
           {profilo.nome}
         </div>
         <div className="w-10 h-[3px] bg-neutral-50 my-3.5" />
-        <div className="text-[10px] tracking-[0.25em] text-neutral-500 font-semibold">
+        <div className="text-[10px] tracking-[0.25em] text-dettaglio font-semibold">
           FOCUS. TRAIN. IMPROVE. REPEAT.
         </div>
       </div>
@@ -116,7 +116,7 @@ export default function Home({
         <Card className="flex items-stretch">
           <Cerchio icona={prima.tipo === "classe" ? Calendar : DoorOpen} pieno />
           <div className="flex-1 min-w-0 ml-4">
-            <div className="text-[11.5px] text-neutral-400 first-letter:uppercase">
+            <div className="text-[11.5px] text-etichetta first-letter:uppercase">
               {quando(prima.data)}
             </div>
             <div className="text-[31px] font-display font-bold text-neutral-50 leading-none mt-0.5">
@@ -126,7 +126,7 @@ export default function Home({
               {prima.nome}
             </div>
             {prima.coach && (
-              <div className="flex items-center gap-1.5 text-[11.5px] text-neutral-400 mt-1.5">
+              <div className="flex items-center gap-1.5 text-[11.5px] text-etichetta mt-1.5">
                 <UserRound size={12} strokeWidth={1.8} />
                 <span className="truncate">{prima.coach}</span>
               </div>
@@ -149,9 +149,9 @@ export default function Home({
           <div className="shrink-0 self-center text-left pr-1">
             <div className="text-[21px] font-display font-bold text-neutral-50 leading-none">
               {prima.posti_liberi ?? "–"}
-              <span className="text-neutral-500 text-[15px]"> / {prima.capienza ?? "–"}</span>
+              <span className="text-dettaglio text-[15px]"> / {prima.capienza ?? "–"}</span>
             </div>
-            <div className="text-[9.5px] tracking-[0.1em] text-neutral-500 font-semibold mt-1.5">
+            <div className="text-[9.5px] tracking-[0.1em] text-dettaglio font-semibold mt-1.5">
               POSTI LIBERI
             </div>
           </div>
@@ -160,13 +160,13 @@ export default function Home({
         <Card className="flex items-center">
           <Cerchio icona={Calendar} />
           <div className="flex-1 min-w-0 ml-3.5">
-            <div className="text-[10.5px] text-neutral-500 first-letter:uppercase">
+            <div className="text-[10.5px] text-dettaglio first-letter:uppercase">
               {quando(libera.data)}
             </div>
             <div className="text-[30px] font-display font-bold text-neutral-50 leading-none mt-0.5">
               {soloOra(libera.ora)}
             </div>
-            <div className="text-[10px] tracking-[0.18em] text-neutral-400 font-semibold uppercase mt-1.5 truncate">
+            <div className="text-[10px] tracking-[0.18em] text-etichetta font-semibold uppercase mt-1.5 truncate">
               {libera.nome}
             </div>
           </div>
@@ -174,9 +174,9 @@ export default function Home({
           <div className="shrink-0 text-right">
             <div className="text-[15px] font-display font-bold text-neutral-50 leading-none tabular-nums">
               {libera.capienza - libera.iscritti}
-              <span className="text-neutral-600"> / {libera.capienza}</span>
+              <span className="text-spento"> / {libera.capienza}</span>
             </div>
-            <div className="text-[9px] tracking-[0.1em] text-neutral-600 font-semibold mt-1 mb-2.5 leading-tight">
+            <div className="text-[9px] tracking-[0.1em] text-spento font-semibold mt-1 mb-2.5 leading-tight">
               POSTI<br />LIBERI
             </div>
             <BottonePiccolo chiaro onClick={() => onApriLezione(libera)}>
@@ -189,7 +189,7 @@ export default function Home({
           <div className="text-[13px] text-neutral-300 mb-1">Non hai prenotazioni attive.</div>
           <button
             onClick={onVaiAlCalendario}
-            className="text-[12px] text-neutral-400 underline underline-offset-2"
+            className="text-[12px] text-etichetta underline underline-offset-2"
           >
             Apri il calendario
           </button>
@@ -208,7 +208,7 @@ export default function Home({
               <div className="text-[13px] text-neutral-300">
                 Oggi non c'è ancora un WOD.
               </div>
-              <div className="text-[11px] text-neutral-600 mt-0.5">
+              <div className="text-[11px] text-spento mt-0.5">
                 {puoScrivere ? "Aprilo per scriverlo." : "Lo pubblica lo staff."}
               </div>
             </div>
@@ -219,7 +219,7 @@ export default function Home({
           <Cerchio icona={Dumbbell} />
           <Divisore />
           <div className="flex-1 min-w-0">
-            <div className="text-[9.5px] tracking-[0.18em] text-neutral-500 font-semibold uppercase">
+            <div className="text-[9.5px] tracking-[0.18em] text-dettaglio font-semibold uppercase">
               {wod.tipo_score === "tempo" ? "FOR TIME"
                : wod.tipo_score === "carico" ? "A CARICO" : "A RIPETIZIONI"}
               {wod.time_cap && ` · CAP ${wod.time_cap}`}
@@ -227,7 +227,7 @@ export default function Home({
             <div className="text-[17px] font-display font-bold text-neutral-50 leading-tight uppercase mt-0.5 truncate">
               {capo(wod)}
             </div>
-            <div className="text-[11.5px] text-neutral-400 leading-[1.5] mt-1 whitespace-pre-line">
+            <div className="text-[11.5px] text-etichetta leading-[1.5] mt-1 whitespace-pre-line">
               {corpo(wod)}
             </div>
           </div>
@@ -248,18 +248,18 @@ export default function Home({
                 className="flex items-center gap-3.5 !py-3"
               >
                 {p.tipo === "classe" ? (
-                  <Dumbbell size={16} className="text-neutral-500 shrink-0" strokeWidth={1.5} />
+                  <Dumbbell size={16} className="text-dettaglio shrink-0" strokeWidth={1.5} />
                 ) : (
-                  <DoorOpen size={16} className="text-neutral-500 shrink-0" strokeWidth={1.5} />
+                  <DoorOpen size={16} className="text-dettaglio shrink-0" strokeWidth={1.5} />
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="text-[13px] text-neutral-100 truncate">{p.nome}</div>
-                  <div className="text-[11px] text-neutral-500 mt-0.5 first-letter:uppercase">
+                  <div className="text-[11px] text-dettaglio mt-0.5 first-letter:uppercase">
                     {quando(p.data)} · {soloOra(p.ora)}
                   </div>
                 </div>
                 {p.stato === "lista_attesa" && (
-                  <span className="text-[9.5px] font-bold tracking-wider border border-neutral-700 text-neutral-400 rounded-full px-2 py-0.5 shrink-0">
+                  <span className="text-[9.5px] font-bold tracking-wider border border-neutral-700 text-etichetta rounded-full px-2 py-0.5 shrink-0">
                     IN CODA
                   </span>
                 )}
@@ -291,11 +291,11 @@ export default function Home({
                   accesa={numeri.settimana_fatta}
                   serie={numeri.settimane_di_fila}
                 />
-                <div className="text-[8.5px] tracking-[0.1em] text-neutral-400 mt-3 font-semibold leading-[1.5]">
+                <div className="text-[8.5px] tracking-[0.1em] text-etichetta mt-3 font-semibold leading-[1.5]">
                   <div>SETTIMANE</div>
                   <div>DI FILA</div>
                 </div>
-                <div className="text-[8.5px] text-neutral-600 mt-1.5 mb-2.5 leading-[1.4] px-0.5">
+                <div className="text-[8.5px] text-spento mt-1.5 mb-2.5 leading-[1.4] px-0.5">
                   {numeri.settimana_fatta
                     ? "questa l'hai alimentata"
                     : "questa è ancora da fare"}
@@ -339,14 +339,14 @@ export default function Home({
                   <div className="text-[13px] font-semibold text-neutral-50 uppercase tracking-[0.04em]">
                     {a.titolo}
                   </div>
-                  <div className="text-[10.5px] text-neutral-500 mt-0.5">
+                  <div className="text-[10.5px] text-dettaglio mt-0.5">
                     {quantoFa(a.pubblicata_il)}
                   </div>
-                  <div className="text-[11.5px] text-neutral-400 leading-relaxed mt-1">
+                  <div className="text-[11.5px] text-etichetta leading-relaxed mt-1">
                     {a.testo}
                   </div>
                 </div>
-                <ChevronRight size={16} className="text-neutral-700 shrink-0" />
+                <ChevronRight size={16} className="text-spento shrink-0" />
               </Card>
             ))}
           </div>
@@ -414,11 +414,11 @@ function Tassello({ icona: Icona, sopra, valore, nome, nota, onClick }) {
       <div className="text-[26px] font-display font-bold text-neutral-50 leading-none -mt-1">
         {valore}
       </div>
-      <div className="text-[8.5px] tracking-[0.1em] text-neutral-400 mt-3 font-semibold leading-[1.5]">
+      <div className="text-[8.5px] tracking-[0.1em] text-etichetta mt-3 font-semibold leading-[1.5]">
         {righe.map((r) => <div key={r}>{r}</div>)}
       </div>
       {nota && (
-        <div className="text-[8.5px] text-neutral-600 mt-1.5 leading-[1.4] px-0.5">
+        <div className="text-[8.5px] text-spento mt-1.5 leading-[1.4] px-0.5">
           {nota}
         </div>
       )}
@@ -429,12 +429,12 @@ function Tassello({ icona: Icona, sopra, valore, nome, nota, onClick }) {
 function Voce({ nome, valore, nota, allarme }) {
   return (
     <div className="flex items-center justify-between py-3 first:pt-0 last:pb-0">
-      <div className="text-[12.5px] text-neutral-400">{nome}</div>
+      <div className="text-[12.5px] text-etichetta">{nome}</div>
       <div className="text-right">
         <div className={`text-[12.5px] ${allarme ? "text-amber-300" : "text-neutral-100"}`}>
           {valore}
         </div>
-        {nota && <div className="text-[10.5px] text-neutral-600 mt-0.5">{nota}</div>}
+        {nota && <div className="text-[10.5px] text-spento mt-0.5">{nota}</div>}
       </div>
     </div>
   );

@@ -106,7 +106,7 @@ export default function Staff({ profilo, onIndietro, onMessaggio }) {
         <div className="text-[21px] font-display font-bold text-neutral-50 uppercase leading-tight">
           Staff
         </div>
-        <div className="text-[11.5px] text-neutral-500 mt-1 leading-relaxed">
+        <div className="text-[11.5px] text-dettaglio mt-1 leading-relaxed">
           Chi gestisce il box. Questa schermata la vedi solo tu.
         </div>
       </div>
@@ -131,13 +131,13 @@ export default function Staff({ profilo, onIndietro, onMessaggio }) {
 
       <button
         onClick={() => setCerca(true)}
-        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-neutral-400"
+        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-etichetta"
       >
         <UserPlus size={15} strokeWidth={1.8} />
         <span className="text-[12.5px] font-semibold">Metti un socio nello staff</span>
       </button>
 
-      <div className="text-[11px] text-neutral-600 leading-relaxed mt-4">
+      <div className="text-[11px] text-spento leading-relaxed mt-4">
         Si promuove un socio già registrato e approvato: da qui non si
         creano account. Chi entra nello staff resta socio come prima —
         prenota, compare negli iscritti, tiene i suoi progressi.
@@ -165,22 +165,22 @@ function Riga({ s, io, onApri }) {
       className="rounded-2xl border border-bordo bg-scheda p-3.5 flex items-center gap-3 text-left"
     >
       <div className="w-9 h-9 rounded-full border border-neutral-700 flex items-center justify-center shrink-0">
-        <span className="text-[10.5px] font-display font-bold text-neutral-400">
+        <span className="text-[10.5px] font-display font-bold text-etichetta">
           {`${s.nome?.[0] ?? ""}${s.cognome?.[0] ?? ""}`.toUpperCase()}
         </span>
       </div>
       <div className="flex-1 min-w-0">
         <div className="text-[13.5px] text-neutral-100 truncate">
           {s.cognome} {s.nome}
-          {io && <span className="text-neutral-600"> · tu</span>}
+          {io && <span className="text-spento"> · tu</span>}
         </div>
-        <div className="text-[10.5px] text-neutral-500 mt-0.5 truncate">
+        <div className="text-[10.5px] text-dettaglio mt-0.5 truncate">
           {ruolo?.nome ?? s.ruolo}
           {eccezioni > 0 &&
             ` · ${eccezioni} ${eccezioni === 1 ? "eccezione" : "eccezioni"}`}
         </div>
       </div>
-      <ChevronRight size={16} className="text-neutral-700 shrink-0" />
+      <ChevronRight size={16} className="text-spento shrink-0" />
     </button>
   );
 }
@@ -203,7 +203,7 @@ function Scheda({ s, io, onIndietro, onCambiato, onRimuovi, onMessaggio }) {
 
       <div className="flex items-center gap-4 mt-2 mb-6">
         <div className="w-14 h-14 rounded-full border border-neutral-700 flex items-center justify-center shrink-0">
-          <span className="text-[16px] font-display font-bold text-neutral-400">
+          <span className="text-[16px] font-display font-bold text-etichetta">
             {`${s.nome?.[0] ?? ""}${s.cognome?.[0] ?? ""}`.toUpperCase()}
           </span>
         </div>
@@ -211,13 +211,13 @@ function Scheda({ s, io, onIndietro, onCambiato, onRimuovi, onMessaggio }) {
           <div className="text-[20px] font-display font-bold text-neutral-50 leading-tight truncate">
             {s.nome} {s.cognome}
           </div>
-          <div className="text-[11.5px] text-neutral-500 mt-0.5 truncate">{s.email}</div>
+          <div className="text-[11.5px] text-dettaglio mt-0.5 truncate">{s.email}</div>
         </div>
       </div>
 
       {io ? (
         <Card className="mb-6">
-          <div className="text-[12.5px] text-neutral-400 leading-relaxed">
+          <div className="text-[12.5px] text-etichetta leading-relaxed">
             Questo sei tu. Ruolo e permessi non si modificano da qui, per
             non rischiare di chiuderti fuori dalla gestione.
           </div>
@@ -229,7 +229,7 @@ function Scheda({ s, io, onIndietro, onCambiato, onRimuovi, onMessaggio }) {
           {!conferma ? (
             <button
               onClick={() => setConferma(true)}
-              className="w-full rounded-xl border border-bordo text-neutral-500 py-3 text-[12px] font-semibold flex items-center justify-center gap-2"
+              className="w-full rounded-xl border border-bordo text-dettaglio py-3 text-[12px] font-semibold flex items-center justify-center gap-2"
             >
               <UserMinus size={14} />
               TOGLI DALLO STAFF
@@ -246,7 +246,7 @@ function Scheda({ s, io, onIndietro, onCambiato, onRimuovi, onMessaggio }) {
               <div className="flex gap-2">
                 <button
                   onClick={() => setConferma(false)}
-                  className="flex-1 rounded-xl border border-bordo text-neutral-400 py-3.5 text-[12.5px] font-semibold"
+                  className="flex-1 rounded-xl border border-bordo text-etichetta py-3.5 text-[12.5px] font-semibold"
                 >
                   LASCIA STARE
                 </button>
@@ -262,7 +262,7 @@ function Scheda({ s, io, onIndietro, onCambiato, onRimuovi, onMessaggio }) {
         </>
       )}
 
-      <div className="text-[11px] text-neutral-600 leading-relaxed mt-5">
+      <div className="text-[11px] text-spento leading-relaxed mt-5">
         Nome, telefono e data di nascita si modificano dalla scheda socio,
         in Soci.
       </div>
@@ -304,7 +304,7 @@ function Promuovi({ gia, onScelto, onIndietro }) {
         <div className="text-[19px] font-display font-bold text-neutral-50 uppercase mt-2 mb-2">
           {scelto.nome} {scelto.cognome}
         </div>
-        <div className="text-[11.5px] text-neutral-500 mb-6">
+        <div className="text-[11.5px] text-dettaglio mb-6">
           Che ruolo gli dai?
         </div>
 
@@ -316,14 +316,14 @@ function Promuovi({ gia, onScelto, onIndietro }) {
               className="rounded-2xl border border-bordo bg-scheda p-4 text-left"
             >
               <div className="text-[13.5px] text-neutral-100">{r.nome}</div>
-              <div className="text-[11.5px] text-neutral-500 mt-1 leading-relaxed">
+              <div className="text-[11.5px] text-dettaglio mt-1 leading-relaxed">
                 {r.spiega}
               </div>
             </button>
           ))}
         </div>
 
-        <div className="text-[11px] text-neutral-600 leading-relaxed mt-4">
+        <div className="text-[11px] text-spento leading-relaxed mt-4">
           Il ruolo si può cambiare dopo, e i permessi si aggiustano uno
           per uno dalla sua scheda.
         </div>
@@ -346,13 +346,13 @@ function Promuovi({ gia, onScelto, onIndietro }) {
       </div>
 
       <div className="relative mb-5">
-        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-600" />
+        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-spento" />
         <input
           autoFocus
           value={testo}
           onChange={(e) => setTesto(e.target.value)}
           placeholder="Cognome o nome"
-          className="w-full bg-scheda border border-bordo rounded-xl pl-10 pr-3 py-3 text-[13.5px] text-neutral-100 placeholder:text-neutral-600 outline-none focus:border-neutral-600"
+          className="w-full bg-scheda border border-bordo rounded-xl pl-10 pr-3 py-3 text-[13.5px] text-neutral-100 placeholder:text-spento outline-none focus:border-neutral-600"
         />
       </div>
 
@@ -377,14 +377,14 @@ function Promuovi({ gia, onScelto, onIndietro }) {
               className="rounded-2xl border border-bordo bg-scheda p-3 flex items-center gap-3 text-left"
             >
               <div className="w-9 h-9 rounded-full border border-neutral-700 flex items-center justify-center shrink-0">
-                <span className="text-[10.5px] font-display font-bold text-neutral-400">
+                <span className="text-[10.5px] font-display font-bold text-etichetta">
                   {`${s.nome?.[0] ?? ""}${s.cognome?.[0] ?? ""}`.toUpperCase()}
                 </span>
               </div>
               <div className="text-[13.5px] text-neutral-100 truncate flex-1">
                 {s.cognome} {s.nome}
               </div>
-              <ChevronRight size={15} className="text-neutral-700 shrink-0" />
+              <ChevronRight size={15} className="text-spento shrink-0" />
             </button>
           ))}
         </div>

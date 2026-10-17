@@ -177,7 +177,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
       </button>
 
       <div className="mt-2 mb-6">
-        <div className="text-[10.5px] tracking-[0.2em] text-neutral-500 font-semibold">
+        <div className="text-[10.5px] tracking-[0.2em] text-dettaglio font-semibold">
           {giaConfermata ? "PRESENZE CONFERMATE"
            : cominciata ? "REGISTRO PRESENZE"
            : "ELENCO ISCRITTI"}
@@ -185,16 +185,16 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
         <div className="text-[21px] font-display font-bold text-neutral-50 leading-tight uppercase mt-1">
           {sessione.nome}
         </div>
-        <div className="text-[12px] text-neutral-500 first-letter:uppercase mt-0.5">
+        <div className="text-[12px] text-dettaglio first-letter:uppercase mt-0.5">
           {dataEstesa(sessione.data)}
         </div>
-        <div className="text-[11.5px] text-neutral-400 mt-0.5">
+        <div className="text-[11.5px] text-etichetta mt-0.5">
           {/* L'ora di fine solo se la durata la conosco: arrivando
               dall'elenco delle classi da chiudere non ce l'ho, e
               inventarne una sbagliata è peggio che non scriverla. */}
           {soloOra(sessione.ora)}
           {sessione.durata_min && ` – ${piuMinuti(sessione.ora, sessione.durata_min)}`}
-          {sessione.coach && <span className="text-neutral-600"> · {sessione.coach}</span>}
+          {sessione.coach && <span className="text-spento"> · {sessione.coach}</span>}
         </div>
       </div>
 
@@ -219,13 +219,13 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
           {prenotati.length > 0 && (
             <>
               <div className="flex items-center mb-3">
-                <div className="text-[11px] tracking-[0.15em] text-neutral-500 font-semibold">
+                <div className="text-[11px] tracking-[0.15em] text-dettaglio font-semibold">
                   ISCRITTI ({prenotati.length})
                 </div>
                 <div className="flex-1" />
                 <button
                   onClick={quanti === prenotati.length ? nessuno : tutti}
-                  className="text-[10.5px] tracking-[0.1em] text-neutral-400 font-semibold"
+                  className="text-[10.5px] tracking-[0.1em] text-etichetta font-semibold"
                 >
                   {quanti === prenotati.length ? "NESSUNO" : "C'ERANO TUTTI"}
                 </button>
@@ -248,7 +248,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
           {coda.length > 0 && (
             <>
               <Titolo>ERANO IN LISTA D'ATTESA ({coda.length})</Titolo>
-              <div className="text-[11px] text-neutral-600 leading-relaxed mb-3 -mt-1">
+              <div className="text-[11px] text-spento leading-relaxed mb-3 -mt-1">
                 Non avevano un posto. Spunta solo chi è entrato davvero.
               </div>
               <div className="flex flex-col gap-2 mb-7">
@@ -337,11 +337,11 @@ function Riga({ r, spuntato, inCoda, onSpunta, onTogli }) {
           r.prova ? "border-dashed border-neutral-700" : "border-neutral-700"
         }`}>
           {r.prova ? (
-            <UserRound size={15} className="text-neutral-600" strokeWidth={1.6} />
+            <UserRound size={15} className="text-spento" strokeWidth={1.6} />
           ) : r.foto_url ? (
             <img src={r.foto_url} alt="" className="w-full h-full object-cover" />
           ) : (
-            <span className="text-[10.5px] font-display font-bold text-neutral-400">
+            <span className="text-[10.5px] font-display font-bold text-etichetta">
               {iniziali}
             </span>
           )}
@@ -349,11 +349,11 @@ function Riga({ r, spuntato, inCoda, onSpunta, onTogli }) {
 
         <div className="min-w-0">
           <div className={`text-[13.5px] truncate ${
-            r.prova ? "text-neutral-400 italic" : "text-neutral-100"
+            r.prova ? "text-etichetta italic" : "text-neutral-100"
           }`}>
             {r.prova ? "Utente prova" : `${r.cognome} ${r.nome}`}
           </div>
-          <div className="text-[10px] text-neutral-600 mt-0.5 flex items-center gap-1">
+          <div className="text-[10px] text-spento mt-0.5 flex items-center gap-1">
             {r.prova ? (
               "non è un socio"
             ) : inCoda ? (
@@ -373,7 +373,7 @@ function Riga({ r, spuntato, inCoda, onSpunta, onTogli }) {
         <button
           onClick={onTogli}
           aria-label={`Togli ${r.nome} ${r.cognome} dalla classe`}
-          className="w-8 h-8 flex items-center justify-center text-neutral-600 shrink-0"
+          className="w-8 h-8 flex items-center justify-center text-spento shrink-0"
         >
           <X size={15} />
         </button>
@@ -412,7 +412,7 @@ function ScegliFonte({ onScelto, onAnnulla }) {
         <div className="text-[13px] text-neutral-100 mb-1">
           Da dove arriva?
         </div>
-        <div className="text-[11px] text-neutral-500 mb-4 leading-relaxed">
+        <div className="text-[11px] text-dettaglio mb-4 leading-relaxed">
           Serve a capire cosa porta gente in palestra. Non si registra
           nient'altro della persona.
         </div>
@@ -431,7 +431,7 @@ function ScegliFonte({ onScelto, onAnnulla }) {
 
         <button
           onClick={() => onScelto(null)}
-          className="w-full mt-3 py-3 text-[12px] text-neutral-500"
+          className="w-full mt-3 py-3 text-[12px] text-dettaglio"
         >
           Non lo so
         </button>
@@ -445,7 +445,7 @@ function BottoneAggiungi({ onSocio, onProva }) {
     <div className="flex flex-col gap-2">
       <button
         onClick={onSocio}
-        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-neutral-400"
+        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-etichetta"
       >
         <UserPlus size={15} strokeWidth={1.8} />
         <span className="text-[12px] font-semibold">
@@ -454,7 +454,7 @@ function BottoneAggiungi({ onSocio, onProva }) {
       </button>
       <button
         onClick={onProva}
-        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-neutral-500"
+        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-dettaglio"
       >
         <UserRound size={15} strokeWidth={1.8} />
         <span className="text-[12px] font-semibold">Aggiungi un utente prova</span>
@@ -498,13 +498,13 @@ function Cerca({ esclusi, onScelto, onIndietro }) {
       </div>
 
       <div className="relative mb-5">
-        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-600" />
+        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-spento" />
         <input
           autoFocus
           value={testo}
           onChange={(e) => setTesto(e.target.value)}
           placeholder="Cognome o nome"
-          className="w-full bg-scheda border border-bordo rounded-xl pl-10 pr-3 py-3 text-[13.5px] text-neutral-100 placeholder:text-neutral-600 outline-none focus:border-neutral-600"
+          className="w-full bg-scheda border border-bordo rounded-xl pl-10 pr-3 py-3 text-[13.5px] text-neutral-100 placeholder:text-spento outline-none focus:border-neutral-600"
         />
       </div>
 
@@ -529,7 +529,7 @@ function Cerca({ esclusi, onScelto, onIndietro }) {
               {/* Qui le iniziali e non la foto: l'elenco dei soci non
                   la porta, e per cercare un cognome non serve. */}
               <div className="w-9 h-9 rounded-full border border-neutral-700 flex items-center justify-center shrink-0">
-                <span className="text-[10.5px] font-display font-bold text-neutral-400">
+                <span className="text-[10.5px] font-display font-bold text-etichetta">
                   {`${s.nome?.[0] ?? ""}${s.cognome?.[0] ?? ""}`.toUpperCase()}
                 </span>
               </div>
@@ -538,12 +538,12 @@ function Cerca({ esclusi, onScelto, onIndietro }) {
                   {s.cognome} {s.nome}
                 </div>
                 {s.in_regola === false && (
-                  <div className="text-[10px] text-neutral-500 mt-0.5">
+                  <div className="text-[10px] text-dettaglio mt-0.5">
                     posizione da sistemare in reception
                   </div>
                 )}
               </div>
-              <UserPlus size={15} className="text-neutral-600 shrink-0" />
+              <UserPlus size={15} className="text-spento shrink-0" />
             </button>
           ))}
         </div>

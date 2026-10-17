@@ -130,7 +130,7 @@ export default function Registrazione({ onIndietro }) {
       <h1 className="font-display font-bold text-[22px] text-neutral-50 mt-2">
         Crea account
       </h1>
-      <p className="text-[12.5px] text-neutral-400 mt-1.5 mb-7 leading-relaxed">
+      <p className="text-[12.5px] text-etichetta mt-1.5 mb-7 leading-relaxed">
         Compila i tuoi dati per chiedere l'accesso. Lo staff approva
         l'iscrizione in reception, quando porti il certificato medico.
       </p>
@@ -153,7 +153,7 @@ export default function Registrazione({ onIndietro }) {
                value={d.conferma} onChange={set("conferma")} placeholder="Conferma password" />
       </div>
 
-      <p className="text-[11px] mt-2.5 ml-1 text-neutral-500">
+      <p className="text-[11px] mt-2.5 ml-1 text-dettaglio">
         {passwordCorta
           ? <span className="text-amber-400">La password deve avere almeno 8 caratteri.</span>
           : passwordDiverse
@@ -161,7 +161,7 @@ export default function Registrazione({ onIndietro }) {
           : "Almeno 8 caratteri."}
       </p>
 
-      <p className="text-[11px] text-neutral-500 leading-relaxed mt-5 mb-4">
+      <p className="text-[11px] text-dettaglio leading-relaxed mt-5 mb-4">
         Telefono e data di nascita servono allo staff: il primo per avvisarti
         se cambia qualcosa, la seconda per il tesseramento.
       </p>
@@ -173,13 +173,13 @@ export default function Registrazione({ onIndietro }) {
                   className="text-neutral-100 underline underline-offset-2">
             informativa privacy
           </button>
-          <span className="text-neutral-500"> · obbligatorio</span>
+          <span className="text-dettaglio"> · obbligatorio</span>
         </Spunta>
 
         <Spunta attiva={foto} onChange={() => setFoto((v) => !v)}>
           Acconsento alla pubblicazione di foto e video che mi ritraggono sui
           canali PEAK
-          <span className="text-neutral-500"> · facoltativo, revocabile in ogni momento</span>
+          <span className="text-dettaglio"> · facoltativo, revocabile in ogni momento</span>
         </Spunta>
       </div>
 

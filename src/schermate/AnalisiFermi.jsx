@@ -80,7 +80,7 @@ export default function AnalisiFermi({ onIndietro, onApriSocio }) {
             ))}
           </div>
           {daChiamare > 0 && (
-            <div className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed">
+            <div className="text-[10.5px] text-spento mt-3 leading-relaxed">
               {daChiamare === 1
                 ? "Uno di questi ha l'abbonamento attivo e pagato"
                 : `${daChiamare} di questi hanno l'abbonamento attivo e pagato`}

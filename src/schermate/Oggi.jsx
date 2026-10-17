@@ -50,13 +50,13 @@ export default function Oggi({
       <Montagna className="absolute right-[-35px] top-[9px] w-[240px] h-[190px] text-white pointer-events-none" />
 
       <div className="relative mb-6">
-        <div className="text-[10.5px] tracking-[0.2em] text-neutral-500 font-semibold">
+        <div className="text-[10.5px] tracking-[0.2em] text-dettaglio font-semibold">
           {saluto()}
         </div>
         <div className="text-[25px] font-display font-bold text-neutral-50 leading-tight mt-1">
           {profilo.nome}
         </div>
-        <div className="text-[11.5px] text-neutral-500 mt-1.5 first-letter:uppercase">
+        <div className="text-[11.5px] text-dettaglio mt-1.5 first-letter:uppercase">
           {dataEstesa(oggiIso())}
         </div>
       </div>
@@ -109,12 +109,12 @@ export default function Oggi({
                 onClick={() => onApriPresenze(c)}
                 className="rounded-2xl border border-bordo bg-scheda p-3.5 flex items-center gap-3.5 text-left"
               >
-                <ClipboardCheck size={17} className="text-neutral-500 shrink-0" strokeWidth={1.8} />
+                <ClipboardCheck size={17} className="text-dettaglio shrink-0" strokeWidth={1.8} />
                 <div className="flex-1 min-w-0">
                   <div className="text-[13px] text-neutral-100 truncate">
                     {c.nome} · {soloOra(c.ora)}
                   </div>
-                  <div className="text-[10.5px] text-neutral-500 mt-0.5 first-letter:uppercase truncate">
+                  <div className="text-[10.5px] text-dettaglio mt-0.5 first-letter:uppercase truncate">
                     {quando(c.data)} · {c.iscritti}{" "}
                     {c.iscritti === 1 ? "iscritto" : "iscritti"}
                   </div>
@@ -127,7 +127,7 @@ export default function Oggi({
               </button>
             ))}
             {daChiudere.length > 5 && (
-              <div className="text-[11px] text-neutral-600 text-center pt-1">
+              <div className="text-[11px] text-spento text-center pt-1">
                 e altre {daChiudere.length - 5}
               </div>
             )}
@@ -167,7 +167,7 @@ export default function Oggi({
       <Sezione titolo="IL WOD DI OGGI" azione={onVaiAlWod} etichetta="APRI" />
       <button onClick={onVaiAlWod} className="w-full text-left">
         <Card className="flex items-center gap-3.5">
-          <Dumbbell size={16} className="text-neutral-500 shrink-0" strokeWidth={1.6} />
+          <Dumbbell size={16} className="text-dettaglio shrink-0" strokeWidth={1.6} />
           <div className="text-[12.5px] text-neutral-300">
             Scrivi o modifica il WOD
           </div>
@@ -187,12 +187,12 @@ function Riquadro({ icona: Icona, valore, nome, nota, acceso, onClick }) {
           : "border-bordo bg-scheda"
       }`}
     >
-      <Icona size={15} className="text-neutral-500 mb-2.5" strokeWidth={1.8} />
+      <Icona size={15} className="text-dettaglio mb-2.5" strokeWidth={1.8} />
       <div className="text-[23px] font-display font-bold text-neutral-50 leading-none">
         {valore}
       </div>
-      <div className="text-[11px] text-neutral-400 mt-1.5">{nome}</div>
-      {nota && <div className="text-[10px] text-neutral-600 mt-0.5">{nota}</div>}
+      <div className="text-[11px] text-etichetta mt-1.5">{nome}</div>
+      {nota && <div className="text-[10px] text-spento mt-0.5">{nota}</div>}
     </button>
   );
 }
@@ -205,23 +205,23 @@ function Attivita({ a }) {
         <div className="text-[15px] font-display font-bold text-neutral-50 leading-none">
           {soloOra(a.ora)}
         </div>
-        <div className="text-[9.5px] text-neutral-600 mt-1">
+        <div className="text-[9.5px] text-spento mt-1">
           {piuMinuti(a.ora, a.durata_min)}
         </div>
       </div>
       <div className="w-px self-stretch bg-rilievo" />
       <div className="flex-1 min-w-0">
         <div className="text-[13px] text-neutral-100 truncate">{a.nome}</div>
-        <div className="text-[10.5px] text-neutral-500 mt-0.5 truncate">
+        <div className="text-[10.5px] text-dettaglio mt-0.5 truncate">
           {a.coach ?? (a.tipo === "classe" ? "coach da assegnare" : "accesso libero")}
           {a.in_coda > 0 && ` · ${a.in_coda} in coda`}
         </div>
       </div>
       <div className="shrink-0 text-right">
         <div className="text-[13px] font-semibold text-neutral-100 tabular-nums">
-          {a.iscritti}<span className="text-neutral-600">/{a.capienza}</span>
+          {a.iscritti}<span className="text-spento">/{a.capienza}</span>
         </div>
-        <div className="text-[9.5px] text-neutral-600 mt-0.5">
+        <div className="text-[9.5px] text-spento mt-0.5">
           {liberi === 0 ? "pieno" : `${liberi} liberi`}
         </div>
       </div>
@@ -265,7 +265,7 @@ function Istogramma({ righe }) {
           <div
             key={r.data}
             className={`flex-1 text-center text-[9.5px] ${
-              r.data === oggiIso() ? "text-neutral-300 font-semibold" : "text-neutral-600"
+              r.data === oggiIso() ? "text-neutral-300 font-semibold" : "text-spento"
             }`}
           >
             {["dom", "lun", "mar", "mer", "gio", "ven", "sab"][aData(r.data).getDay()]}

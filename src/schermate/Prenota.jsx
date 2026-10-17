@@ -67,7 +67,7 @@ export default function Prenota({ onApri, ricarica, onMessaggio, poteri }) {
           onClick={() => spostaSettimana(-1)}
           disabled={settimanaDal <= lunedi(oggiIso())}
           aria-label="Settimana precedente"
-          className="w-9 h-9 flex items-center justify-center text-neutral-400 disabled:opacity-20"
+          className="w-9 h-9 flex items-center justify-center text-etichetta disabled:opacity-20"
         >
           <ChevronLeft size={20} />
         </button>
@@ -77,7 +77,7 @@ export default function Prenota({ onApri, ricarica, onMessaggio, poteri }) {
         <button
           onClick={() => spostaSettimana(1)}
           aria-label="Settimana successiva"
-          className="w-9 h-9 flex items-center justify-center text-neutral-400"
+          className="w-9 h-9 flex items-center justify-center text-etichetta"
         >
           <ChevronRight size={20} />
         </button>
@@ -96,7 +96,7 @@ export default function Prenota({ onApri, ricarica, onMessaggio, poteri }) {
                 scelto
                   ? "bg-neutral-50 border-neutral-50 text-black"
                   : passato
-                  ? "border-filo text-neutral-700"
+                  ? "border-filo text-spento"
                   : "border-bordo text-neutral-300"
               }`}
             >
@@ -114,7 +114,7 @@ export default function Prenota({ onApri, ricarica, onMessaggio, poteri }) {
         })}
       </div>
 
-      <div className="text-[12px] text-neutral-500 mb-5 first-letter:uppercase">
+      <div className="text-[12px] text-dettaglio mb-5 first-letter:uppercase">
         {dataEstesa(giorno)}
       </div>
 
@@ -141,7 +141,7 @@ export default function Prenota({ onApri, ricarica, onMessaggio, poteri }) {
             <section className="mb-8">
               <Intestazione icona={Dumbbell} testo="CLASSI" />
               {senzaClassi && (
-                <div className="text-[11.5px] text-neutral-500 leading-relaxed mb-3">
+                <div className="text-[11.5px] text-dettaglio leading-relaxed mb-3">
                   Il tuo pacchetto è Open Box: per le classi passa in reception.
                 </div>
               )}
@@ -183,8 +183,8 @@ export default function Prenota({ onApri, ricarica, onMessaggio, poteri }) {
 function Intestazione({ icona: Icona, testo }) {
   return (
     <div className="flex items-center gap-2 mb-3">
-      <Icona size={13} className="text-neutral-500" />
-      <span className="text-[11px] tracking-[0.15em] text-neutral-500 font-semibold">
+      <Icona size={13} className="text-dettaglio" />
+      <span className="text-[11px] tracking-[0.15em] text-dettaglio font-semibold">
         {testo}
       </span>
     </div>
@@ -216,7 +216,7 @@ function Riga({ r, onApri }) {
         <div className="text-[16px] font-display font-bold text-neutral-50 leading-none">
           {soloOra(r.ora)}
         </div>
-        <div className="text-[10px] text-neutral-600 mt-1">
+        <div className="text-[10px] text-spento mt-1">
           {piuMinuti(r.ora, r.durata_min)}
         </div>
       </div>
@@ -227,7 +227,7 @@ function Riga({ r, onApri }) {
         <div className="text-[13.5px] text-neutral-100 font-semibold truncate">
           {r.annullata ? "Annullata" : r.nome}
         </div>
-        <div className="text-[11px] text-neutral-500 mt-0.5 truncate flex items-center gap-1">
+        <div className="text-[11px] text-dettaglio mt-0.5 truncate flex items-center gap-1">
           {/* Lo stato personale sta qui, non al posto dei numeri.
               Prima l'etichetta PRENOTATO prendeva il posto del conteggio,
               e di una classe prenotata non si sapeva più quanti posti
@@ -236,16 +236,16 @@ function Riga({ r, onApri }) {
             <>
               <Check size={11} strokeWidth={2.6} className="text-neutral-300 shrink-0" />
               <span className="text-neutral-300 font-semibold">Prenotato</span>
-              <span className="text-neutral-700">·</span>
+              <span className="text-spento">·</span>
             </>
           )}
           {inCoda && (
             <>
-              <Clock size={11} strokeWidth={2.2} className="text-neutral-400 shrink-0" />
-              <span className="text-neutral-400 font-semibold">
+              <Clock size={11} strokeWidth={2.2} className="text-etichetta shrink-0" />
+              <span className="text-etichetta font-semibold">
                 In coda, {r.mia_posizione}º
               </span>
-              <span className="text-neutral-700">·</span>
+              <span className="text-spento">·</span>
             </>
           )}
           <span className="truncate">
@@ -260,10 +260,10 @@ function Riga({ r, onApri }) {
 
       {/* I posti occupati ci sono sempre, prenotata o no. */}
       <div className="shrink-0 text-right">
-        <div className={`text-[13px] font-semibold ${pieno ? "text-neutral-500" : "text-neutral-100"}`}>
-          {r.iscritti}<span className="text-neutral-600">/{r.capienza}</span>
+        <div className={`text-[13px] font-semibold ${pieno ? "text-dettaglio" : "text-neutral-100"}`}>
+          {r.iscritti}<span className="text-spento">/{r.capienza}</span>
         </div>
-        <div className="text-[10px] text-neutral-600 mt-0.5">
+        <div className="text-[10px] text-spento mt-0.5">
           {/* La coda batte "al completo": che sia piena lo dice già
               12/12, mentre quante persone aspettano non lo dice
               nient'altro. */}

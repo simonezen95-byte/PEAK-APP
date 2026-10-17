@@ -96,7 +96,7 @@ export default function Listino({ onIndietro, onMessaggio }) {
         <div className="text-[21px] font-display font-bold text-neutral-50 uppercase leading-tight">
           Listino
         </div>
-        <div className="text-[11.5px] text-neutral-500 mt-1 leading-relaxed">
+        <div className="text-[11.5px] text-dettaglio mt-1 leading-relaxed">
           Quello che la reception può vendere. Le modifiche valgono dai
           nuovi abbonamenti: quelli già registrati restano com'erano.
         </div>
@@ -136,7 +136,7 @@ export default function Listino({ onIndietro, onMessaggio }) {
 
       <button
         onClick={() => setNuovo(true)}
-        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-neutral-400"
+        className="w-full rounded-2xl border border-dashed border-bordo p-3.5 flex items-center justify-center gap-2.5 text-etichetta"
       >
         <Plus size={16} strokeWidth={2} />
         <span className="text-[12.5px] font-semibold">Nuovo pacchetto</span>
@@ -153,20 +153,20 @@ function Riga({ p, onApri, onAccendi }) {
       }`}
     >
       <button onClick={onApri} className="flex-1 text-left min-w-0">
-        <div className={`text-[13.5px] truncate ${p.attivo ? "text-neutral-100" : "text-neutral-600"}`}>
+        <div className={`text-[13.5px] truncate ${p.attivo ? "text-neutral-100" : "text-spento"}`}>
           {p.nome}
         </div>
         {/* "Non in vendita" sta qui sotto e non in fondo al nome:
             un nome un po' lungo lo tagliava via proprio quando
             serviva leggerlo. */}
-        <div className="text-[10.5px] text-neutral-500 mt-0.5 truncate">
+        <div className="text-[10.5px] text-dettaglio mt-0.5 truncate">
           {durata(p)} · {descrizione(p)}
-          {!p.attivo && <span className="text-neutral-400"> · non in vendita</span>}
+          {!p.attivo && <span className="text-etichetta"> · non in vendita</span>}
         </div>
       </button>
 
       <div className={`text-[15px] font-display font-bold shrink-0 tabular-nums ${
-        p.attivo ? "text-neutral-50" : "text-neutral-700"
+        p.attivo ? "text-neutral-50" : "text-spento"
       }`}>
         {Number(p.prezzo) === 0
           ? <span className="text-[11px] tracking-wider">GRATUITO</span>
@@ -176,7 +176,7 @@ function Riga({ p, onApri, onAccendi }) {
       <button
         onClick={onApri}
         aria-label={`Modifica ${p.nome}`}
-        className="w-8 h-8 flex items-center justify-center text-neutral-600 shrink-0"
+        className="w-8 h-8 flex items-center justify-center text-spento shrink-0"
       >
         <Pencil size={14} />
       </button>
@@ -184,7 +184,7 @@ function Riga({ p, onApri, onAccendi }) {
         onClick={onAccendi}
         aria-label={p.attivo ? `Togli ${p.nome} dalla vendita` : `Rimetti ${p.nome} in vendita`}
         className={`w-8 h-8 flex items-center justify-center shrink-0 ${
-          p.attivo ? "text-neutral-600" : "text-neutral-400"
+          p.attivo ? "text-spento" : "text-etichetta"
         }`}
       >
         <Power size={14} />
@@ -350,7 +350,7 @@ function Scheda({ pacchetto, onSalva, onIndietro, errore }) {
 
           {serveNumero && (
             <div className="mb-7">
-              <div className="text-[11.5px] text-neutral-500 mb-2">{scelta.numero}</div>
+              <div className="text-[11.5px] text-dettaglio mb-2">{scelta.numero}</div>
               <Numeretto
                 valore={numero}
                 onCambia={setNumero}
@@ -362,13 +362,13 @@ function Scheda({ pacchetto, onSalva, onIndietro, errore }) {
       )}
 
       <Card className="mb-6">
-        <div className="text-[10px] tracking-[0.15em] text-neutral-600 font-semibold mb-2">
+        <div className="text-[10px] tracking-[0.15em] text-spento font-semibold mb-2">
           COME SI LEGGERÀ
         </div>
         <div className="text-[13px] text-neutral-100">
           {nome.trim() || "Nome del pacchetto"}
         </div>
-        <div className="text-[11px] text-neutral-500 mt-1">
+        <div className="text-[11px] text-dettaglio mt-1">
           {Number(mesi) === 1 ? "1 mese" : `${mesi} mesi`} ·{" "}
           {anteprima(tipo, forma, numero, sessioni)} ·{" "}
           {prezzoScritto === ""
@@ -414,7 +414,7 @@ function Tipo({ attivo, nome, spiega, onClick }) {
       </div>
       <div className="min-w-0">
         <div className="text-[13px] text-neutral-100">{nome}</div>
-        <div className="text-[11px] text-neutral-500 mt-0.5 leading-relaxed">{spiega}</div>
+        <div className="text-[11px] text-dettaglio mt-0.5 leading-relaxed">{spiega}</div>
       </div>
     </button>
   );

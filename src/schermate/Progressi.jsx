@@ -80,7 +80,7 @@ export default function Progressi({ onIndietro, onMessaggio }) {
         </Card>
       )}
       {numeri?.dal && (
-        <div className="text-[10.5px] text-neutral-600 text-center mb-6">
+        <div className="text-[10.5px] text-spento text-center mb-6">
           dal {dataBreve(numeri.dal)}
         </div>
       )}
@@ -94,7 +94,7 @@ export default function Progressi({ onIndietro, onMessaggio }) {
             className={`flex-1 rounded-xl py-2.5 text-[11px] font-bold tracking-wider border transition-colors ${
               vista === k
                 ? "bg-neutral-50 border-neutral-50 text-black"
-                : "border-bordo text-neutral-400"
+                : "border-bordo text-etichetta"
             }`}
           >
             {nome}
@@ -162,7 +162,7 @@ export default function Progressi({ onIndietro, onMessaggio }) {
             <div key={i} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
               <div className="flex-1 min-w-0">
                 <div className="text-[13px] text-neutral-100 uppercase truncate">{r.titolo}</div>
-                <div className="text-[10.5px] text-neutral-600 mt-0.5">
+                <div className="text-[10.5px] text-spento mt-0.5">
                   {dataBreve(r.data)} · {r.variante}
                   {r.su_quanti > 1 && ` · ${r.posizione}° su ${r.su_quanti}`}
                 </div>
@@ -191,7 +191,7 @@ function Massimale({ r, aperto, onApri, onCambiato }) {
       <button onClick={onApri} className="w-full flex items-center gap-3 text-left">
         <div className="flex-1 min-w-0">
           <div className="text-[13px] text-neutral-100 truncate">{r.esercizio}</div>
-          <div className="text-[10.5px] text-neutral-600 mt-0.5">
+          <div className="text-[10.5px] text-spento mt-0.5">
             {r.tipo} · {dataBreve(r.data)}
             {r.quanti > 1 && ` · ${r.quanti} tentativi`}
           </div>
@@ -208,7 +208,7 @@ function Massimale({ r, aperto, onApri, onCambiato }) {
           ) : (
             storico.map((s) => (
               <div key={s.id} className="flex items-center gap-3 py-1.5">
-                <span className="text-[11.5px] text-neutral-500 w-20 shrink-0">
+                <span className="text-[11.5px] text-dettaglio w-20 shrink-0">
                   {dataBreve(s.data)}
                 </span>
                 <span className="flex-1 text-[12.5px] text-neutral-300 tabular-nums">
@@ -220,7 +220,7 @@ function Massimale({ r, aperto, onApri, onCambiato }) {
                     await onCambiato("Tentativo eliminato.");
                   }}
                   aria-label="Elimina questo tentativo"
-                  className="text-neutral-700 p-1"
+                  className="text-spento p-1"
                 >
                   <Trash2 size={13} />
                 </button>
@@ -308,7 +308,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
             placeholder="Cerca l'esercizio"
             autoComplete="off"
             autoCorrect="off"
-            className="w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 placeholder:text-neutral-600 outline-none focus:border-neutral-600 mb-4"
+            className="w-full bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 placeholder:text-spento outline-none focus:border-neutral-600 mb-4"
           />
           {lista === null ? (
             <Scheletro righe={4} />
@@ -332,7 +332,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
                     className="w-full flex items-center justify-between py-2.5 first:pt-0 last:pb-0 text-left"
                   >
                     <span className="text-[13px] text-neutral-200">{e.nome}</span>
-                    <span className="text-[10.5px] text-neutral-600 shrink-0 ml-3">
+                    <span className="text-[10.5px] text-spento shrink-0 ml-3">
                       {e.categoria}
                     </span>
                   </button>
@@ -346,17 +346,17 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
           <Card className="mb-5 flex items-center">
             <div className="flex-1">
               <div className="text-[15px] text-neutral-50">{scelto.nome}</div>
-              <div className="text-[10.5px] text-neutral-600 mt-0.5">{scelto.categoria}</div>
+              <div className="text-[10.5px] text-spento mt-0.5">{scelto.categoria}</div>
             </div>
             <button
               onClick={() => setScelto(null)}
-              className="text-[11px] text-neutral-400 underline underline-offset-2 shrink-0"
+              className="text-[11px] text-etichetta underline underline-offset-2 shrink-0"
             >
               cambia
             </button>
           </Card>
 
-          <div className="text-[11px] text-neutral-400 font-semibold mb-2">Ripetizioni</div>
+          <div className="text-[11px] text-etichetta font-semibold mb-2">Ripetizioni</div>
           <div className="flex gap-1.5 mb-5">
             {TIPI_MASSIMALE.map((t) => (
               <button
@@ -365,7 +365,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
                 className={`flex-1 rounded-lg py-2 text-[11px] font-bold border ${
                   tipo === t
                     ? "bg-neutral-50 border-neutral-50 text-black"
-                    : "border-bordo text-neutral-400"
+                    : "border-bordo text-etichetta"
                 }`}
               >
                 {t}
@@ -373,7 +373,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
             ))}
           </div>
 
-          <div className="text-[11px] text-neutral-400 font-semibold mb-2">Peso</div>
+          <div className="text-[11px] text-etichetta font-semibold mb-2">Peso</div>
           <div className="flex items-center gap-2.5 bg-scheda border border-bordo rounded-xl px-3.5 mb-5 focus-within:border-neutral-600">
             <input
               value={peso}
@@ -381,12 +381,12 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
               inputMode="decimal"
               autoComplete="off"
               placeholder="100"
-              className="flex-1 min-w-0 bg-transparent py-3 text-[15px] text-neutral-50 placeholder:text-neutral-600 outline-none"
+              className="flex-1 min-w-0 bg-transparent py-3 text-[15px] text-neutral-50 placeholder:text-spento outline-none"
             />
-            <span className="text-neutral-600 text-[13px] shrink-0">kg</span>
+            <span className="text-spento text-[13px] shrink-0">kg</span>
           </div>
 
-          <div className="text-[11px] text-neutral-400 font-semibold mb-2">Quando</div>
+          <div className="text-[11px] text-etichetta font-semibold mb-2">Quando</div>
           <input
             type="date"
             value={data}
@@ -401,7 +401,7 @@ function Aggiungi({ profilo, onIndietro, onSalvato }) {
             SALVA
           </Bottone>
 
-          <p className="text-[10.5px] text-neutral-600 mt-3 leading-relaxed text-center">
+          <p className="text-[10.5px] text-spento mt-3 leading-relaxed text-center">
             Ogni tentativo resta con la sua data: in elenco compare il migliore,
             ma la storia non si perde.
           </p>

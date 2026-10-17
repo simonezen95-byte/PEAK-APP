@@ -69,13 +69,13 @@ export default function Anagrafica({ s, puoi, onCambiato, onMessaggio }) {
     return (
       <>
         <div className="flex items-center mb-3">
-          <div className="text-[11px] tracking-[0.15em] text-neutral-500 font-semibold flex-1">
+          <div className="text-[11px] tracking-[0.15em] text-dettaglio font-semibold flex-1">
             CONTATTI
           </div>
           {puoi && (
             <button
               onClick={apriModulo}
-              className="flex items-center gap-1.5 text-[10.5px] tracking-[0.08em] text-neutral-400 font-semibold"
+              className="flex items-center gap-1.5 text-[10.5px] tracking-[0.08em] text-etichetta font-semibold"
             >
               <Pencil size={12} />
               MODIFICA
@@ -135,7 +135,7 @@ export default function Anagrafica({ s, puoi, onCambiato, onMessaggio }) {
         </div>
       )}
 
-      <div className="text-[11px] text-neutral-600 leading-relaxed mb-4">
+      <div className="text-[11px] text-spento leading-relaxed mb-4">
         L'email non si cambia da qui: quella scritta sulla scheda serve a
         scrivergli, ma per entrare nell'app vale quella con cui si è
         registrato. Cambiarla è un'altra cosa, e la deve fare lui.
@@ -144,7 +144,7 @@ export default function Anagrafica({ s, puoi, onCambiato, onMessaggio }) {
       <div className="flex gap-2">
         <button
           onClick={() => setApre(false)}
-          className="flex-1 rounded-xl border border-bordo text-neutral-400 py-3.5 text-[12.5px] font-semibold"
+          className="flex-1 rounded-xl border border-bordo text-etichetta py-3.5 text-[12.5px] font-semibold"
         >
           LASCIA STARE
         </button>
@@ -161,7 +161,7 @@ export default function Anagrafica({ s, puoi, onCambiato, onMessaggio }) {
 function Voce({ nome, children }) {
   return (
     <div>
-      <div className="text-[11px] text-neutral-500 mb-1.5">{nome}</div>
+      <div className="text-[11px] text-dettaglio mb-1.5">{nome}</div>
       {children}
     </div>
   );
@@ -170,7 +170,7 @@ function Voce({ nome, children }) {
 function Dato({ icona: Icona, valore }) {
   return (
     <div className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
-      <Icona size={14} className="text-neutral-600 shrink-0" />
+      <Icona size={14} className="text-spento shrink-0" />
       <div className="text-[12.5px] text-neutral-300 truncate">{valore}</div>
     </div>
   );

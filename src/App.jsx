@@ -52,12 +52,12 @@ function Configurazione() {
   return (
     <div className="min-h-full flex flex-col items-center justify-center px-8 text-center max-w-sm mx-auto">
       <Logo altezza={40} />
-      <p className="text-[13px] text-neutral-400 mt-8 leading-relaxed">
+      <p className="text-[13px] text-etichetta mt-8 leading-relaxed">
         L'app non è collegata al database.
       </p>
-      <p className="text-[12px] text-neutral-600 mt-3 leading-relaxed">
-        Mancano <code className="text-neutral-400">VITE_SUPABASE_URL</code> e{" "}
-        <code className="text-neutral-400">VITE_SUPABASE_ANON_KEY</code> fra le
+      <p className="text-[12px] text-spento mt-3 leading-relaxed">
+        Mancano <code className="text-etichetta">VITE_SUPABASE_URL</code> e{" "}
+        <code className="text-etichetta">VITE_SUPABASE_ANON_KEY</code> fra le
         variabili d'ambiente.
       </p>
     </div>

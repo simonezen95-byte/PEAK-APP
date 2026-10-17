@@ -120,7 +120,7 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
       {/* Chi è */}
       <div className="flex items-center gap-4 mt-2 mb-6">
         <div className="w-14 h-14 rounded-full border border-neutral-700 flex items-center justify-center shrink-0">
-          <span className="text-[16px] font-display font-bold text-neutral-400">
+          <span className="text-[16px] font-display font-bold text-etichetta">
             {(s.nome?.[0] ?? "") + (s.cognome?.[0] ?? "")}
           </span>
         </div>
@@ -128,7 +128,7 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
           <div className="text-[20px] font-display font-bold text-neutral-50 leading-tight truncate">
             {s.nome} {s.cognome}
           </div>
-          <div className="text-[11.5px] text-neutral-500 mt-0.5">
+          <div className="text-[11.5px] text-dettaglio mt-0.5">
             {s.stato === "in_attesa" ? "in attesa di approvazione"
              : s.stato === "sospeso" ? "sospeso"
              : s.ruolo !== "socio" ? s.ruolo
@@ -244,14 +244,14 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
       {storico === null ? (
         <div className="h-16 rounded-2xl bg-scheda animate-pulse" />
       ) : storico.length === 0 ? (
-        <div className="text-[12px] text-neutral-600 mb-6">Ancora niente.</div>
+        <div className="text-[12px] text-spento mb-6">Ancora niente.</div>
       ) : (
         <Card className="divide-y divide-filo mb-6">
           {storico.map((v, i) => (
             <div key={i} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
               <div className="min-w-0">
                 <div className="text-[12.5px] text-neutral-200 truncate">{v.descrizione}</div>
-                <div className="text-[10.5px] text-neutral-600 mt-0.5">
+                <div className="text-[10.5px] text-spento mt-0.5">
                   {dataBreve(v.dal)} – {dataBreve(v.al)}
                   {v.totali != null && ` · ${v.residui}/${v.totali}`}
                   {/* Un omaggio non è "pagato": non c'era niente da
@@ -285,7 +285,7 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
                   onClick={() => togli(v)}
                   disabled={lavoro}
                   aria-label={`Togli ${v.descrizione}`}
-                  className="w-7 h-7 flex items-center justify-center text-neutral-700 shrink-0 ml-1.5"
+                  className="w-7 h-7 flex items-center justify-center text-spento shrink-0 ml-1.5"
                 >
                   <Trash2 size={13} strokeWidth={1.8} />
                 </button>
@@ -304,7 +304,7 @@ export default function Socio({ socio, onIndietro, onCambiato, onMessaggio }) {
             { stato: s.stato === "sospeso" ? "approvato" : "sospeso" }
           )}
           disabled={lavoro}
-          className="w-full rounded-xl border border-bordo text-neutral-500 py-3 text-[12px] font-semibold disabled:opacity-40"
+          className="w-full rounded-xl border border-bordo text-dettaglio py-3 text-[12px] font-semibold disabled:opacity-40"
         >
           {s.stato === "sospeso" ? "RIATTIVA SOCIO" : "SOSPENDI SOCIO"}
         </button>
@@ -317,15 +317,15 @@ function Requisito({ icona: Icona, nome, ok, valore, azione, aperto, children })
   return (
     <Card className={ok ? "" : "border-amber-900/50 bg-amber-950/10"}>
       <div className="flex items-center gap-3">
-        <Icona size={16} className={ok ? "text-neutral-500" : "text-amber-400/70"} strokeWidth={1.8} />
+        <Icona size={16} className={ok ? "text-dettaglio" : "text-amber-400/70"} strokeWidth={1.8} />
         <div className="flex-1 min-w-0">
           <div className="text-[12.5px] text-neutral-200">{nome}</div>
-          <div className={`text-[11px] mt-0.5 truncate ${ok ? "text-neutral-500" : "text-amber-300/70"}`}>
+          <div className={`text-[11px] mt-0.5 truncate ${ok ? "text-dettaglio" : "text-amber-300/70"}`}>
             {valore}
           </div>
         </div>
         {ok
-          ? <Check size={14} className="text-neutral-600 shrink-0" strokeWidth={2.5} />
+          ? <Check size={14} className="text-spento shrink-0" strokeWidth={2.5} />
           : <AlertTriangle size={14} className="text-amber-400/70 shrink-0" />}
         {azione && (
           <button
@@ -345,7 +345,7 @@ function FormCertificato({ onSalva, lavoro }) {
   const [data, setData] = useState(() => piuGiorni(oggiIso(), 365));
   return (
     <div className="flex flex-col gap-3">
-      <label className="text-[11px] text-neutral-500">
+      <label className="text-[11px] text-dettaglio">
         Data di scadenza riportata sul certificato
       </label>
       <input
@@ -355,7 +355,7 @@ function FormCertificato({ onSalva, lavoro }) {
         onChange={(e) => setData(e.target.value)}
         className="bg-scheda border border-bordo rounded-xl px-3.5 py-3 text-[14px] text-neutral-50 outline-none focus:border-neutral-600"
       />
-      <p className="text-[10.5px] text-neutral-600 leading-relaxed">
+      <p className="text-[10.5px] text-spento leading-relaxed">
         In app resta solo la data. Il cartaceo va conservato in reception.
       </p>
       <Bottone carica={lavoro} disabled={!data} onClick={() => onSalva(data)}>
@@ -370,11 +370,11 @@ function FormQuota({ onSalva, lavoro }) {
   const [importo, setImporto] = useState("");
   return (
     <div className="flex flex-col gap-3">
-      <label className="text-[11px] text-neutral-500">
+      <label className="text-[11px] text-dettaglio">
         Stagione {anno - 1}/{anno}, chiude il 31 agosto {anno}
       </label>
       <div className="flex items-center gap-2.5 bg-scheda border border-bordo rounded-xl px-3.5 focus-within:border-neutral-600">
-        <span className="text-neutral-600 text-[14px]">€</span>
+        <span className="text-spento text-[14px]">€</span>
         <input
           type="number"
           name="importo-quota"
@@ -384,7 +384,7 @@ function FormQuota({ onSalva, lavoro }) {
           value={importo}
           onChange={(e) => setImporto(e.target.value)}
           placeholder="Importo versato"
-          className="flex-1 min-w-0 bg-transparent py-3 text-[14px] text-neutral-50 placeholder:text-neutral-600 outline-none"
+          className="flex-1 min-w-0 bg-transparent py-3 text-[14px] text-neutral-50 placeholder:text-spento outline-none"
         />
       </div>
       <Bottone
@@ -431,7 +431,7 @@ function FormAbbonamento({ pacchetti, onSalva, lavoro }) {
       </select>
 
       <div>
-        <label className="text-[11px] text-neutral-500 block mb-1.5">Comincia il</label>
+        <label className="text-[11px] text-dettaglio block mb-1.5">Comincia il</label>
         <input
           type="date"
           value={inizio}
@@ -441,12 +441,12 @@ function FormAbbonamento({ pacchetti, onSalva, lavoro }) {
       </div>
 
       {omaggio ? (
-        <p className="text-[11.5px] text-neutral-500 leading-relaxed">
+        <p className="text-[11.5px] text-dettaglio leading-relaxed">
           Pacchetto gratuito: non c'è niente da incassare, e
           l'abbonamento parte subito.
         </p>
       ) : (
-        <label className="flex items-center gap-2.5 text-[12px] text-neutral-400">
+        <label className="flex items-center gap-2.5 text-[12px] text-etichetta">
           <input
             type="checkbox"
             checked={pagato}
@@ -458,7 +458,7 @@ function FormAbbonamento({ pacchetti, onSalva, lavoro }) {
       )}
 
       {pacchetto && (
-        <p className="text-[10.5px] text-neutral-600 leading-relaxed">
+        <p className="text-[10.5px] text-spento leading-relaxed">
           {pacchetto.mesi} {pacchetto.mesi === 1 ? "mese" : "mesi"}
           {pacchetto.ingressi ? ` · ${pacchetto.ingressi} ingressi` : " · ingressi illimitati"}
           {pacchetto.include_classi ? " · classi incluse" : " · solo Open Box"}
@@ -479,7 +479,7 @@ function FormAbbonamento({ pacchetti, onSalva, lavoro }) {
 function Dato({ icona: Icona, valore }) {
   return (
     <div className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
-      <Icona size={14} className="text-neutral-600 shrink-0" />
+      <Icona size={14} className="text-spento shrink-0" />
       <div className="text-[12.5px] text-neutral-300 truncate">{valore}</div>
     </div>
   );

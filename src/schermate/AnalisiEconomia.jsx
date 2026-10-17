@@ -215,14 +215,14 @@ function Riquadro({ icona: Icona, valore, nome, nota, allarme }) {
         allarme ? "border-neutral-600 bg-rilievo" : "border-bordo bg-scheda"
       }`}
     >
-      <Icona size={14} className="text-neutral-500 mb-2" strokeWidth={1.8} />
+      <Icona size={14} className="text-dettaglio mb-2" strokeWidth={1.8} />
       <div className="text-[19px] font-display font-bold text-neutral-50 leading-none tabular-nums">
         {valore}
       </div>
-      <div className="text-[8.5px] tracking-[0.1em] text-neutral-500 mt-2 font-semibold leading-tight">
+      <div className="text-[8.5px] tracking-[0.1em] text-dettaglio mt-2 font-semibold leading-tight">
         {nome}
       </div>
-      <div className="text-[9.5px] text-neutral-600 mt-1">{nota}</div>
+      <div className="text-[9.5px] text-spento mt-1">{nota}</div>
     </div>
   );
 }
@@ -245,7 +245,7 @@ function Colonne({ righe }) {
           const ultimo = i === righe.length - 1;
           return (
             <div key={i} className="flex-1 flex flex-col items-center justify-end h-full gap-1.5">
-              <div className="text-[8.5px] text-neutral-500 tabular-nums">
+              <div className="text-[8.5px] text-dettaglio tabular-nums">
                 {v > 0 ? Math.round(v) : ""}
               </div>
               <div
@@ -260,7 +260,7 @@ function Colonne({ righe }) {
       </div>
       <div className="flex items-end justify-between gap-1.5 mt-2">
         {righe.map((r, i) => (
-          <div key={i} className="flex-1 text-center text-[8.5px] text-neutral-600">
+          <div key={i} className="flex-1 text-center text-[8.5px] text-spento">
             {meseCorto(r.mese)}
           </div>
         ))}
@@ -277,15 +277,15 @@ function RigaPacchetto({ p }) {
       <div className="flex-1 min-w-0">
         <div
           className={`text-[12.5px] truncate ${
-            p.spento ? "text-neutral-600" : "text-neutral-200"
+            p.spento ? "text-spento" : "text-neutral-200"
           }`}
         >
           {p.pacchetto}
           {p.spento && (
-            <span className="text-neutral-500 text-[10.5px]"> · non in vendita</span>
+            <span className="text-dettaglio text-[10.5px]"> · non in vendita</span>
           )}
         </div>
-        <div className="text-[10.5px] text-neutral-600 mt-0.5">
+        <div className="text-[10.5px] text-spento mt-0.5">
           {Number(p.prezzo) === 0 ? "gratuito" : euro(p.prezzo)}
           {venduti > 0 && ` · ${p.attivi} attivi`}
         </div>
@@ -293,12 +293,12 @@ function RigaPacchetto({ p }) {
       <div className="text-right shrink-0">
         <div
           className={`text-[13px] font-display font-bold tabular-nums ${
-            venduti > 0 ? "text-neutral-50" : "text-neutral-700"
+            venduti > 0 ? "text-neutral-50" : "text-spento"
           }`}
         >
           {venduti}
         </div>
-        <div className="text-[9px] text-neutral-600 mt-0.5 tabular-nums">
+        <div className="text-[9px] text-spento mt-0.5 tabular-nums">
           {venduti > 0 ? euro(p.valore) : "nessuna vendita"}
         </div>
       </div>
