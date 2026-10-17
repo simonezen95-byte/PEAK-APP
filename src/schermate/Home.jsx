@@ -191,7 +191,7 @@ export default function Home({
           <div className="text-[13px] text-neutral-300 mb-1">Non hai prenotazioni attive.</div>
           <button
             onClick={onVaiAlCalendario}
-            className="text-[12px] text-etichetta underline underline-offset-2"
+            className="text-[12px] text-etichetta underline underline-offset-2 inline-flex items-center min-h-[44px] -my-3"
           >
             Apri il calendario
           </button>

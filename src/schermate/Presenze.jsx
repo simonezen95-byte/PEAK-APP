@@ -339,7 +339,7 @@ function Riga({ r, spuntato, inCoda, onSpunta, onTogli }) {
           {r.prova ? (
             <UserRound size={15} className="text-spento" strokeWidth={1.6} />
           ) : r.foto_url ? (
-            <img src={r.foto_url} alt="" className="w-full h-full object-cover" />
+            <img src={r.foto_url} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
           ) : (
             <span className="text-[10.5px] font-display font-bold text-etichetta">
               {iniziali}

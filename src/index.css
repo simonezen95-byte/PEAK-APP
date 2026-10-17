@@ -27,3 +27,27 @@ select option {
   background: #0D0E10;
   color: #f5f5f5;
 }
+
+/* Chi ha spento le animazioni nelle impostazioni del telefono.
+
+   Si fa per vertigini o emicrania, e in quel caso un rettangolo che
+   pulsa all'infinito mentre si aspettano i dati è esattamente la
+   cosa da non avere davanti.
+
+   Non si spegne tutto però: lo scheletro resta, grigio e fermo, e
+   "sto caricando" si capisce lo stesso. E la pallina
+   dell'interruttore smette di scivolare ma cambia posto, perché è
+   quello il segnale che l'avviso è acceso. Togliere ogni cambiamento
+   insieme al movimento lascerebbe la persona senza risposta a quello
+   che ha appena toccato — un rimedio peggiore del male.
+
+   I passaggi di colore restano: non sono movimento. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse {
+    animation: none;
+    opacity: 0.6;
+  }
+  .transition-all {
+    transition-property: background-color, border-color, color;
+  }
+}

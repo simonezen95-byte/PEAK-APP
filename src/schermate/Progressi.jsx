@@ -91,7 +91,7 @@ export default function Progressi({ onIndietro, onMessaggio }) {
           <button
             key={k}
             onClick={() => setVista(k)}
-            className={`flex-1 rounded-xl py-2.5 text-[11px] font-bold tracking-wider border transition-colors ${
+            className={`flex-1 rounded-xl py-3.5 text-[11px] font-bold tracking-wider border transition-colors ${
               vista === k
                 ? "bg-neutral-50 border-neutral-50 text-black"
                 : "border-bordo text-etichetta"
@@ -188,7 +188,7 @@ function Massimale({ r, aperto, onApri, onCambiato }) {
 
   return (
     <div className="py-3 first:pt-0 last:pb-0">
-      <button onClick={onApri} className="w-full flex items-center gap-3 text-left">
+      <button onClick={onApri} className="w-full flex items-center gap-3 text-left min-h-[44px]">
         <div className="flex-1 min-w-0">
           <div className="text-[13px] text-neutral-100 truncate">{r.esercizio}</div>
           <div className="text-[10.5px] text-spento mt-0.5">

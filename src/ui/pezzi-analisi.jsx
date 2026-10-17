@@ -217,6 +217,10 @@ export function Faccia({ r }) {
       <img
         src={r.foto_url}
         alt=""
+        /* Dentro una lista di venti soci: si caricano man mano che
+           si scorre, non tutte insieme all'apertura. */
+        loading="lazy"
+        decoding="async"
         className="w-10 h-10 rounded-full object-cover shrink-0"
       />
     );

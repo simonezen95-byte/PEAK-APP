@@ -73,7 +73,7 @@ export default function Prenota({ onApri, ricarica, onMessaggio, poteri }) {
           onClick={() => spostaSettimana(-1)}
           disabled={settimanaDal <= lunedi(oggiIso())}
           aria-label="Settimana precedente"
-          className="w-9 h-9 flex items-center justify-center text-etichetta disabled:opacity-20"
+          className="w-11 h-11 -m-1 flex items-center justify-center text-etichetta disabled:opacity-20"
         >
           <ChevronLeft size={20} />
         </button>
@@ -83,7 +83,7 @@ export default function Prenota({ onApri, ricarica, onMessaggio, poteri }) {
         <button
           onClick={() => spostaSettimana(1)}
           aria-label="Settimana successiva"
-          className="w-9 h-9 flex items-center justify-center text-etichetta"
+          className="w-11 h-11 -m-1 flex items-center justify-center text-etichetta"
         >
           <ChevronRight size={20} />
         </button>
@@ -102,11 +102,14 @@ export default function Prenota({ onApri, ricarica, onMessaggio, poteri }) {
                 scelto
                   ? "bg-neutral-50 border-neutral-50 text-black"
                   : passato
-                  ? "border-filo text-spento"
+                  // Si aprono, quindi si devono leggere. Che siano
+                  // alle spalle lo dice il riquadro che non c'è, non
+                  // il testo spento.
+                  ? "border-transparent text-etichetta"
                   : "border-bordo text-neutral-300"
               }`}
             >
-              <span className="text-[9.5px] uppercase tracking-wider opacity-70">
+              <span className="text-[9.5px] uppercase tracking-wider">
                 {giornoCorto(g)}
               </span>
               <span className="text-[15px] font-display font-bold leading-none">
@@ -214,12 +217,18 @@ function Riga({ r, onApri }) {
           : inCoda
           ? "border-neutral-700 bg-scheda"
           : passata || r.annullata
-          ? "border-filo bg-neutral-950 opacity-50"
+          // Niente velo sopra la riga intera: dimezzava anche il
+          // testo e lo rendeva illeggibile, su una riga che però
+          // resta apribile. "Passata" si dice togliendo il fondo,
+          // non spegnendo le parole.
+          ? "border-filo bg-transparent"
           : "border-bordo bg-scheda"
       }`}
     >
       <div className="shrink-0">
-        <div className="text-[16px] font-display font-bold text-neutral-50 leading-none">
+        <div className={`text-[16px] font-display font-bold leading-none ${
+          passata || r.annullata ? "text-etichetta" : "text-neutral-50"
+        }`}>
           {soloOra(r.ora)}
         </div>
         <div className="text-[10px] text-spento mt-1">

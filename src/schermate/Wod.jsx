@@ -95,7 +95,7 @@ export default function Wod({
         <button
           onClick={() => setGiorno(piuGiorni(giorno, -1))}
           aria-label="Giorno precedente"
-          className="w-9 h-9 flex items-center justify-center text-dettaglio"
+          className="w-11 h-11 -m-1 flex items-center justify-center text-dettaglio"
         >
           <ChevronLeft size={18} />
         </button>
@@ -115,7 +115,7 @@ export default function Wod({
         <button
           onClick={() => setGiorno(piuGiorni(giorno, 1))}
           aria-label="Giorno successivo"
-          className="w-9 h-9 flex items-center justify-center text-dettaglio"
+          className="w-11 h-11 -m-1 flex items-center justify-center text-dettaglio"
         >
           <ChevronRight size={18} />
         </button>
@@ -172,7 +172,7 @@ export default function Wod({
                 <button
                   key={v}
                   onClick={() => setVariante(v)}
-                  className={`flex-1 rounded-xl py-2 text-[11px] font-bold tracking-wider border transition-colors ${
+                  className={`flex-1 rounded-xl min-h-[44px] text-[11px] font-bold tracking-wider border transition-colors ${
                     variante === v
                       ? "bg-neutral-50 border-neutral-50 text-black"
                       : "border-bordo text-etichetta"

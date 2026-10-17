@@ -109,7 +109,12 @@ export function Spunta({ attiva, onChange, children }) {
 
     Spento resta comunque toccabile: è il caso in cui si accende.
     Bloccato è un'altra cosa — vuol dire che da qui non si può fare,
-    e allora accanto deve esserci scritto perché. */
+    e allora accanto deve esserci scritto perché.
+
+    La pastiglia si vede alta 27 punti, ma quello che risponde al
+    tocco è alto 44: è la misura di un dito, e la pastiglia da sola
+    sarebbe troppo bassa. Il bottone è trasparente e la pastiglia sta
+    dentro, così l'area cresce senza che si veda. */
 export function Interruttore({ acceso, onCambia, bloccato, etichetta }) {
   return (
     <button
@@ -119,15 +124,19 @@ export function Interruttore({ acceso, onCambia, bloccato, etichetta }) {
       aria-label={etichetta}
       disabled={bloccato}
       onClick={onCambia}
-      className={`relative w-[46px] h-[27px] rounded-full shrink-0 transition-colors ${
-        acceso ? "bg-neutral-100" : "bg-neutral-800 border border-neutral-700"
-      } ${bloccato ? "opacity-40" : ""}`}
+      className="h-11 shrink-0 flex items-center -my-2"
     >
       <span
-        className={`absolute top-1/2 -translate-y-1/2 w-[21px] h-[21px] rounded-full transition-all ${
-          acceso ? "left-[22px] bg-black" : "left-[2px] bg-neutral-500"
-        }`}
-      />
+        className={`relative block w-[46px] h-[27px] rounded-full transition-colors ${
+          acceso ? "bg-neutral-100" : "bg-neutral-800 border border-neutral-700"
+        } ${bloccato ? "opacity-40" : ""}`}
+      >
+        <span
+          className={`absolute top-1/2 -translate-y-1/2 w-[21px] h-[21px] rounded-full transition-all ${
+            acceso ? "left-[22px] bg-black" : "left-[2px] bg-neutral-500"
+          }`}
+        />
+      </span>
     </button>
   );
 }
@@ -347,7 +356,7 @@ export function Sezione({ titolo, azione, etichetta = "VEDI TUTTO", livello = 2 
       {azione && (
         <button
           onClick={azione}
-          className="text-[10.5px] text-dettaglio flex items-center gap-0.5 font-semibold tracking-wider py-2 -my-2 pl-3"
+          className="text-[10.5px] text-dettaglio flex items-center gap-0.5 font-semibold tracking-wider min-h-[44px] -my-3 pl-3"
         >
           {etichetta}
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -401,7 +410,7 @@ export function BottonePiccolo({ chiaro, children, ...resto }) {
   return (
     <button
       {...resto}
-      className={`rounded-xl px-3.5 py-2.5 text-[10.5px] font-bold tracking-[0.08em] whitespace-nowrap flex items-center gap-1 ${
+      className={`rounded-xl px-3.5 min-h-[44px] text-[10.5px] font-bold tracking-[0.08em] whitespace-nowrap flex items-center gap-1 ${
         chiaro
           ? "bg-neutral-100 text-black"
           : "border border-neutral-700 text-neutral-200"

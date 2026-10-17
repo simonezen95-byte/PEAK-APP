@@ -373,7 +373,7 @@ function Faccia({ socio, io, prova }) {
         style={{ width: 52, height: 52 }}
       >
         {socio?.foto_url ? (
-          <img src={socio.foto_url} alt="" className="w-full h-full object-cover" />
+          <img src={socio.foto_url} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
         ) : (
           <span className="text-[13px] font-display font-bold text-etichetta">
             {iniziali}
