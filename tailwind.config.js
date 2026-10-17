@@ -6,11 +6,11 @@ export default {
       // La scala dei neri, presa misurando il mockup. Il fondo è
       // quasi nero pieno: è quello che fa risaltare tutto il resto.
       colors: {
-        fondo:   "#050507",   // la pagina
-        scheda:  "#0D0E10",   // l'interno delle schede
-        bordo:   "#232427",   // il bordo delle schede
-        rilievo: "#161719",   // i cerchi delle icone
-        filo:    "#1C1D20",   // divisori e righe fra le voci
+        fondo:   "#0A0A0A",   // la pagina
+        scheda:  "#171717",   // l'interno delle schede
+        bordo:   "#262626",   // il bordo delle schede
+        rilievo: "#1F1F1F",   // i cerchi delle icone, le schede in allarme
+        filo:    "#262626",   // divisori e righe fra le voci
 
         // ------------------------------------------------------
         // I GRIGI DEL TESTO
@@ -26,9 +26,16 @@ export default {
         // dentro una scheda, che è un filo più chiara e quindi è il
         // caso peggiore. Il numero fra parentesi è il contrasto
         // misurato nella scheda.
-        etichetta: "#A8A8A8",  // 8.1:1 — dice cos'è: nomi di sezione e di campo
-        dettaglio: "#8A8A8A",  // 5.6:1 — la precisazione: date, unità, quanti
-        spento:    "#828282",  // 5.0:1 — c'è ma non chiede attenzione
+        //
+        // Dal 17 ottobre la scala è quella del sito (neri e grigi
+        // Tailwind "neutral"), così app e sito sono lo stesso marchio.
+        // Su quella scala "spento" non poteva restare più scuro: nelle
+        // schede in allarme (fondo rilievo) scendeva sotto 4.5:1. Oggi
+        // coincide con "dettaglio"; il nome resta perché dice il
+        // mestiere, e se un giorno serve distinguerli si cambia qui.
+        etichetta: "#A3A3A3",  // 7.1:1 — dice cos'è: nomi di sezione e di campo
+        dettaglio: "#8A8A8A",  // 5.2:1 — la precisazione: date, unità, quanti
+        spento:    "#8A8A8A",  // 5.2:1 — c'è ma non chiede attenzione
       },
       fontFamily: {
         // Barlow per titoli e numeri, Montserrat per il testo.

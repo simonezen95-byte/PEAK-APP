@@ -281,7 +281,7 @@ export default function Presenze({ sessione, onIndietro, onCambiato, onMessaggio
           presenze di gente che deve ancora arrivare. */}
       {cominciata && (
       <div
-        className="fixed left-0 right-0 px-5 pb-3 pt-6 bg-gradient-to-t from-[#050507] via-[#050507] to-transparent"
+        className="fixed left-0 right-0 px-5 pb-3 pt-6 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A] to-transparent"
         style={{ bottom: "calc(60px + env(safe-area-inset-bottom))" }}
       >
         <div className="max-w-md mx-auto">

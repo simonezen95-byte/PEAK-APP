@@ -89,15 +89,20 @@ Quattro dipendenze in tutto: aggiungerne una va motivato.
 
 - Sfondo nero, font **Barlow** e **Montserrat**.
 - Token per superfici: `fondo`, `scheda`, `bordo`, `rilievo`, `filo`.
-- Token per testo (introdotti il 17 ottobre, **usare questi, mai
-  `text-neutral-*` a mano**):
+- Scala di neri e grigi **uguale al sito** (Tailwind "neutral"):
+  fondo `#0A0A0A`, scheda `#171717`, bordo e filo `#262626`, rilievo
+  `#1F1F1F`.
+- Token per testo (**usare questi, mai `text-neutral-*` a mano**):
 
   | Token | Colore | Uso | Contrasto in scheda |
   |---|---|---|---|
-  | `etichetta` | `#A8A8A8` | nomi di sezione e di campo | 8.1:1 |
-  | `dettaglio` | `#8A8A8A` | date, unità, quantità | 5.6:1 |
-  | `spento` | `#828282` | presente ma secondario | 5.0:1 |
+  | `etichetta` | `#A3A3A3` | nomi di sezione e di campo | 7.1:1 |
+  | `dettaglio` | `#8A8A8A` | date, unità, quantità | 5.2:1 |
+  | `spento` | `#8A8A8A` | presente ma secondario | 5.2:1 |
 
+- Testo mai sotto **10 px** (etichette maiuscole spaziate) e **12 px**
+  (frasi). Fatto sulla Home; le altre schermate vanno portate una alla
+  volta.
 - Ogni cosa toccabile almeno **44×44**. Ogni schermata ha un titolo
   vero (`<h1>`/`<h2>` da `Titolo` e `Sezione`). Rispettare
   `prefers-reduced-motion`.
@@ -245,6 +250,10 @@ prenotazione, nuovo WOD, risultato del compagno. Dettagli nel Progetto:
 sessione, qui o in Claude Code. Il codice dice cosa c'è; questo dice
 perché.*
 
+- **2026-10-17** — App allineata ai neri e grigi del sito: stesso
+  marchio, schede più staccate dal fondo, testo secondario più
+  leggibile. `spento` coincide con `dettaglio` (più scuro falliva sulle
+  schede in allarme). Home senza testi sotto 10 px.
 - **2026-10-17** — Font Barlow e Montserrat ospitati in `public/fonts`,
   non più da Google Fonts: il link a Google passava l'IP di chi apre
   l'app senza consenso (GDPR, sentenza di Monaco 2022). Il sito era già

@@ -438,7 +438,7 @@ export function BottonePiccolo({ chiaro, children, ...resto }) {
 export function Fiamma({ accesa, serie = 0 }) {
   const cifre = String(serie).length;
   const corpo = accesa ? "#FAFAFA" : "#2E2F33";
-  const numero = accesa ? "#050507" : "#8F9196";
+  const numero = accesa ? "#0A0A0A" : "#A3A3A3";
 
   // Quanto scalda l'alone: niente a serie spenta, poi tre gradini.
   const alone = !accesa ? null

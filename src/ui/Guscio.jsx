@@ -167,7 +167,7 @@ export default function Guscio() {
 
   return (
     <div className="min-h-full flex flex-col">
-      <header className="flex items-center px-5 py-3.5 pt-[max(0.875rem,env(safe-area-inset-top))] border-b border-filo sticky top-0 bg-[#050507]/95 backdrop-blur z-20">
+      <header className="flex items-center px-5 py-3.5 pt-[max(0.875rem,env(safe-area-inset-top))] border-b border-filo sticky top-0 bg-[#0A0A0A]/95 backdrop-blur z-20">
         <Logo altezza={26} />
         <div className="flex-1" />
         <div className="flex items-center gap-4">
@@ -179,7 +179,7 @@ export default function Guscio() {
           >
             <Bell size={20} strokeWidth={1.7} />
             {daLeggere > 0 && (
-              <span className="absolute top-0 right-0 w-[7px] h-[7px] rounded-full bg-neutral-50 ring-2 ring-[#050507]" />
+              <span className="absolute top-0 right-0 w-[7px] h-[7px] rounded-full bg-neutral-50 ring-2 ring-[#0A0A0A]" />
             )}
           </button>
           <button
@@ -306,7 +306,7 @@ export default function Guscio() {
 
       <Messaggio testo={messaggio} />
 
-      <nav className="fixed bottom-0 left-0 right-0 border-t border-filo bg-[#050507]/95 backdrop-blur z-20 pb-[env(safe-area-inset-bottom)]">
+      <nav className="fixed bottom-0 left-0 right-0 border-t border-filo bg-[#0A0A0A]/95 backdrop-blur z-20 pb-[env(safe-area-inset-bottom)]">
         <div
           className="max-w-md mx-auto grid"
           style={{ gridTemplateColumns: `repeat(${sezioni.length}, minmax(0, 1fr))` }}

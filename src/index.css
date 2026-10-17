@@ -41,7 +41,7 @@ body,
 
 body {
   margin: 0;
-  background: #050507;
+  background: #0A0A0A;
   color: #f5f5f5;
   font-family: Montserrat, sans-serif;
   /* Niente rimbalzo elastico: l'app deve sembrare un'app, non una pagina. */
@@ -51,7 +51,7 @@ body {
 
 /* Le tendine di sistema restano scure anche su iOS. */
 select option {
-  background: #0D0E10;
+  background: #171717;
   color: #f5f5f5;
 }
 

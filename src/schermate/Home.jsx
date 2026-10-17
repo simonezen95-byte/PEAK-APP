@@ -153,7 +153,7 @@ export default function Home({
               {prima.posti_liberi ?? "–"}
               <span className="text-dettaglio text-[15px]"> / {prima.capienza ?? "–"}</span>
             </div>
-            <div className="text-[9.5px] tracking-[0.1em] text-dettaglio font-semibold mt-1.5">
+            <div className="text-[10px] tracking-[0.1em] text-dettaglio font-semibold mt-1.5">
               POSTI LIBERI
             </div>
           </div>
@@ -178,7 +178,7 @@ export default function Home({
               {libera.capienza - libera.iscritti}
               <span className="text-spento"> / {libera.capienza}</span>
             </div>
-            <div className="text-[9px] tracking-[0.1em] text-spento font-semibold mt-1 mb-2.5 leading-tight">
+            <div className="text-[10px] tracking-[0.1em] text-spento font-semibold mt-1 mb-2.5 leading-tight">
               POSTI<br />LIBERI
             </div>
             <BottonePiccolo chiaro onClick={() => onApriLezione(libera)}>
@@ -210,7 +210,7 @@ export default function Home({
               <div className="text-[13px] text-neutral-300">
                 Oggi non c'è ancora un WOD.
               </div>
-              <div className="text-[11px] text-spento mt-0.5">
+              <div className="text-[12px] text-spento mt-0.5">
                 {puoScrivere ? "Aprilo per scriverlo." : "Lo pubblica lo staff."}
               </div>
             </div>
@@ -221,7 +221,7 @@ export default function Home({
           <Cerchio icona={Dumbbell} />
           <Divisore />
           <div className="flex-1 min-w-0">
-            <div className="text-[9.5px] tracking-[0.18em] text-dettaglio font-semibold uppercase">
+            <div className="text-[10px] tracking-[0.18em] text-dettaglio font-semibold uppercase">
               {wod.tipo_score === "tempo" ? "FOR TIME"
                : wod.tipo_score === "carico" ? "A CARICO" : "A RIPETIZIONI"}
               {wod.time_cap && ` · CAP ${wod.time_cap}`}
@@ -261,7 +261,7 @@ export default function Home({
                   </div>
                 </div>
                 {p.stato === "lista_attesa" && (
-                  <span className="text-[9.5px] font-bold tracking-wider border border-neutral-700 text-etichetta rounded-full px-2 py-0.5 shrink-0">
+                  <span className="text-[10px] font-bold tracking-wider border border-neutral-700 text-etichetta rounded-full px-2 py-0.5 shrink-0">
                     IN CODA
                   </span>
                 )}
@@ -293,11 +293,11 @@ export default function Home({
                   accesa={numeri.settimana_fatta}
                   serie={numeri.settimane_di_fila}
                 />
-                <div className="text-[8.5px] tracking-[0.1em] text-etichetta mt-3 font-semibold leading-[1.5]">
+                <div className="text-[10px] tracking-[0.1em] text-etichetta mt-3 font-semibold leading-[1.5]">
                   <div>SETTIMANE</div>
                   <div>DI FILA</div>
                 </div>
-                <div className="text-[8.5px] text-spento mt-1.5 mb-2.5 leading-[1.4] px-0.5">
+                <div className="text-[10px] text-spento mt-1.5 mb-2.5 leading-[1.4] px-0.5">
                   {numeri.settimana_fatta
                     ? "questa l'hai alimentata"
                     : "questa è ancora da fare"}
@@ -416,11 +416,11 @@ function Tassello({ icona: Icona, sopra, valore, nome, nota, onClick }) {
       <div className="text-[26px] font-display font-bold text-neutral-50 leading-none -mt-1">
         {valore}
       </div>
-      <div className="text-[8.5px] tracking-[0.1em] text-etichetta mt-3 font-semibold leading-[1.5]">
+      <div className="text-[10px] tracking-[0.1em] text-etichetta mt-3 font-semibold leading-[1.5]">
         {righe.map((r) => <div key={r}>{r}</div>)}
       </div>
       {nota && (
-        <div className="text-[8.5px] text-spento mt-1.5 leading-[1.4] px-0.5">
+        <div className="text-[10px] text-spento mt-1.5 leading-[1.4] px-0.5">
           {nota}
         </div>
       )}

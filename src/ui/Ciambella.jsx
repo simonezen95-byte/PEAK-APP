@@ -88,7 +88,7 @@ export default function Ciambella({ pezzi, totale, sotto }) {
               key={p.nome}
               d={spicchio(p.da, p.a)}
               fill={p.colore}
-              stroke="#0D0E10"
+              stroke="#171717"
               strokeWidth="2"
             />
           ))
@@ -106,7 +106,7 @@ export default function Ciambella({ pezzi, totale, sotto }) {
               textAnchor="middle"
               fontSize="10"
               fontWeight="700"
-              fill="#0D0E10"
+              fill="#171717"
             >
               {Math.round(p.quota * 100)}%
             </text>
@@ -122,7 +122,7 @@ export default function Ciambella({ pezzi, totale, sotto }) {
         </text>
         <text
           x={C} y={C + 13} textAnchor="middle"
-          fontSize="7.5" fill="#737373" letterSpacing="1"
+          fontSize="9" fill="#8A8A8A" letterSpacing="1"
         >
           {sotto}
         </text>
