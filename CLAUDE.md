@@ -245,6 +245,10 @@ prenotazione, nuovo WOD, risultato del compagno. Dettagli nel Progetto:
 sessione, qui o in Claude Code. Il codice dice cosa c'è; questo dice
 perché.*
 
+- **2026-10-17** — Font Barlow e Montserrat ospitati in `public/fonts`,
+  non più da Google Fonts: il link a Google passava l'IP di chi apre
+  l'app senza consenso (GDPR, sentenza di Monaco 2022). Il sito era già
+  a posto.
 - **2026-10-17** — Creato questo file: le decisioni stanno nel repo,
   così le leggono sia la chat del Progetto sia Claude Code.
 - **2026-10-17** — Audit accessibilità lato socio: introdotti i tre
