@@ -230,6 +230,11 @@ prenotazione, nuovo WOD, risultato del compagno. Dettagli nel Progetto:
 - **`outline-none` senza sostituto** in `base.jsx` (Numeretto),
   `NuovaLezione.jsx`, `GestioneClasse.jsx`.
 - **Audit del lato staff**: mai fatto.
+- **Testi sotto 10 px**: 30 rimasti, da portare a 10 una schermata
+  alla volta, controllando 390 e 320 px. AnalisiProve 6,
+  AnalisiEconomia 5, Oggi 4, AnalisiSoci 3, pezzi-analisi 2, base 2,
+  Guscio 2, Socio 2, RuoloEPermessi 1, Prenota 1, Analisi 1, Altro 1.
+  La Home è già fatta.
 - **Prove da convertire**: `analisi`, `classi`, `coda`, `economia`,
   `ingressi`, `presenze`, `prove`, `utenteprova` stampano tabelle invece
   di dire OK/NO.
