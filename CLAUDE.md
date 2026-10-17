@@ -100,9 +100,8 @@ Quattro dipendenze in tutto: aggiungerne una va motivato.
   | `dettaglio` | `#8A8A8A` | date, unità, quantità | 5.2:1 |
   | `spento` | `#8A8A8A` | presente ma secondario | 5.2:1 |
 
-- Testo mai sotto **10 px** (etichette maiuscole spaziate) e **12 px**
-  (frasi). Fatto sulla Home; le altre schermate vanno portate una alla
-  volta.
+- Testo mai sotto **10 px**. Fatto sulla Home; le altre schermate
+  vanno portate una alla volta.
 - Ogni cosa toccabile almeno **44×44**. Ogni schermata ha un titolo
   vero (`<h1>`/`<h2>` da `Titolo` e `Sezione`). Rispettare
   `prefers-reduced-motion`.
