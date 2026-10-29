@@ -113,6 +113,11 @@ export default function Guscio() {
   const [staff2, setStaff2] = useState(false);
   const [analisi, setAnalisi] = useState(false);
   const [comunicazioni, setComunicazioni] = useState(false);
+  /* ATTENZIONE: ogni schermata sovrapposta dichiarata qui sopra va
+     anche AZZERATA in vaiA() e in cambiaModo(). Se si dimentica, la
+     barra in basso cambia voce e si illumina ma il contenuto non si
+     muove, perché la catena qui sotto si ferma alla prima vera. È
+     successo con le comunicazioni il 29 ottobre. */
   const [daLeggere, setDaLeggere] = useState(0);
   const [messaggio, setMessaggio] = useState("");
   // Cambiando questo numero le schermate rileggono i dati: serve dopo
@@ -139,6 +144,7 @@ export default function Guscio() {
     setListino(false);
     setStaff2(false);
     setAnalisi(false);
+    setComunicazioni(false);
     setSezione(chiave);
   }
 
@@ -152,6 +158,7 @@ export default function Guscio() {
     setListino(false);
     setStaff2(false);
     setAnalisi(false);
+    setComunicazioni(false);
     setSezione(nuovo === "staff" ? "oggi" : "home");
   }
 
