@@ -48,7 +48,6 @@ export default function Altro({ onApri, onVaiAlProfilo }) {
       icona: Megaphone,
       nome: "Comunicazioni",
       nota: "Avvisi ai soci e bacheca",
-      manca: "da costruire",
     },
     eOwner(profilo) && {
       chiave: "impostazioni",

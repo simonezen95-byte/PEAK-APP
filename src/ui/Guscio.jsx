@@ -22,6 +22,7 @@ import Presenze from "../schermate/Presenze";
 import Listino from "../schermate/Listino";
 import Altro from "../schermate/Altro";
 import Analisi from "../schermate/Analisi";
+import Comunicazioni from "../schermate/Comunicazioni";
 import StaffSchermata from "../schermate/Staff";
 
 /* La struttura dell'app una volta dentro.
@@ -111,6 +112,7 @@ export default function Guscio() {
   const [listino, setListino] = useState(false);
   const [staff2, setStaff2] = useState(false);
   const [analisi, setAnalisi] = useState(false);
+  const [comunicazioni, setComunicazioni] = useState(false);
   const [daLeggere, setDaLeggere] = useState(0);
   const [messaggio, setMessaggio] = useState("");
   // Cambiando questo numero le schermate rileggono i dati: serve dopo
@@ -217,6 +219,11 @@ export default function Guscio() {
             onIndietro={() => setStaff2(false)}
             onMessaggio={avvisa}
           />
+        ) : comunicazioni ? (
+          <Comunicazioni
+            onIndietro={() => setComunicazioni(false)}
+            onMessaggio={avvisa}
+          />
         ) : listino ? (
           <Listino onIndietro={() => setListino(false)} onMessaggio={avvisa} />
         ) : presenze ? (
@@ -293,6 +300,7 @@ export default function Guscio() {
               if (dove === "analisi") setAnalisi(true);
               else if (dove === "staff") setStaff2(true);
               else if (dove === "listino") setListino(true);
+              else if (dove === "comunicazioni") setComunicazioni(true);
               else if (dove === "progressi") setProgressi(true);
             }}
             onVaiAlProfilo={() => vaiA("profilo")}
