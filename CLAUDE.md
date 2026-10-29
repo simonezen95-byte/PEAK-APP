@@ -34,7 +34,13 @@ amministrazione). Simone dirige e rivede; Claude scrive il codice.
 | Sito pubblico | `peakfunctionalfitness.it`, repo separato `Peak-Landing` |
 
 Ogni commit su `main` viene ripubblicato da Vercel in un paio di minuti.
-Le modifiche al database si eseguono a mano nell'editor SQL di Supabase.
+
+Dal 29 ottobre Claude applica i file `db/` **direttamente su Supabase**
+tramite il connettore, dopo averli provati in locale, e verifica che
+l'impronta delle funzioni nel database coincida con quella del banco di
+prova. Prima passavano dal copia-incolla di Simone: era anche un
+controllo in più, quindi se una modifica merita una lettura prima di
+toccare il database, basta chiederla e si torna al link grezzo.
 
 ## Struttura
 
@@ -215,8 +221,6 @@ prenotazione, nuovo WOD, risultato del compagno. Dettagli nel Progetto:
 
 ## Cosa manca
 
-- Schermata **Comunicazioni** (oggi gli avvisi della palestra si
-  scrivono solo in SQL).
 - **Personal training**: i pacchetti ci sono, le sessioni no.
 - **Chiusure** per ferie e festivi.
 - **Palinsesto** modificabile dall'app (oggi solo SQL).
@@ -254,6 +258,15 @@ prenotazione, nuovo WOD, risultato del compagno. Dettagli nel Progetto:
 sessione, qui o in Claude Code. Il codice dice cosa c'è; questo dice
 perché.*
 
+- **2026-10-29** — Comunicazioni fatte (`db/34` + schermata). I due
+  permessi che esistevano da sempre adesso fanno due cose diverse:
+  `com_board` scrive in bacheca, `com_send` fa squillare i telefoni.
+  Prima di pubblicare l'app dice quanti soci raggiungi davvero. Una
+  comunicazione pubblicata non si corregge: si toglie e si riscrive,
+  e togliendola il testo finisce nel registro attività.
+- **2026-10-29** — Connettore Supabase collegato: Claude applica i
+  file `db/` da sé dopo averli provati in locale, e confronta
+  l'impronta delle funzioni fra banco e produzione.
 - **2026-10-17** — App allineata ai neri e grigi del sito: stesso
   marchio, schede più staccate dal fondo, testo secondario più
   leggibile. `spento` coincide con `dettaglio` (più scuro falliva sulle
